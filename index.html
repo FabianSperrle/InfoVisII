@@ -35,7 +35,7 @@ html, body, #map {
 
 // Create the Google Map…
 var map = new google.maps.Map(d3.select("#map").node(), {
-  zoom: 13,
+  zoom: 14,
   center: new google.maps.LatLng(51.507378, -0.127684),
   mapTypeId: google.maps.MapTypeId.TERRAIN
 });
@@ -43,6 +43,7 @@ var map = new google.maps.Map(d3.select("#map").node(), {
 // Load the station data. When the data comes back, create an overlay.
 d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisIIPreProcessing/master/DataComplete/crimes.json", function(error, data) {
   if (error) throw error;
+  console.log(data.length);
   var overlay = new google.maps.OverlayView();
 
   // Add the container when the overlay is added to the map.
@@ -65,16 +66,17 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisIIPreProcessing/
 
       // Add a circle.
       marker.append("circle")
-        .attr("r", 4.5)
+        .attr("r", 2.5)
         .attr("cx", padding)
         .attr("cy", padding);
 
       // Add a label.
-      marker.append("text")
+      /* marker.append("text")
         .attr("x", padding + 7)
         .attr("y", padding)
         .attr("dy", ".31em")
-        .text(function(d) { return d.value.crimetype; });
+        .text(function(d) { return d.value.crimetype + " " + d.value.lastOutcomCategory ;});
+       */
 
       function transform(d) {
         d = new google.maps.LatLng(d.value.latitude, d.value.longitude);
