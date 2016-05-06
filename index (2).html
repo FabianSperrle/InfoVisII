@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+  <link rel="stylesheet" href="d3.slider.css" />  
 <style>
 
 html, body, #map {
   width: 100%;
-  height: 100%;
+  height: 90%;
   margin: 0;
   padding: 0;
 }
@@ -32,6 +33,7 @@ html, body, #map {
 <div id="map"></div>
 <script src="https://maps.google.com/maps/api/js"></script>
 <script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="d3.slider.js"></script>
 <script>
 
 // Create the Google Map…
@@ -57,9 +59,10 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisIIPreProcessing/
     overlay.draw = function() {
       var projection = this.getProjection();
       var padding = 10;
-
+      var completedata = d3.entries(data);
+      var partialdata = completedata.slice(0,500); // REDUCE DATA! DEBUGMODE!
       var marker = layer.selectAll("svg")
-                  .data(d3.entries(data))
+                  .data(partialdata) //d3.entries(data)
                   .each(transform) // update existing markers
                   .enter().append("svg")
                   .each(transform)
@@ -93,4 +96,20 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisIIPreProcessing/
   overlay.setMap(map);
 });
 
+
 </script>
+
+
+
+<body>
+  <div class="wrapper">
+    <h2>select date</h2>
+    <div id="slider10"></div>
+  </div>
+
+  
+  <script>
+    d3.select('#slider10').call(d3.slider().scale(d3.time.scale().domain([new Date(2010,12,1), new Date(2016,2,1)])).axis(d3.svg.axis()));
+  </script>
+ 
+</body>
