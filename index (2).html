@@ -5,23 +5,26 @@
 
 <div id="map"></div>
 <script src="libs/mapsgoogle.js"></script>
+<script src="libs/crossfilter.v1.min.js"></script>
 <script src="libs/d3.v3.min.js"></script>
 <script src="d3.slider.js"></script>
-<script type="text/javascript" src="scripts/timelineView.js"></script>
+<script type="text/javascript" src="scripts/crimeTimeViews.js"></script>
 
 <link rel="stylesheet" type="text/css" href="css/timelineView.css">
 
 <body>
 
-  <div id="timelineView"></div>
-  <div class="wrapper">
-    <h2>select date</h2>
-    <div id="slider10"></div>
+
+  <div id="crimeTimeVieWrapper">
+    <div id="timelineView"></div>
+    <div id="sliderDate"></div>
+    <div id="crimeTimeMatrix"></div>
   </div>
   
   <script>
     timelineView();
-    d3.select('#slider10').call(d3.slider().scale(d3.time.scale().domain([new Date(2010,12,1), new Date(2016,2,1)])).axis(d3.svg.axis()));
+    matrixView();
+
   </script>
  
 </body>
