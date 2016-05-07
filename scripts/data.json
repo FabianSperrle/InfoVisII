@@ -1,0 +1,7 @@
+{
+"aggregatedNumberCrimes" : [
+{"date":"2011-02", "allCrimes" : "300", "theft" : "20"},
+{"date":"2011-03", "allCrimes" : "400", "theft" : "40"},
+{"date":"2011-04", "allCrimes" : "200", "theft" : "50"}
+]
+}
