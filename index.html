@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
 <style>
@@ -27,69 +28,175 @@ html, body, #map {
   stroke-width: 1.5px;
 }
 
+.leaflet-cluster-anim .leaflet-marker-icon, .leaflet-cluster-anim .leaflet-marker-shadow {
+	-webkit-transition: -webkit-transform 0.3s ease-out, opacity 0.3s ease-in;
+	-moz-transition: -moz-transform 0.3s ease-out, opacity 0.3s ease-in;
+	-o-transition: -o-transform 0.3s ease-out, opacity 0.3s ease-in;
+	transition: transform 0.3s ease-out, opacity 0.3s ease-in;
+	}
+
+.marker-cluster-small {
+	background-color: rgba(181, 226, 140, 0.6);
+	}
+.marker-cluster-small div {
+	background-color: rgba(110, 204, 57, 0.6);
+	}
+
+.marker-cluster-medium {
+	background-color: rgba(241, 211, 87, 0.6);
+	}
+.marker-cluster-medium div {
+	background-color: rgba(240, 194, 12, 0.6);
+	}
+
+.marker-cluster-large {
+	background-color: rgba(253, 156, 115, 0.6);
+	}
+.marker-cluster-large div {
+	background-color: rgba(241, 128, 23, 0.6);
+	}
+
+	/* IE 6-8 fallback colors */
+.leaflet-oldie .marker-cluster-small {
+	background-color: rgb(181, 226, 140);
+	}
+.leaflet-oldie .marker-cluster-small div {
+	background-color: rgb(110, 204, 57);
+	}
+
+.leaflet-oldie .marker-cluster-medium {
+	background-color: rgb(241, 211, 87);
+	}
+.leaflet-oldie .marker-cluster-medium div {
+	background-color: rgb(240, 194, 12);
+	}
+
+.leaflet-oldie .marker-cluster-large {
+	background-color: rgb(253, 156, 115);
+	}
+.leaflet-oldie .marker-cluster-large div {
+	background-color: rgb(241, 128, 23);
+}
+
+.marker-cluster {
+	background-clip: padding-box;
+	border-radius: 20px;
+	}
+.marker-cluster div {
+	width: 30px;
+	height: 30px;
+	margin-left: 5px;
+	margin-top: 5px;
+
+	text-align: center;
+	border-radius: 15px;
+	font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
+	}
+.marker-cluster span {
+	line-height: 30px;
+	}
+
+#map {
+	width: 800px; 
+	height: 600px; 
+	border: 1px solid #ccc;
+}
+
+#progress {
+    display: none;
+    position: absolute;
+    z-index: 1000;
+    left: 400px;
+    top: 300px;
+    width: 200px;
+    height: 20px;
+    margin-top: -20px;
+    margin-left: -100px;
+    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 4px;
+    padding: 2px;
+}
+
+#progress-bar {
+    width: 0;
+    height: 100%;
+    background-color: #76A6FC;
+    border-radius: 4px;
+}
+
 </style>
-<div id="map"></div>
-<script src="https://maps.google.com/maps/api/js"></script>
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css">
+<script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
+<script src="http://leaflet.github.io/Leaflet.markercluster/dist/leaflet.markercluster.js"></script>
 <script src="https://d3js.org/d3.v3.min.js"></script>
+</head>
+
+<body>
+<div id="map"><div id="progress"><div id="progress-bar"></div></div></div>
 <script>
+	//var tiles = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+	var tiles = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v8/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZmFiaWFuc3BlcnJsZSIsImEiOiJjaW51NXBlOXowMG13dzltMndzdHI4b3gwIn0.-KwI70EkNL2Ni6YWkXfKsQ', {
+			maxZoom: 20,
+			attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors, Points &copy 2012 LINZ, Tiles from Mapbox'
+		}),
+		latlng = L.latLng(51.513819, -0.098361);
 
-// Create the Google Map…
-var map = new google.maps.Map(d3.select("#map").node(), {
-  zoom: 14,
-  center: new google.maps.LatLng(51.507378, -0.127684),
-  mapTypeId: google.maps.MapTypeId.TERRAIN
-});
+	var map = L.map('map', { center: latlng, zoom: 13, layers: [tiles] });
 
-// Load the station data. When the data comes back, create an overlay.
-d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisIIPreProcessing/master/DataComplete/crimes.json", function(error, data) {
-  if (error) throw error;
-  console.log(data.length);
-  var overlay = new google.maps.OverlayView();
+	var progress = document.getElementById('progress');
+	var progressBar = document.getElementById('progress-bar');
 
-  // Add the container when the overlay is added to the map.
-  overlay.onAdd = function() {
-    var layer = d3.select(this.getPanes().overlayLayer).append("div")
-     			  		.attr("class", "stations");
+	function updateProgressBar(processed, total, elapsed, layersArray) {
+		if (elapsed > 1000) {
+			// if it takes more than a second to load, display the progress bar:
+			progress.style.display = 'block';
+			progressBar.style.width = Math.round(processed/total*100) + '%';
+		}
 
-    // Draw each marker as a separate SVG element.
-    // We could use a single SVG, but what size would it have?
-    overlay.draw = function() {
-      var projection = this.getProjection();
-      var padding = 10;
+		if (processed === total) {
+			// all markers processed - hide the progress bar:
+			progress.style.display = 'none';
+		}
+	}
+	console.log('start creating markers: ' + window.performance.now());
 
-      var marker = layer.selectAll("svg")
-          				.data(d3.entries(data))
-          				.each(transform) // update existing markers
-          				.enter().append("svg")
-          				.each(transform)
-          				.attr("class", "marker");
+	d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisIIPreProcessing/master/DataComplete/crimes.json", function(error, data) {
+		var markers = L.markerClusterGroup({ 
+			chunkedLoading: true, 
+			chunkProgress: updateProgressBar,
+			maxClusterRadius: 80,
+		});
 
-      // Add a circle.
-      marker.append("circle")
-        .attr("r", 2.5)
-        .attr("cx", padding)
-        .attr("cy", padding);
+		var markerList = [];
 
-      // Add a label.
-      /* marker.append("text")
-        .attr("x", padding + 7)
-        .attr("y", padding)
-        .attr("dy", ".31em")
-        .text(function(d) { return d.value.crimetype + " " + d.value.lastOutcomCategory ;});
-       */
 
-      function transform(d) {
-        d = new google.maps.LatLng(d.value.latitude, d.value.longitude);
-        d = projection.fromLatLngToDivPixel(d);
-        return d3.select(this)
-            .style("left", (d.x - padding) + "px")
-            .style("top", (d.y - padding) + "px");
-      }
-    };
-  };
+		for (var i = 0; i < data.length; i++) {
+			var a = data[i];
+			var title = a.crimetype;
 
-  // Bind our overlay to the map…
-  overlay.setMap(map);
-});
+			/*var d = new Date(a.month + "-01");
+			if (d < new Date("2016-01-01"))
+				continue;*/
+
+			var lat = a.latitude;
+			var lng = a.longitude;
+
+			if (lat == "" || lng == "" || lat == "Latitude" || lng == "Longitude") {
+				continue;
+			}
+
+			var marker = L.marker(L.latLng(a.latitude, a.longitude), { title: title });
+			marker.bindPopup(title);
+			markerList.push(marker);
+		}
+
+		console.log('start clustering: ' + window.performance.now());
+		markers.addLayers(markerList);
+		map.addLayer(markers);
+		console.log('end clustering: ' + window.performance.now());
+	});
 
 </script>
+</body>
+</html>
