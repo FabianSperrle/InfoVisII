@@ -207,7 +207,7 @@ function timelineView(){
                         .range([0,width])
                         .domain([new Date(2010,12,1), new Date(2016,2,1)]);
                     currentDate = x.invert(coordinateX);
-                    d3.select("#sliderDate").node().innerHTML = formatDate(x.invert(coordinateX));
+                    printDate();
                 }
             }
         });
@@ -217,8 +217,7 @@ function timelineView(){
             var coordinateX = d3.mouse(this)[0];
             if(coordinateX>=50){
                 sliderLine.attr("x1", coordinateX).attr("x2", coordinateX);
-                currentDate = x.invert(coordinateX);
-                d3.select("#sliderDate").node().innerHTML = formatDate(currentDate);
+                
             }
             _dragSliderLine = slider;
             document.body.focus();
@@ -248,8 +247,8 @@ function getDate(){
     var formatDate1 = d3.time.format("%B");
     var formatDate2 = d3.time.format("%Y");
     var date = [];
-    date.push(formatDate1(timeScale.invert(d3.select("#slider").attr("x1"))));
-    date.push(formatDate2(timeScale.invert(d3.select("#slider").attr("x1"))));
+    date.push(formatDate1(timeScale.invert(d3.select("#slider").attr("x1")-50)));
+    date.push(formatDate2(timeScale.invert(d3.select("#slider").attr("x1")-50)));
     return date;
 }
 
