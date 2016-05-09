@@ -14,8 +14,6 @@ var timeScale = d3.time.scale()
 
 var svg1;
 
-
-
 var crimes = {
     "aggregatedCrimesByMonth" : [
         {"date":"2011-02", "allCrimes" : "300", "theft" : "20", "robbery": "70"},
@@ -50,6 +48,11 @@ function matrixView() {
         height = 430 - margin.top - margin.bottom,
         gridSize = Math.floor(width / 63),
         legendElementWidth = gridSize * 2,
+        buckets = 9,
+        colors = ["#ffffd9", "#edf8b1", "#c7e9b4", "#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#253494", "#081d58"], // alternatively colorbrewer.YlGnBu[9]
+
+        years = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+        times = ["1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12p"];
 
     crimeTimeMatrix = d3.select("#crimeTimeMatrix").append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -75,7 +78,7 @@ function matrixView() {
                 .attr("width", gridSize)
                 .attr("height", gridSize)
                 .attr("class", "field bordered")
-                .style("fill-opacity", function(){
+                .style("opacity", function(){
                     var value = crimes.aggregatedCrimesByMonth[i][crimes.crimesTotal[j].type];
                     var min = crimes.crimesTotal[j].min;
                     var max = crimes.crimesTotal[j].max;
@@ -93,6 +96,7 @@ function matrixView() {
 
 
 function timelineView(){
+
     var x = d3.time.scale()
         .range([0, width]);
 
@@ -126,12 +130,9 @@ function timelineView(){
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/Timeline/scripts/data.json", function(error, data) {
+        //if (error) throw error;
         data = crimes;
-
-        if (error) throw error;
-
         x.domain([new Date(2010,12,1), new Date(2016,2,1)]);
-        //y.domain(d3.extent(data, function(d) { return d.aggregatedNumberCrimes.allCrimes; }));
         y.domain([0,500]);
 
         svg.append("g")
