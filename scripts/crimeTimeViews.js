@@ -60,17 +60,17 @@ var svg1;
 var createCrimeCategoryButtons = function() {
     // Generate list of checkboxes
     d3.select("#crimeCheckboxes").selectAll("input")
-        .data(crimeTime.crimeTypes)
+        .data(data.getCrimeTypes())
         .enter()
         .append('label')
         .attr('for', function(d, i) {
             return 'a' + i;
         })
         .style("color", function(d, i) {
-            return CLUSTERINGCOLORS[i];
+            return data.getCrimeColor(d);
         })
         .text(function(d, i) {
-            return d;
+            return data.getVerboseCrimeName(d);
         })
         .append("input")
         .attr("type", "checkbox")
@@ -96,13 +96,9 @@ function toggleCheckboxesOfCrimes(checkboxID) {
     crimeTime.activeCrimesCheckBoxes[checkboxID] = d3.select("#category_" + checkboxID).property("checked");
     toggleTimeviewLines(checkboxID);
     resizeTimeLine(crimes);
+    // Trigger 'toggle' event of the DataController
     data.emit('toggle', crimeTime.crimeTypes[checkboxID]);
 }
-
-
-
-
-
 
 function getCrimeData(crimeType, data) {
     var returndata = [];
@@ -133,6 +129,11 @@ var plotCrimePath = d3.svg.line()
     });
 
 function plotTimeviewLines(data) {
+    var datas  = {};
+    for (var i = 0; i < crimeTime.crimeTypes.length; i++) {
+        datas[crimeTime.crimeTypes[i]] = getCrimeData(crimeTime.crimeTypes[i], data);
+    }
+    console.log(JSON.stringify(datas));
     for (var i = 0; i < crimeTime.crimeTypes.length; i++) {
         svg.append("path")
             .attr("id", crimeTime.crimeTypes[i])
