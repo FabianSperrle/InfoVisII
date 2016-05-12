@@ -3,6 +3,20 @@ body {
     font: 10px sans-serif;
 }
 
+#crimeTimeVieWrapper {
+    width: 1000px;
+    float: left;
+}
+
+#crimeCheckboxes {
+    font: 16px sans-serif;
+    margin: 45px;
+}
+
+#crimeCheckboxes label {
+    margin-right: 20px;
+}
+
 .axis path,
 .axis line {
     fill: none;

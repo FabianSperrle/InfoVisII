@@ -5,6 +5,10 @@ html, body, #map {
   padding: 0;
 }
 
+#map {
+	float: right;
+}
+
 .stations, .stations svg {
   position: absolute;
 }
