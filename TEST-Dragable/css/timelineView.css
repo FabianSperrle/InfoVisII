@@ -1,0 +1,51 @@
+
+body {
+    font: 10px sans-serif;
+}
+
+#crimeTimeVieWrapper {
+    width: 1000px;
+    float: left;
+}
+
+#crimeCheckboxes {
+    font: 16px sans-serif;
+    margin: 45px;
+}
+
+#crimeCheckboxes label {
+    margin-right: 20px;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.x.axis path {
+    display: none;
+}
+
+.line {
+    fill: none;
+    stroke-width: 1.5px;
+}
+#crimeTimeMatrix,
+#timelineView{
+    border: thin solid lightgrey;
+}
+
+#slider {
+    stroke: black;
+    stroke-width: 5;
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+
+rect.bordered {
+    stroke: #C6C6C6;
+    stroke-width:1px;
+}

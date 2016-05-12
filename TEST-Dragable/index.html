@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+
+	<script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
+	<script src="http://leaflet.github.io/Leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+
+	<script src="https://d3js.org/d3.v3.min.js"></script>
+	<script src="libs/crossfilter.v1.min.js"></script>
+	<script src="libs/d3.slider.js"></script>
+
+	<script src="scripts/telegraph.min.js"></script>
+	<script src="scripts/dataController.js"></script>
+
+	<script src="scripts/jquery-1.12.3.min.js"></script>
+	<script src="scripts/jquery-ui.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="css/timelineView.css">
+	<link rel="stylesheet" type="text/css" href="css/pointCluster.css">
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css">
+	<link rel="stylesheet" href="css/d3.slider.css" />
+
+
+	<script>
+		  $(function() {
+		    $( ".draggable" ).draggable();
+		    $('.draggable').draggable({
+		        cancel: '.notdraggable'
+		    });
+		  });
+		  
+	  </script>
+
+	 
+</head>
+
+<body>
+	<div class="draggable" style="border: 1px solid red; width: 300px;">
+			<div style="margin-bottom: -30px;">
+				<img src="move.png" alt="Move" style="width:40px;height:40px;">
+			</div>
+			<div class="notdraggable">
+				<div id="crimeCheckboxes" style="width:200px;"> </div>
+			</div>
+	</div>
+
+	<div id="crimeTimeVieWrapper">
+		<div class="draggable">
+			<div style="border: 1px dotted grey; width: 40px;">
+				<img src="move.png" alt="Move" style="width:40px;height:40px;">
+			</div>
+			<div class="notdraggable">
+				<div id="timelineView"></div>
+				<div id="sliderDate"></div>
+			</div>
+		</div>
+		
+		<div class="draggable">
+			<div style="border: 1px dotted grey; width: 40px; height:40px;">
+				
+			</div>
+			<div class="notdraggable">
+				<div id="crimeTimeMatrix"></div>
+			</div>
+		</div>
+		
+	</div>
+
+	<div id="progress"><div id="progress-bar"></div></div>
+	
+	<div class="draggable">
+			<div style="border: 1px dotted grey; width: 40px; height:40px; position: absolute; top: 60px; left: 1100px;">
+				
+			</div>
+			<div> </div>
+			<div class="notdraggable" style="position: absolute; top: 100px; left: 1100px;">
+				<div id="map"></div>
+			</div>
+	</div>
+	
+
+	<script type="text/javascript" src="scripts/crimeTimeViews.js"></script>
+	<script type="text/javascript" src="scripts/pointCluster.js"></script>
+</body>
+</html>
