@@ -8,8 +8,8 @@ function DataController() {
 
 	this.crimeTypes = {
 		allCrimes: {
-			visibility: 1,
-			verboseName: ''
+				visibility: 1,
+				verboseName: ''
 		},
 		violence_and_sex: {
 			visibility: 0,
@@ -74,7 +74,7 @@ function DataController() {
 		possesion_of_weapons: {
 			visibility: 0,
 			verboseName: 'Possession of weapons'
-		},
+		}
 	};
 	this.visibleVerboseCrimeTypes = ["Other theft"];
 }
@@ -139,7 +139,7 @@ DataController.prototype.toggleFilter = function(type) {
 };
 
 DataController.prototype.mapFilterKeyword = function(key) {
-	return this.CrimeTypes[key].verboseName;
+	return this.crimeTypes[key].verboseName;
 };
 
 var data = new DataController();
