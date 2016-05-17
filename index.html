@@ -22,6 +22,9 @@
 	<link rel="stylesheet" href="css/d3.slider.css" />
 
 
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
 	<script>
 		  $(function() {
 		    $( ".draggable" ).draggable();
@@ -36,14 +39,28 @@
 </head>
 
 <body>
+
+	
+
+
 	<div class="draggable" style="border: 1px solid red; width: 300px;">
-			<div style="margin-bottom: -30px;">
-				<img src="move.png" alt="Move" style="width:40px;height:40px;">
+			
+		    <div style="margin-bottom: -30px;">
+				<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Collapse</button> <img src="move.png" alt="Move" style="width:40px;height:40px;">  
 			</div>
-			<div class="notdraggable">
-				<div id="crimeCheckboxes" style="width:200px;"> </div>
+			<div class="container"> 
+			 
+			  <div id="demo" class="collapse in">
+				<div class="notdraggable">
+					<div id="crimeCheckboxes" style="width:200px;"> </div>
+				</div>
+			  </div>
 			</div>
 	</div>
+
+
+
+
 
 	<div id="crimeTimeVieWrapper">
 		<div class="draggable">
