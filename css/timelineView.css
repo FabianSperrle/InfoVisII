@@ -42,14 +42,14 @@ body {
 
 
 #slider1{
-    stroke: RED;
-    stroke-width: 5;
+    stroke: GRAY;
+    stroke-width: 2;
     opacity: 0.5;
     cursor: pointer;
 }
 #slider2{
-    stroke: BLUE;
-    stroke-width: 5;
+    stroke: GRAY;
+    stroke-width: 2;
     opacity: 0.5;
     cursor: pointer;
 }
@@ -58,6 +58,5 @@ body {
 
 
 rect.bordered {
-    /*stroke: #C6C6C6;
-    stroke-width:1px;*/
+    stroke-width:2px;
 }

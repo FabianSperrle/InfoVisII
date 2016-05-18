@@ -82,6 +82,7 @@ function toggleCheckboxesOfCrimes(checkboxID) {
     data.emit('toggle', data.getCrimeTypes()[checkboxID]);
     toggleTimeviewLines(checkboxID);
     resizeTimeLine(data.crimeAggregates);
+    highlightMatrixSelection();
 }
 
 function getCrimeData(crimeType, data) {
@@ -350,11 +351,13 @@ var matrixView = function() {
                             .text(data.getVerboseCrimeName(data.getCrimeTypes()[i]));
                     }
                     crimeTimeMatrix.append("rect")
-                        .attr("id", monthIndex + "-" + i)
+                        .attr("id",  "m"+monthIndex + "-" + i)
                         .attr("x", gridSize * (monthIndex+8))
                         .attr("y", gridSize * i)
                         .attr("rx", 5)
                         .attr("ry", 5)
+                        .attr("month", k)
+                        .attr("crimeID",i)
                         .attr("width", gridSize)
                         .attr("height", gridSize)
                         .attr("class", "field bordered")
@@ -364,7 +367,6 @@ var matrixView = function() {
                         })
                         .style("fill", data.getCrimeColor(data.getCrimeTypes()[i]))
                         .attr("numberOfCrimes",data.crimeAggregates[years[j]][months[k]][data.getCrimeTypes()[i]])
-                        .attr("crimeID",i)
                         .attr("totalCrimesOfMonth", data.crimeAggregates[years[j]][months[k]][data.getCrimeTypes()[0]])
                         .on("mouseover", function (d, x) {
                             var mine = d3.select(this);
@@ -435,7 +437,6 @@ function updateDate(selectedField){
     updateDateLimits();
 }
 
-
 function updateDateLimits(){
     // Update Left Border
     var lowerDate = getDateOfSlider(1);
@@ -472,7 +473,28 @@ function updateDateLimits(){
     if(lowerDate.getFullYear()==upperDate.getFullYear()){
         deactivateOptions(leftDate[1], upperDate.getMonth()+2);
     }
+    highlightMatrixSelection();
 }
+
+
+function highlightMatrixSelection(){
+    d3.selectAll("rect").style("stroke","none");
+    d3.selectAll("rect").style("stroke-opacity","0.8");
+
+    var monthIndexLeft = getMonthIndex(getDateOfSlider(1));
+    var monthIndexRight = (getDateOfSlider(2).getFullYear()-2011) * 12 +  getDateOfSlider(2).getMonth() + 1;
+    for(var j = monthIndexLeft; j < monthIndexRight+1; j++){
+        for (var i = 0; i < data.getCrimeTypes().length; i++) {
+            if (data.crimeTypes[data.getCrimeTypes()[i]].visibility) {
+                d3.select("#m"+j+"-"+i).style("stroke","black");
+            }
+        }
+    }
+}
+function getMonthIndex(date){
+    return (date.getFullYear()-2011) * 12 +  date.getMonth() + 1;
+}
+
 
 function deactivateOptions(element, lowerLimit, upperLimit){
     var options = document.getElementById(element).getElementsByTagName("option");
@@ -569,5 +591,6 @@ function log(text) {
 data.on('loadAggregates', createTimeDropdowns);
 data.on('loadAggregates', createCrimeCategoryButtons);
 data.on('loadAggregates', crimeTimeViewRequirements);
-data.on('loadAggregates', timelineView);
 data.on('loadAggregates', matrixView);
+data.on('loadAggregates', timelineView);
+
