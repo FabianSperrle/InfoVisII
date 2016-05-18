@@ -24,12 +24,6 @@ var svg;
 var years = ["y2010", "y2011", "y2012", "y2013", "y2014", "y2015", "y2016"];
 var months = ["m01", "m02", "m03", "m04", "m05", "m06", "m07", "m08", "m09", "m10", "m11", "m12"];
 var NUM_MONTHS = 63;
-/*var CLUSTERINGCOLORS = ['red', 'aqua', 'blue', 'fuchsia', 'gray', 'green', 'lime',
-    'maroon', 'darkorange', 'olive', 'silver', 'darkolivegreen', 'blueviolet',
-    'burlywood', 'darkcyan', 'chocolate', 'darkgoldenrod',
-    'darkmagenta', 'darkkhaki', 'darkgreen'
-];*/
-
 
 var x = d3.time.scale().range([0, crimeTime.width]);
 var y = d3.scale.linear().range([crimeTime.height, 0]);
