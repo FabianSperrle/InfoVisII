@@ -24,11 +24,11 @@ var svg;
 var years = ["y2010", "y2011", "y2012", "y2013", "y2014", "y2015", "y2016"];
 var months = ["m01", "m02", "m03", "m04", "m05", "m06", "m07", "m08", "m09", "m10", "m11", "m12"];
 var NUM_MONTHS = 63;
-/*var CLUSTERINGCOLORS = ['red', 'aqua', 'blue', 'fuchsia', 'gray', 'green', 'lime',
+var CLUSTERINGCOLORS = ['red', 'aqua', 'blue', 'fuchsia', 'gray', 'green', 'lime',
     'maroon', 'darkorange', 'olive', 'silver', 'darkolivegreen', 'blueviolet',
     'burlywood', 'darkcyan', 'chocolate', 'darkgoldenrod',
     'darkmagenta', 'darkkhaki', 'darkgreen'
-];*/
+];
 
 
 var x = d3.time.scale().range([0, crimeTime.width]);
@@ -120,7 +120,7 @@ function plotTimeviewLines() {
             .attr("class", "line")
             .attr("d", plotCrimePath)
             .attr("stroke-width", 10)
-            .attr("stroke", data.getCrimeColor(crimeTime.crimeTypes[i]));
+            .attr("stroke", CLUSTERINGCOLORS[i]);
         if (!data.crimeTypes[crimeTime.crimeTypes[i]].visibility) {
             d3.select("#" + crimeTime.crimeTypes[i]).attr("display", "none");
         }
@@ -149,7 +149,6 @@ function resizeTimeLine() {
     for (i = 0; i < crimeTime.crimeTypes.length; i++) {
         d3.select("#" + crimeTime.crimeTypes[i]).transition().duration(750).attr("d", plotCrimePath(getCrimeData(crimeTime.crimeTypes[i], data.crimeAggregates)));
     }
-    log("resize");
     svg.select(".y.axis") // change the y axis
         .transition().duration(750)
         .call(yAxis);
@@ -258,6 +257,7 @@ var matrixView = function() {
         height = 430 - margin.top - margin.bottom,
         gridSize = Math.floor(width / (NUM_MONTHS+8)),
 
+
     crimeTimeMatrix = d3.select("#crimeTimeMatrix").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -276,7 +276,7 @@ var matrixView = function() {
                             .attr("y", gridSize * (i+1) - 5)
                             .attr("font-family", "sans-serif")
                             .attr("font-size", "10px")
-                            .attr("fill",data.getCrimeColor(crimeTime.crimeTypes[i]))
+                            .attr("fill",CLUSTERINGCOLORS[i])
                             .text(crimeTime.crimeTypes[i]);
                     }
                     crimeTimeMatrix.append("rect")
@@ -291,7 +291,7 @@ var matrixView = function() {
                             var val = data.crimeAggregates[years[j]][months[k]][crimeTime.crimeTypes[i]];
                             return (val - countMin[i]) / (countMax[i] - countMin[i]);
                         })
-                        .style("fill", data.getCrimeColor(crimeTime.crimeTypes[i]));
+                        .style("fill", CLUSTERINGCOLORS[i]);
                 }
                 monthIndex++;
             }
