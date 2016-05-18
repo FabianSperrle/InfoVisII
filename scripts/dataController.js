@@ -113,7 +113,7 @@ DataController.prototype.initializeFilters = function() {
 
 /**
  * Changes the visibility of a given crime type. 
- * @param  {string} The crime type to change
+ * @param  {string} type The crime type to change
  * @return {[type]}
  */
 DataController.prototype.toggleVisibilityFlag = function(type) {

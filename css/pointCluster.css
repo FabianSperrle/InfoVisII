@@ -5,8 +5,71 @@ html, body, #map {
   padding: 0;
 }
 
-#map {
+#map_box {
 	float: right;
+	font: 16px sans-serif;
+}
+
+.pin {
+	width: 20px;
+	height: 20px;
+	-webkit-border-radius: 50% 50% 50% 0;
+	border-radius: 50% 50% 50% 0;
+	position: absolute;
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+	left: 50%;
+	top: 50%;
+	margin: -20px 0 0 -20px;
+}
+.pin:after {
+	content: '';
+	width: 6px;
+	height: 6px;
+	margin: 7px 0 0 7px;
+	background: #2f2f2f;
+	position: absolute;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+}
+
+.AllCrimes { background: red; }
+.Violenceandsexualoffences { background: aqua }
+.Othertheft { background: blue }
+.Burglary { background: fuchsia }
+.Violentcrime { background: gray }
+.Bicycletheft { background: green }
+.Anti-socialbehaviour { background: lime }
+.Othercrime { background: maroon }
+.Shoplifting { background: darkorange }
+.Drugs { background: olive }
+.Criminaldamageandarson { background: silver }
+.Vehiclecrime { background: darkolivegreen }
+.Theftfromtheperson { background: blueviolet }
+.Publicdisorderandweapons { background: burlywood }
+.Publicorder { background: darkcyan }
+.Robbery { background: chocolate }
+.Possessionofweapons { background: darkgoldenrod }
+
+.warning {
+	width: 400;
+	height: 400px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -20px 0 0 -20px;
+	background: white;
+	border: 10px solid firebrick;
+}
+.warning:after {
+	content: 'Too many points. It is impossible to render that many points. Please apply some filters, or use the other maps.';
+	width: 200px;
+	height: 200px;
+	margin: 100px 200px 0 100px;
+	position: absolute;
 }
 
 .stations, .stations svg {

@@ -5,6 +5,8 @@
 
 	<script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
 	<script src="http://leaflet.github.io/Leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+	<script src="libs/leaflet-heat.js"></script>
+	<script src="libs/rotatedMarker.js"></script>
 	<script src="libs/telegraph.min.js"></script>
 	<script src="libs/d3.v3.min.js"></script>
 	<script src="libs/crossfilter.v1.min.js"></script>
@@ -28,7 +30,17 @@
 	</div>
 
 	<div id="progress"><div id="progress-bar"></div></div>
-	<div id="map"></div>
+	<div id="map_box">
+		<div id="map_controls">
+			<form>
+                <span><label for="cluster_map">Clustered View</label><input onClick="setVisibleLayer('clusters')" type="radio" name="map_typ" id="cluster_map" value="clusters"></span>
+				<span><label for="heat_map">Heat Map</label><input onClick="setVisibleLayer('heat')" type="radio" name="map_typ" id="heat_map" value="heat"></span>
+                <span><label for="point_map">Single Crimes</label><input onClick="setVisibleLayer('points')" type="radio" name="map_typ" id="point_map" value="points"></span>
+                <span><label for="choropleth_map">Choropleth View</label><input onClick="setVisibleLayer('choropleth')" type="radio" name="map_typ" id="choropleth_map" value="choropleth"></span>
+            </form>
+		</div>
+        <div id="map"></div>
+    </div>
 
 	<script type="text/javascript" src="scripts/crimeTimeViews.js"></script>
 	<script type="text/javascript" src="scripts/pointCluster.js"></script>
