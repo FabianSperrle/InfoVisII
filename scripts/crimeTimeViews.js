@@ -270,7 +270,6 @@ var matrixView = function() {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    log(gridSize);
     var monthIndex = 0;
     for (var j = 0; j < years.length; j++) {
         for (var k = 0; k < months.length; k++) {
@@ -287,6 +286,7 @@ var matrixView = function() {
                             .text(data.getVerboseCrimeName(data.getCrimeTypes()[i]));
                     }
                     crimeTimeMatrix.append("rect")
+                        .attr("id", monthIndex + "-" + i)
                         .attr("x", gridSize * (monthIndex+8))
                         .attr("y", gridSize * i)
                         .attr("rx", 5)
@@ -294,18 +294,21 @@ var matrixView = function() {
                         .attr("width", gridSize)
                         .attr("height", gridSize)
                         .attr("class", "field bordered")
-                        .style("opacity", function() {
+                        .style("fill-opacity", function() {
                             var val = data.crimeAggregates[years[j]][months[k]][data.getCrimeTypes()[i]];
                             return (val - countMin[i]) / (countMax[i] - countMin[i]);
                         })
                         .style("fill", data.getCrimeColor(data.getCrimeTypes()[i]))
                         .attr("numberOfCrimes",data.crimeAggregates[years[j]][months[k]][data.getCrimeTypes()[i]])
+                        .attr("crimeID",i)
+                        .attr("totalCrimesOfMonth", data.crimeAggregates[years[j]][months[k]][data.getCrimeTypes()[0]])
                         .on("mouseover", function (d, x) {
+                            var mine = d3.select(this);
                             var tooltip = d3.select("#tooltip");
                             test = tooltip;
-                            tooltip.style("color", d3.select(this).style("fill"));
+                            tooltip.style("color", mine.style("fill"));
                             //log(data.getCrimeColor(data.getCrimeTypes()[colorIndex]));
-                            tooltip.html(d3.select(this).attr("numberOfCrimes"));
+                            tooltip.html(data.getVerboseCrimeName(data.getCrimeTypes()[mine.attr("crimeID")]) + ": " +mine.attr("numberOfCrimes") + '<br>' + "Monthly Crimes: " + mine.attr("totalCrimesOfMonth"));
                             tooltip.style("visibility","visible");
                             //if (!d3.select('#tooltip').node().checked) return;
                             //tooltip.html("# Crimes: " + data.crimeAggregates[years[j]][months[k]][data.getCrimeTypes()[i]]);
@@ -326,21 +329,22 @@ var matrixView = function() {
 
 var test;
 
-var countMax, countMin;
+var countMax, countMin, countTotal;
 function crimeTimeViewRequirements(){
     // Define Max and Min Values
     countMax = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    countTotal = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     countMin = [Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE];
     for (var j = 0; j < years.length; j++) {
         for (var k = 0; k < months.length; k++) {
             for (var i = 0; i < data.getCrimeTypes().length; i++) {
-                //log(years[j] + " - " + months[k] + " " + crimeTypes[i]);
                 if (!(typeof data.crimeAggregates[years[j]] === 'undefined' || typeof data.crimeAggregates[years[j]][months[k]] === 'undefined')) {
                     var val = data.crimeAggregates[years[j]][months[k]][data.getCrimeTypes()[i]];
                     if (typeof val !== "undefined") {
                         if (countMax[i] < val) countMax[i] = val;
                         if (countMin[i] > val) countMin[i] = val;
                     }
+                    countTotal[i] += val;
                 }
             }
         }

@@ -51,6 +51,6 @@ body {
 
 
 rect.bordered {
-    stroke: #C6C6C6;
-    stroke-width:1px;
+    /*stroke: #C6C6C6;
+    stroke-width:1px;*/
 }

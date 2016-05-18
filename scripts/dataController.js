@@ -12,35 +12,25 @@ function DataController() {
 			verboseName: 'All Crimes',
 			color: 'red',
 		},
-		violence_and_sex: {
-			visibility: 0,
-			verboseName: 'Violence and sexual offences',
-			color: 'aqua',
-		},
-		other_theft: {
-			visibility: 1,
-			verboseName: 'Other theft',
-			color: 'blue',
-		},
 		burglary: {
 			visibility: 0,
 			verboseName: 'Burglary',
 			color: 'fuchsia',
 		},
-		violent_crime: {
-			visibility: 0,
-			verboseName: 'Violent crime',
-			color: 'gray',
-		},
-		bicycle_theft: {
-			visibility: 0,
-			verboseName: 'Bicycle theft',
-			color: 'green',
-		},
 		anti_social_behaviour: {
 			visibility: 0,
 			verboseName: 'Anti-social behaviour',
 			color: 'lime',
+		},
+		vehicle_crime: {
+			visibility: 0,
+			verboseName: 'Vehicle crime',
+			color: 'darkolivegreen',
+		},
+		robbery: {
+			visibility: 0,
+			verboseName: 'Robbery',
+			color: 'chocolate',
 		},
 		other_crime: {
 			visibility: 0,
@@ -62,10 +52,15 @@ function DataController() {
 			verboseName: 'Criminal damage and arson',
 			color: 'silver',
 		},
-		vehicle_crime: {
+		other_theft: {
+			visibility: 1,
+			verboseName: 'Other theft',
+			color: 'blue',
+		},
+		bicycle_theft: {
 			visibility: 0,
-			verboseName: 'Vehicle crime',
-			color: 'darkolivegreen',
+			verboseName: 'Bicycle theft',
+			color: 'green',
 		},
 		theft_from_the_person: {
 			visibility: 0,
@@ -77,20 +72,25 @@ function DataController() {
 			verboseName: 'Public disorder and weapons',
 			color: 'burlywood',
 		},
+		possesion_of_weapons: {
+			visibility: 0,
+			verboseName: 'Possession of weapons',
+			color: 'darkgoldenrod'
+		},
 		public_order: {
 			visibility: 0,
 			verboseName: 'Public order',
 			color: 'darkcyan',
 		},
-		robbery: {
+		violent_crime: {
 			visibility: 0,
-			verboseName: 'Robbery',
-			color: 'chocolate',
+			verboseName: 'Violent crime',
+			color: 'gray',
 		},
-		possesion_of_weapons: {
+		violence_and_sex: {
 			visibility: 0,
-			verboseName: 'Possession of weapons',
-			color: 'darkgoldenrod',
+			verboseName: 'Violence and sexual offences',
+			color: 'aqua',
 		},
 	};
 	this.visibleVerboseCrimeTypes = ["Other theft"];
