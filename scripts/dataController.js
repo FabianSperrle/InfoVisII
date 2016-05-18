@@ -160,8 +160,10 @@ DataController.prototype.toggleFilter = function(type) {
 			return true;
 		return false;
 	}).top(Infinity);
+	setTimeout(function(){
+		data.emit('filtered');
+	}, 0);
 
-	data.emit('filtered');
 };
 
 DataController.prototype.mapFilterKeyword = function(key) {
@@ -175,15 +177,15 @@ DataController.prototype.getCrimeTypes = function() {
 	}
 
 	return names;
-}
+};
 
 DataController.prototype.getVerboseCrimeName = function(crime) {
 	return this.crimeTypes[crime].verboseName;
-}
+};
 
 DataController.prototype.getCrimeColor = function(crime) {
 	return this.crimeTypes[crime].color;
-}
+};
 
 var data = new DataController();
 

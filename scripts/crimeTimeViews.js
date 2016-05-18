@@ -5,10 +5,20 @@ function CrimeTime() {
         bottom: 30,
         left: 50
     };
-    this.width = 960 - this.margin.left - this.margin.right;
+    this.width = 819;//960 - this.margin.left - this.margin.right;
     this.height = 300 - this.margin.top - this.margin.bottom;
 }
 
+// Tooltip of Cluster Points
+var tooltip = d3.select("body")
+    .append("div")
+    .attr("id", "tooltip")
+    .style("position", "absolute")
+    .style("font-size", "20px")
+    .style("z-index", "10")
+    .style("background-color", "rgba(255,255,255,0.9)")
+    .style("visibility", "hidden")
+    .style("padding", "2px");
 var crimeTime = new CrimeTime();
 
 var dateFormat = d3.time.format("%Y-%m");
@@ -141,7 +151,6 @@ function resizeTimeLine() {
     for (i = 0; i < data.getCrimeTypes().length; i++) {
         d3.select("#" + data.getCrimeTypes()[i]).transition().duration(750).attr("d", plotCrimePath(getCrimeData(data.getCrimeTypes()[i], data.crimeAggregates)));
     }
-    log("resize");
     svg.select(".y.axis") // change the y axis
         .transition().duration(750)
         .call(yAxis);
@@ -149,7 +158,7 @@ function resizeTimeLine() {
 
 var timelineView = function() {
     svg1 = d3.select("#timelineView").append("svg:svg")
-        .attr("width", crimeTime.width + crimeTime.margin.left + crimeTime.margin.right)
+        .attr("width", crimeTime.width + crimeTime.margin.left + crimeTime.margin.right) //
         .attr("height", crimeTime.height + crimeTime.margin.top + crimeTime.margin.bottom);
     svg = svg1.append("g")
         .attr("transform", "translate(" + crimeTime.margin.left + "," + crimeTime.margin.top + ")");
@@ -261,6 +270,7 @@ var matrixView = function() {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+    log(gridSize);
     var monthIndex = 0;
     for (var j = 0; j < years.length; j++) {
         for (var k = 0; k < months.length; k++) {
@@ -269,12 +279,12 @@ var matrixView = function() {
                     if(monthIndex==0){
                         crimeTimeMatrix
                             .append('text')
-                            .attr("x", -20)
+                            .attr("x", -25)
                             .attr("y", gridSize * (i+1) - 5)
                             .attr("font-family", "sans-serif")
                             .attr("font-size", "10px")
                             .attr("fill",data.getCrimeColor(data.getCrimeTypes()[i]))
-                            .text(data.getCrimeTypes()[i]);
+                            .text(data.getVerboseCrimeName(data.getCrimeTypes()[i]));
                     }
                     crimeTimeMatrix.append("rect")
                         .attr("x", gridSize * (monthIndex+8))
@@ -288,13 +298,33 @@ var matrixView = function() {
                             var val = data.crimeAggregates[years[j]][months[k]][data.getCrimeTypes()[i]];
                             return (val - countMin[i]) / (countMax[i] - countMin[i]);
                         })
-                        .style("fill", data.getCrimeColor(data.getCrimeTypes()[i]));
+                        .style("fill", data.getCrimeColor(data.getCrimeTypes()[i]))
+                        .attr("numberOfCrimes",data.crimeAggregates[years[j]][months[k]][data.getCrimeTypes()[i]])
+                        .on("mouseover", function (d, x) {
+                            var tooltip = d3.select("#tooltip");
+                            test = tooltip;
+                            tooltip.style("color", d3.select(this).style("fill"));
+                            //log(data.getCrimeColor(data.getCrimeTypes()[colorIndex]));
+                            tooltip.html(d3.select(this).attr("numberOfCrimes"));
+                            tooltip.style("visibility","visible");
+                            //if (!d3.select('#tooltip').node().checked) return;
+                            //tooltip.html("# Crimes: " + data.crimeAggregates[years[j]][months[k]][data.getCrimeTypes()[i]]);
+                            return;
+                        })
+                        .on("mousemove", function () {
+                            tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
+                        })
+                        .on("mouseout", function () {
+                            return d3.select("#tooltip").style("visibility", "hidden");
+                        });
                 }
                 monthIndex++;
             }
         }
     }
 };
+
+var test;
 
 var countMax, countMin;
 function crimeTimeViewRequirements(){

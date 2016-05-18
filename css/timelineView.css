@@ -32,9 +32,12 @@ body {
     fill: none;
     stroke-width: 1.5px;
 }
-#crimeTimeMatrix,
+#crimeTimeMatrix{
+    border: thin solid lightgrey;
+}
 #timelineView{
     border: thin solid lightgrey;
+    padding-left: 80px;
 }
 
 #slider {
@@ -43,6 +46,8 @@ body {
     opacity: 0.5;
     cursor: pointer;
 }
+
+
 
 
 rect.bordered {
