@@ -40,8 +40,15 @@ body {
     padding-left: 80px;
 }
 
-#slider {
-    stroke: black;
+
+#slider1{
+    stroke: RED;
+    stroke-width: 5;
+    opacity: 0.5;
+    cursor: pointer;
+}
+#slider2{
+    stroke: BLUE;
     stroke-width: 5;
     opacity: 0.5;
     cursor: pointer;

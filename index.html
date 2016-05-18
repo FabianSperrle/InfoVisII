@@ -23,6 +23,17 @@
 
 	<div id="crimeTimeVieWrapper">
 		<div id="timelineView"></div>
+
+		<div id="dateDropdowns">
+			<form style="float:left" action="" name="timeLeftBorder">
+				<select id="monthdropdownLeft" class="leftDate" onchange="updateDate(this)"></select>
+				<select id="yeardropdownLeft" class="leftDate" onchange="updateDate(this)"></select>
+			</form>
+			<form style="float:right" action="" name="timeRightBorder">
+				<select id="monthdropdownRight" class="rightDate" onchange="updateDate(this)"></select>
+				<select id="yeardropdownRight" class="rightDate" onchange="updateDate(this)"></select>
+			</form>
+		</div>
 		<div id="sliderDate"></div>
 		<div id="crimeTimeMatrix"></div>
 	</div>
