@@ -7,7 +7,6 @@ function CrimeTime() {
     };
     this.width = 960 - this.margin.left - this.margin.right;
     this.height = 300 - this.margin.top - this.margin.bottom;
-    this.crimeTypes = Object.keys(data.crimeTypes);
 }
 
 var crimeTime = new CrimeTime();
@@ -34,7 +33,7 @@ var svg1;
 var createCrimeCategoryButtons = function() {
     // Generate list of checkboxes
     d3.select("#crimeCheckboxes").selectAll("input")
-        .data(crimeTime.crimeTypes)
+        .data(data.getCrimeTypes())
         .enter()
         .append('label')
         .attr('for', function(d, i) {
@@ -61,17 +60,16 @@ var createCrimeCategoryButtons = function() {
     // Make sure they're all unchecked
     d3.selectAll('input').property('checked', false);
     // And select the default ones from the boolean array
-    for (var i = 0; i < crimeTime.crimeTypes.length; i++) {
-        d3.select("#category_" + i).property("checked", data.crimeTypes[crimeTime.crimeTypes[i]].visibility);
+    for (var i = 0; i < data.getCrimeTypes().length; i++) {
+        d3.select("#category_" + i).property("checked", data.crimeTypes[data.getCrimeTypes()[i]].visibility);
     }
 };
 
 function toggleCheckboxesOfCrimes(checkboxID) {
-    data.crimeTypes[crimeTime.crimeTypes[checkboxID]].visibility = d3.select("#category_" + checkboxID).property("checked");
+    // Trigger 'toggle' event of the DataController
+    data.emit('toggle', data.getCrimeTypes()[checkboxID]);
     toggleTimeviewLines(checkboxID);
     resizeTimeLine(data.crimeAggregates);
-    // Trigger 'toggle' event of the DataController
-    data.emit('toggle', crimeTime.crimeTypes[checkboxID]);
 }
 
 function getCrimeData(crimeType, data) {
@@ -107,24 +105,24 @@ function plotTimeviewLines() {
     //    datas[crimeTime.crimeTypes[i]] = getCrimeData(crimeTime.crimeTypes[i], data);
     //}
     //console.log(JSON.stringify(datas));
-    for (var i = 0; i < crimeTime.crimeTypes.length; i++) {
+    for (var i = 0; i < data.getCrimeTypes().length; i++) {
         svg.append("path")
-            .attr("id", crimeTime.crimeTypes[i])
-            .datum(getCrimeData(crimeTime.crimeTypes[i], data.crimeAggregates))
+            .attr("id", data.getCrimeTypes()[i])
+            .datum(getCrimeData(data.getCrimeTypes()[i], data.crimeAggregates))
             .attr("class", "line")
             .attr("d", plotCrimePath)
             .attr("stroke-width", 10)
-            .attr("stroke", data.getCrimeColor(crimeTime.crimeTypes[i]));
-        if (!data.crimeTypes[crimeTime.crimeTypes[i]].visibility) {
-            d3.select("#" + crimeTime.crimeTypes[i]).attr("display", "none");
+            .attr("stroke", data.getCrimeColor(data.getCrimeTypes()[i]));
+        if (!data.crimeTypes[data.getCrimeTypes()[i]].visibility) {
+            d3.select("#" + data.getCrimeTypes()[i]).attr("display", "none");
         }
     }
     resizeTimeLine(data.crimeAggregates);
 }
 
 function toggleTimeviewLines(crimeLineID) {
-    var line = d3.select('#' + crimeTime.crimeTypes[crimeLineID]);
-    if (data.crimeTypes[crimeTime.crimeTypes[crimeLineID]].visibility) {
+    var line = d3.select('#' + data.getCrimeTypes()[crimeLineID]);
+    if (data.crimeTypes[data.getCrimeTypes()[crimeLineID]].visibility) {
         line.attr("display", "block");
     } else {
         line.attr("display", "none");
@@ -133,15 +131,15 @@ function toggleTimeviewLines(crimeLineID) {
 
 function resizeTimeLine() {
     var maxValue = 0;
-    for (var i = 0; i < crimeTime.crimeTypes.length; i++) {
-        if (data.crimeTypes[crimeTime.crimeTypes[i]].visibility) {
+    for (var i = 0; i < data.getCrimeTypes().length; i++) {
+        if (data.crimeTypes[data.getCrimeTypes()[i]].visibility) {
             if (countMax[i] > maxValue)
                 maxValue = countMax[i];
         }
     }
     y.domain([0, maxValue + 0.2 * maxValue]);
-    for (i = 0; i < crimeTime.crimeTypes.length; i++) {
-        d3.select("#" + crimeTime.crimeTypes[i]).transition().duration(750).attr("d", plotCrimePath(getCrimeData(crimeTime.crimeTypes[i], data.crimeAggregates)));
+    for (i = 0; i < data.getCrimeTypes().length; i++) {
+        d3.select("#" + data.getCrimeTypes()[i]).transition().duration(750).attr("d", plotCrimePath(getCrimeData(data.getCrimeTypes()[i], data.crimeAggregates)));
     }
     log("resize");
     svg.select(".y.axis") // change the y axis
@@ -177,7 +175,7 @@ var timelineView = function() {
     plotTimeviewLines();
 
     // SLIDER
-    var _dragSliderLine;
+    var _dragSliderLine = null;;
     var slider = svg1.append("g");
 
     var sliderLine = slider.append("line").attr("id", "slider")
@@ -214,6 +212,11 @@ var timelineView = function() {
                 printDate();
             }
         }
+    });
+
+    svg1.on("mouseleave", function(){
+        d3.event.preventDefault();
+        _dragSliderLine = null;
     });
 
     svg1.on("mousedown", function() {
@@ -262,7 +265,7 @@ var matrixView = function() {
     for (var j = 0; j < years.length; j++) {
         for (var k = 0; k < months.length; k++) {
             if (!(typeof data.crimeAggregates[years[j]] === 'undefined' || typeof data.crimeAggregates[years[j]][months[k]] === 'undefined')) {
-                for (var i = 0; i < crimeTime.crimeTypes.length; i++) {
+                for (var i = 0; i < data.getCrimeTypes().length; i++) {
                     if(monthIndex==0){
                         crimeTimeMatrix
                             .append('text')
@@ -270,8 +273,8 @@ var matrixView = function() {
                             .attr("y", gridSize * (i+1) - 5)
                             .attr("font-family", "sans-serif")
                             .attr("font-size", "10px")
-                            .attr("fill",data.getCrimeColor(crimeTime.crimeTypes[i]))
-                            .text(crimeTime.crimeTypes[i]);
+                            .attr("fill",data.getCrimeColor(data.getCrimeTypes()[i]))
+                            .text(data.getCrimeTypes()[i]);
                     }
                     crimeTimeMatrix.append("rect")
                         .attr("x", gridSize * (monthIndex+8))
@@ -282,10 +285,10 @@ var matrixView = function() {
                         .attr("height", gridSize)
                         .attr("class", "field bordered")
                         .style("opacity", function() {
-                            var val = data.crimeAggregates[years[j]][months[k]][crimeTime.crimeTypes[i]];
+                            var val = data.crimeAggregates[years[j]][months[k]][data.getCrimeTypes()[i]];
                             return (val - countMin[i]) / (countMax[i] - countMin[i]);
                         })
-                        .style("fill", data.getCrimeColor(crimeTime.crimeTypes[i]));
+                        .style("fill", data.getCrimeColor(data.getCrimeTypes()[i]));
                 }
                 monthIndex++;
             }
@@ -300,10 +303,10 @@ function crimeTimeViewRequirements(){
     countMin = [Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE];
     for (var j = 0; j < years.length; j++) {
         for (var k = 0; k < months.length; k++) {
-            for (var i = 0; i < crimeTime.crimeTypes.length; i++) {
+            for (var i = 0; i < data.getCrimeTypes().length; i++) {
                 //log(years[j] + " - " + months[k] + " " + crimeTypes[i]);
                 if (!(typeof data.crimeAggregates[years[j]] === 'undefined' || typeof data.crimeAggregates[years[j]][months[k]] === 'undefined')) {
-                    var val = data.crimeAggregates[years[j]][months[k]][crimeTime.crimeTypes[i]];
+                    var val = data.crimeAggregates[years[j]][months[k]][data.getCrimeTypes()[i]];
                     if (typeof val !== "undefined") {
                         if (countMax[i] < val) countMax[i] = val;
                         if (countMin[i] > val) countMin[i] = val;
