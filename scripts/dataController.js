@@ -218,7 +218,6 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisIIPreProcessing/
 	if (error) throw error;
 	
 	json.forEach(function(d, i) {
-		d.index = i;
 		d.month = new Date(d.month.substring(0,4), d.month.substring(5,7)-1, 15);
 	})
 

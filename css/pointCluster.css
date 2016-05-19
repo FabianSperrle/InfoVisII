@@ -8,6 +8,20 @@ html, body, #map {
 #map_box {
 	float: right;
 	font: 16px sans-serif;
+	position: relative
+}
+
+#too_many,
+#no_elements {
+	font: 16px sans-serif;
+	position: absolute;
+	z-index: 100000;
+	height: 100%;
+	width: 100%;
+	background: white;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s, opacity 0.5s;
 }
 
 .pin {

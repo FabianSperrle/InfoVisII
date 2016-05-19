@@ -25,7 +25,7 @@ var layers = {
         invalid: true
     }
 };
-maxPoints = 5000;
+maxPoints = 1000;
 
 var visibleLayer = layers.clusters;
 var visibleLayerName = 'clusters';
@@ -33,6 +33,7 @@ var visibleLayerName = 'clusters';
 function setVisibleLayer(name) {
     if (visibleLayer !== undefined)
         map.removeLayer(visibleLayer);
+    removeTooManyPointsWarning();
     
     if (layers[name].invalid == true) {
         updateLayer(name);
@@ -43,7 +44,7 @@ function setVisibleLayer(name) {
     map.addLayer(visibleLayer);
     
     if (data.filtered.length > maxPoints && name == "points") {
-        map.panTo(latlng);
+        tooManyPoints();
     }
 }
 
@@ -134,18 +135,8 @@ var updatePointsLayer = function () {
             marker.bindPopup(title);
             markerList.push(marker);
         }
-    } else {
-        // too many points!
-        var divIcon = L.divIcon({
-            className: 'warning',
-            iconSize: [400, 400]
-        });
-        var marker = L.marker(latlng, {
-            icon: divIcon,
-        });
-        markerList.push(marker);
     }
-    
+
     layers.points = L.layerGroup(markerList);
 }
 
@@ -181,9 +172,35 @@ function invalidateLayers() {
     })
 }
 
+function emptyDataList() {
+    if (data.filtered.length == 0) {
+        d3.selectAll('#no_elements')
+            .style('visibility', 'visible')
+            .style('opacity', '1');
+    } else {
+        d3.selectAll('#no_elements').style('opacity', '0');
+        setTimeout(
+            function() {
+                d3.selectAll('#no_elements').style('visibility', 'hidden');
+            }, 500
+        );
+    }
+}
+
+function tooManyPoints() {
+    d3.selectAll('#too_many')
+        .style('visibility', 'visible')
+        .style('opacity', '1');
+}
+
+function removeTooManyPointsWarning() {
+    d3.selectAll('#too_many').style('opacity', '0')
+        .style('visibility', 'hidden');
+}
 data.once('filtered', updateClusterLayer);
 
 data.on('filtered', invalidateLayers);
+data.on('filtered', emptyDataList);
 data.on('filtered', updateCurrentLayer);
 data.on('filtered', redrawCurrentLayer);
 
