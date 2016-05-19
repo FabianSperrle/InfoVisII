@@ -13,7 +13,7 @@ body {
     margin: 45px;
 }
 
-#crimeCheckboxes label {
+#crimeCheckboxes span {
     margin-right: 20px;
 }
 

@@ -44,30 +44,28 @@ var svg1;
 
 var createCrimeCategoryButtons = function() {
     // Generate list of checkboxes
-    d3.select("#crimeCheckboxes").selectAll("input")
+    var spans = d3.select("#crimeCheckboxes").selectAll("input")
         .data(data.getCrimeTypes())
         .enter()
-        .append('label')
+        .append('span')
+    spans.append('label')
         .attr('for', function(d, i) {
-            return 'a' + i;
+            return 'category_' + i;
         })
         .style("color", function(d, i) {
             return data.getCrimeColor(d);
         })
         .text(function(d, i) {
             return data.getVerboseCrimeName(d);
-        })
-        .append("input")
+    });
+    spans.append("input")
         .attr("type", "checkbox")
         .attr("id", function(d, i) {
             return "category_" + i;
         })
         .attr("onClick", function(d, i) {
             return "toggleCheckboxesOfCrimes(" + i + ")";
-        })
-        .attr("for", function(d, i) {
-            return "a" + i;
-        });
+    });
 
     // Make sure they're all unchecked
     d3.selectAll('input').property('checked', false);
