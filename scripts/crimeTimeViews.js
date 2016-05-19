@@ -308,6 +308,10 @@ var timelineView = function() {
         return false;
 
     });
+    
+    svg1.on('mouseup', function() {
+        data.dateChangeBoth(getDateOfSlider(1), getDateOfSlider(2));
+    })
 
     function type(d) {
         d.date = formatDate.parse(d.date);
@@ -422,18 +426,22 @@ var leftDate = ["left", "monthdropdownLeft", "yeardropdownLeft"];
 var rightDate = ["right", "monthdropdownRight", "yeardropdownRight"];
 
 function updateDate(selectedField){
-    var month, year;
+    console.log("updating date");
+    var month, year, type;
     if(selectedField.getAttribute("class") === "leftDate"){
         month = monthtext.indexOf(document.getElementById(leftDate[1]).value);
         year = document.getElementById(leftDate[2]).value;
         xSliderLeft = timeScale(new Date(year, month, 15))+50;
         d3.select(".left").transition().duration(500).attr("x1", xSliderLeft).attr("x2", xSliderLeft);
+        type = "from";
     } else if (selectedField.getAttribute("class") === "rightDate"){
         month = monthtext.indexOf(document.getElementById(rightDate[1]).value);
         year = document.getElementById(rightDate[2]).value;
         xSliderRight = timeScale(new Date(year, month, 15))+50;
         d3.select(".right").transition().duration(500).attr("x1", xSliderRight).attr("x2", xSliderRight);
+        type = "to";
     }
+    data.dateChange(month, year, type);
     updateDateLimits();
 }
 

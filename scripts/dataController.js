@@ -3,8 +3,14 @@ function DataController() {
 	this.all = {};
 	this.crimes = {};
 	this.crimesByType = {};
+	this.crimesByDate = {};
 	this.filtered = {};
 	this.crimeAggregates = {};
+
+	this.dates = {
+		from: new Date(2011, 4,  15),
+		to: new Date(2012, 6, 15)
+	};
 
 	this.crimeTypes = {
 		allCrimes: {
@@ -105,6 +111,10 @@ DataController.prototype.initializeFilters = function() {
 	this.crimesByType = this.crimes.dimension(function(d) {
 		return d.crimetype;
 	});
+	this.crimesByDate = this.crimes.dimension(function(d) {
+		return d.month;
+	});
+	this.filterDate();
 	this.filtered = this.crimesByType.filterAll().top(Infinity);
 	this.visibleVerboseCrimeTypes = ["Violence and sexual offences", "Other theft", "Burglary", "Violent crime", "Bicycle theft", "Anti-social behaviour", "Other crime", "Shoplifting", "Drugs", "Criminal damage and arson", "Vehicle  crime", "Theft from the person", "Public disorder and weapons", "Public order", "Robbery", "Possession of weapons"];
 
@@ -151,20 +161,34 @@ DataController.prototype.toggleVisibilityFlag = function(type) {
 	}
 };
 
+DataController.prototype.dateChangeBoth = function(from, to) {
+	this.dates.from = from;
+	this.dates.to = to;
+	this.filterDate();
+}
+DataController.prototype.dateChange = function(month, year, type) {
+	this.dates[type] = new Date(year, month - 1, 15);
+	this.filterDate();
+}
+
+DataController.prototype.filterDate = function() {
+    this.filtered = this.crimesByDate.filter(function(d) {
+        return (d >= data.dates.from && d <= data.dates.to);
+    }).top(Infinity);
+    data.emit('filtered');
+}
+
 DataController.prototype.toggleFilter = function(type) {
 	this.toggleVisibilityFlag(type);
-
+	
 	// Apply all filters
 	this.filtered = this.crimesByType.filter(function(d) {
 		if (data.visibleVerboseCrimeTypes.indexOf(d) >= 0)
 			return true;
 		return false;
 	}).top(Infinity);
-	setTimeout(function(){
-		data.emit('filtered');
-	}, 0);
-
-};
+    data.emit('filtered');
+}
 
 DataController.prototype.mapFilterKeyword = function(key) {
 	return this.CrimeTypes[key].verboseName;
@@ -192,6 +216,11 @@ var data = new DataController();
 
 d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisIIPreProcessing/master/DataComplete/crimes.json", function(error, json) {
 	if (error) throw error;
+	
+	json.forEach(function(d, i) {
+		d.index = i;
+		d.month = new Date(d.month.substring(0,4), d.month.substring(5,7)-1, 15);
+	})
 
 	data.all = json;
 	data.filtered = json;
@@ -207,3 +236,4 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisIIPreProcessing/
 
 data.on('loadAll', data.initializeFilters);
 data.on('toggle', data.toggleFilter);
+data.on('dateChange', data.dateChange);
