@@ -82,6 +82,8 @@ function toggleCheckboxesOfCrimes(checkboxID) {
     toggleTimeviewLines(checkboxID);
     resizeTimeLine(data.crimeAggregates);
     highlightMatrixSelection();
+    d3.select("#category_" + checkboxID).property("checked", data.crimeTypes[data.getCrimeTypes()[checkboxID]].visibility);
+    
 }
 
 function getCrimeData(crimeType, data) {
@@ -364,7 +366,12 @@ var matrixView = function() {
                             .attr("fill",data.getCrimeColor(data.getCrimeTypes()[i]))
                             .text(data.getVerboseCrimeName(data.getCrimeTypes()[i]))
                             .on("click", function(d,i){
-                                toggleCheckboxesOfCrimes(data.getCrimeIndexByVerboseName(d3.select(this).text()));
+                                var indexC = data.getCrimeIndexByVerboseName(d3.select(this).text());
+                                toggleCheckboxesOfCrimes(indexC);
+                                //var xxxx = data.crimeTypes[data.getCrimeVarName(d3.select(this).text())].visibility ? 'true' : 'false';
+                                //var x = data.crimeTypes[data.getCrimeVarName(d3.select(this).text())].visibility;
+                                //console.log(xxxx);
+                                //d3.select('#category_'+indexC).attr('checked','' + xxxx);
                             })
                             .style("cursor","pointer");
                             
