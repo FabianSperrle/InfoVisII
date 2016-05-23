@@ -38,7 +38,7 @@ var NUM_MONTHS = 63;
 
 var x = d3.time.scale().range([0, crimeTime.width]);
 var y = d3.scale.linear().range([crimeTime.height, 0]);
-var xAxis = d3.svg.axis().scale(x).orient("bottom");
+var xAxis = d3.svg.axis().scale(x).orient("bottom").ticks(d3.time.years).tickSize(16, 0).tickFormat(d3.time.format("%Y"));
 var yAxis = d3.svg.axis().scale(y).orient("left");
 var svg1;
 
@@ -55,6 +55,7 @@ var createCrimeCategoryButtons = function() {
         .style("color", function(d, i) {
             return data.getCrimeColor(d);
         })
+        .style("cursor","pointer")
         .text(function(d, i) {
             return data.getVerboseCrimeName(d);
     });
@@ -171,6 +172,17 @@ var timelineView = function() {
         .attr("class", "x axis")
         .attr("transform", "translate(0," + crimeTime.height + ")")
         .call(xAxis);
+
+    //add small ticks for months
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + crimeTime.height + ")")
+        .call(d3.svg.axis()
+            .scale(x)
+            .orient("bottom")
+            .ticks(d3.time.months)
+            .tickSize(10, 0)
+            .tickFormat(d3.time.format("")));
 
     svg.append("g")
         .attr("class", "y axis")
@@ -350,7 +362,12 @@ var matrixView = function() {
                             .attr("font-family", "sans-serif")
                             .attr("font-size", "10px")
                             .attr("fill",data.getCrimeColor(data.getCrimeTypes()[i]))
-                            .text(data.getVerboseCrimeName(data.getCrimeTypes()[i]));
+                            .text(data.getVerboseCrimeName(data.getCrimeTypes()[i]))
+                            .on("click", function(d,i){
+                                toggleCheckboxesOfCrimes(data.getCrimeIndexByVerboseName(d3.select(this).text()));
+                            })
+                            .style("cursor","pointer");
+                            
                     }
                     crimeTimeMatrix.append("rect")
                         .attr("id",  "m"+monthIndex + "-" + i)
@@ -394,6 +411,7 @@ var matrixView = function() {
         }
     }
 };
+
 
 var test;
 
