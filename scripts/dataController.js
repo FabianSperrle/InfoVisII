@@ -211,6 +211,25 @@ DataController.prototype.getCrimeColor = function(crime) {
 	return this.crimeTypes[crime].color;
 };
 
+DataController.prototype.getCrimeVarName = function(crimeVerboseName) {
+	for (var key in this.crimeTypes) {
+				if(this.crimeTypes[key].verboseName == crimeVerboseName){
+					return key.toString();
+				}
+			}
+	return null;
+};
+DataController.prototype.getCrimeIndexByVerboseName = function(crimeVerboseName) {
+	var index=0;
+	for (var key in this.crimeTypes) {
+				if(this.crimeTypes[key].verboseName == crimeVerboseName){
+					return index;
+				}
+				index++;
+			}
+	return null;
+};
+
 var data = new DataController();
 
 
