@@ -6,7 +6,7 @@ function CrimeTime() {
         left: 50
     };
     this.width = 819;//960 - this.margin.left - this.margin.right;
-    this.height = 300 - this.margin.top - this.margin.bottom;
+    this.height = 200 - this.margin.top - this.margin.bottom;
 }
 
 // Tooltip of Cluster Points
@@ -44,11 +44,19 @@ var svg1;
 
 var createCrimeCategoryButtons = function() {
     // Generate list of checkboxes
-    var spans = d3.select("#crimeCheckboxes").selectAll("input")
+    var divs = d3.select("#crimeCheckboxes").selectAll("input")
         .data(data.getCrimeTypes())
         .enter()
-        .append('span')
-    spans.append('label')
+        .append('div')
+    divs.append("input")
+        .attr("type", "checkbox")
+        .attr("id", function(d, i) {
+            return "category_" + i;
+        })
+        .attr("onClick", function(d, i) {
+            return "toggleCheckboxesOfCrimes(" + i + ")";
+    });
+    divs.append('label')
         .attr('for', function(d, i) {
             return 'category_' + i;
         })
@@ -57,14 +65,6 @@ var createCrimeCategoryButtons = function() {
         })
         .text(function(d, i) {
             return data.getVerboseCrimeName(d);
-    });
-    spans.append("input")
-        .attr("type", "checkbox")
-        .attr("id", function(d, i) {
-            return "category_" + i;
-        })
-        .attr("onClick", function(d, i) {
-            return "toggleCheckboxesOfCrimes(" + i + ")";
     });
 
     // Make sure they're all unchecked

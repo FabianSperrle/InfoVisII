@@ -18,50 +18,80 @@
 	<link rel="stylesheet" type="text/css" href="css/pointCluster.css">
 	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css">
 	<link rel="stylesheet" href="css/d3.slider.css" />
+	<link rel="stylesheet" href="css/app.css" />
 </head>
 
 <body>
-	<div id="crimeCheckboxes"> </div>
-
-	<div id="crimeTimeVieWrapper">
-		<div id="timelineView"></div>
-
-		<div id="dateDropdowns">
-			<form style="float:left" action="" name="timeLeftBorder">
-				<select id="monthdropdownLeft" class="leftDate" onchange="updateDate(this)"></select>
-				<select id="yeardropdownLeft" class="leftDate" onchange="updateDate(this)"></select>
-			</form>
-			<form style="float:right" action="" name="timeRightBorder">
-				<select id="monthdropdownRight" class="rightDate" onchange="updateDate(this)"></select>
-				<select id="yeardropdownRight" class="rightDate" onchange="updateDate(this)"></select>
-			</form>
+	<div class="sidebar">
+		<h2>Please Select the Crime Types</h2>
+		<div id="crimeCheckboxes"> </div>
+		<div>
+			<h2>Please Select the Visualitation</h2>
+			<select multiple="false" height="2" id="vis_select">
+				<option value="crimeTimeMatrix" selected="true">Matrix View</option>
+				<option value="map_box">Map View</option>
+			</select>
 		</div>
-		<div id="sliderDate"></div>
-		<div id="crimeTimeMatrix"></div>
 	</div>
 
-	<div id="progress"><div id="progress-bar"></div></div>
-	<div id="map_box">
-		<div id="no_elements">
-			<h3>No data selected.</h3>
-			Your current filters remove all data.<br />Make sure to include more crime types, or enlarge the time period.
-		</div>
-		<div id="map_controls">
-			<form>
-                <span><label for="cluster_map">Clustered View</label><input onClick="setVisibleLayer('clusters')" type="radio" name="map_typ" id="cluster_map" value="clusters"></span>
-				<span><label for="heat_map">Heat Map</label><input onClick="setVisibleLayer('heat')" type="radio" name="map_typ" id="heat_map" value="heat"></span>
-                <span><label for="point_map">Single Crimes</label><input onClick="setVisibleLayer('points')" type="radio" name="map_typ" id="point_map" value="points"></span>
-                <span><label for="choropleth_map">Choropleth View</label><input onClick="setVisibleLayer('choropleth')" type="radio" name="map_typ" id="choropleth_map" value="choropleth"></span>
-            </form>
-		</div>
-        <div id="map">
-			<div id="too_many">
-				<h3>Too much data!</h3>
-				You have selected more than 1000 data points, that's more than we can plot on one map! Please adjust your filters or load a different visualization.
-			</div>
-		</div>
-    </div>
+	<div class="main">
+		<div id="crimeTimeVieWrapper" class="filter clearfix">
+			<h2>Please Select the Time Frame</h2>
+			<div id="timelineView"></div>
 
-	<script type="text/javascript" src="scripts/crimeTimeViews.js"></script>
-	<script type="text/javascript" src="scripts/pointCluster.js"></script>
+			<div id="dateDropdowns" class="clearfix">
+				<form style="float:left" action="" name="timeLeftBorder">
+					<select id="monthdropdownLeft" class="leftDate" onchange="updateDate(this)"></select>
+					<select id="yeardropdownLeft" class="leftDate" onchange="updateDate(this)"></select>
+				</form>
+				<form style="float:right" action="" name="timeRightBorder">
+					<select id="monthdropdownRight" class="rightDate" onchange="updateDate(this)"></select>
+					<select id="yeardropdownRight" class="rightDate" onchange="updateDate(this)"></select>
+				</form>
+			</div>
+			<div id="sliderDate"></div>
+		</div>
+
+		<div id="content">
+			<div id="crimeTimeMatrix"></div>
+
+			<div id="map_box" style="visibility:hidden">
+				<div id="no_elements">
+					<h3>No data selected.</h3>
+					Your current filters remove all data.<br />Make sure to include more crime types, or enlarge the time period.
+				</div>
+				<div id="map_controls">
+					<form>
+		                <span><label for="cluster_map">Clustered View</label><input onClick="setVisibleLayer('clusters')" type="radio" name="map_typ" id="cluster_map" value="clusters"></span>
+						<span><label for="heat_map">Heat Map</label><input onClick="setVisibleLayer('heat')" type="radio" name="map_typ" id="heat_map" value="heat"></span>
+		                <span><label for="point_map">Single Crimes</label><input onClick="setVisibleLayer('points')" type="radio" name="map_typ" id="point_map" value="points"></span>
+		                <span><label for="choropleth_map">Choropleth View</label><input onClick="setVisibleLayer('choropleth')" type="radio" name="map_typ" id="choropleth_map" value="choropleth"></span>
+		            </form>
+				</div>
+		        <div id="map">
+					<div id="too_many">
+						<h3>Too much data!</h3>
+						You have selected more than 1000 data points, that's more than we can plot on one map! Please adjust your filters or load a different visualization.
+					</div>
+				</div>
+		    </div>
+		</div>
+	</div>
+
+<script type="text/javascript">
+var sel = document.getElementById('vis_select');
+var content = document.getElementById('content').children;
+sel.onchange = function () {
+	console.log("Selected value is " + sel.value);
+	for (var i = content.length - 1; i >= 0; i--) {
+		content[i].style.display = 'none';
+		content[i].style.visibility = 'hidden';
+	}
+	content[sel.value].style.display = 'block';
+	content[sel.value].style.visibility = 'visible';
+}
+</script>
+
+<script type="text/javascript" src="scripts/crimeTimeViews.js"></script>
+<script type="text/javascript" src="scripts/pointCluster.js"></script>
 </body>
