@@ -364,7 +364,11 @@ var matrixView = function() {
                             .attr("fill",data.getCrimeColor(data.getCrimeTypes()[i]))
                             .text(data.getVerboseCrimeName(data.getCrimeTypes()[i]))
                             .on("click", function(d,i){
-                                toggleCheckboxesOfCrimes(data.getCrimeIndexByVerboseName(d3.select(this).text()));
+                                var id = data.getCrimeIndexByVerboseName(d3.select(this).text());
+                                toggleCheckboxesOfCrimes(id);
+                                var status = document.getElementById('category_' + id).checked ? 1 : 0;
+                                status = (status + 1) % 2;
+                                document.getElementById('category_' + id).checked = status;
                             })
                             .style("cursor","pointer");
                             
