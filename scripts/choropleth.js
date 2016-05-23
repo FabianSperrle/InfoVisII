@@ -3,7 +3,7 @@ var tiles = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 		maxZoom: 20,
 		attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors, Points &copy 2012 LINZ, Tiles from Mapbox'
 	})
-var latlng = L.latLng(51.505, 0.09);
+var latlng = L.latLng(51.513819, -0.098361);
 var map = L.map('choropleth', { center: latlng, zoom: 13, layers: [tiles] });
 
 
@@ -31,4 +31,8 @@ function style(feature) {
 
 data.on('loadWards', function() {
     L.geoJson(data.wards, {style: style}).addTo(map);
+})
+
+data.on('filtered', function() {
+    
 })

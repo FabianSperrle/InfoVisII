@@ -204,7 +204,7 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisIIPreProcessing/
 	data.emit('loadAggregates');
 });
 
-d3.json("http://127.0.0.1/geo/wards.geo.json", function (error, json) {
+d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geo/wards.geo.json", function (error, json) {
     if(error) throw error;
     
     data.wards = json;
