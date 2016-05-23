@@ -5,6 +5,7 @@ function DataController() {
 	this.crimesByType = {};
 	this.filtered = {};
 	this.crimeAggregates = {};
+    this.wards = {};
 
 	this.crimeTypes = {
 		allCrimes: {
@@ -202,6 +203,14 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisIIPreProcessing/
 	data.crimeAggregates = json;
 	data.emit('loadAggregates');
 });
+
+d3.json("http://127.0.0.1/geo/wards.geo.json", function (error, json) {
+    if(error) throw error;
+    
+    data.wards = json;
+    data.emit('loadWards');
+});
+
 
 data.on('loadAll', data.initializeFilters);
 data.on('toggle', data.toggleFilter);

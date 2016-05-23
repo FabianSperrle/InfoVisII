@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html>
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
@@ -7,6 +8,7 @@
 	<script src="http://leaflet.github.io/Leaflet.markercluster/dist/leaflet.markercluster.js"></script>
 
 	<script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
 	<script src="libs/crossfilter.v1.min.js"></script>
 	<script src="libs/d3.slider.js"></script>
 
@@ -17,9 +19,14 @@
 	<link rel="stylesheet" type="text/css" href="css/pointCluster.css">
 	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css">
 	<link rel="stylesheet" href="css/d3.slider.css" />
+    <link rel="stylesheet" type="text/css" href="css/choropleth.css"/>
+    
+    <!--leaflet exmaple data-->
+    <script type="text/javascript" src="http://leafletjs.com/examples/us-states.js"></script>
 </head>
 
 <body>
+    <!--
 	<div id="crimeCheckboxes"> </div>
 
 	<div id="crimeTimeVieWrapper">
@@ -30,8 +37,13 @@
 
 	<div id="progress"><div id="progress-bar"></div></div>
 	<div id="map"></div>
+    -->
+    
+    <div id="choropleth"></div>
 
 	<script type="text/javascript" src="scripts/crimeTimeViews.js"></script>
 	<script type="text/javascript" src="scripts/pointCluster.js"></script>
+    
+    <script type="text/javascript" src="scripts/choropleth.js"></script>
 </body>
 </html>
