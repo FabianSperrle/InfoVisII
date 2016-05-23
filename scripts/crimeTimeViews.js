@@ -82,6 +82,8 @@ function toggleCheckboxesOfCrimes(checkboxID) {
     toggleTimeviewLines(checkboxID);
     resizeTimeLine(data.crimeAggregates);
     highlightMatrixSelection();
+    d3.select("#category_" + checkboxID).property("checked", data.crimeTypes[data.getCrimeTypes()[checkboxID]].visibility);
+    
 }
 
 function getCrimeData(crimeType, data) {
