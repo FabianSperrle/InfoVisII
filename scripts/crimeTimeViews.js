@@ -323,7 +323,7 @@ var timelineView = function() {
     
     svg1.on('mouseup', function() {
         data.dateChangeBoth(getDateOfSlider(1), getDateOfSlider(2));
-    })
+    });
 
     function type(d) {
         d.date = formatDate.parse(d.date);
@@ -332,6 +332,15 @@ var timelineView = function() {
     }
 };
 
+function toggleCrimetimeview(){
+    if(d3.select("#timelineView").node().style.display=='none'){
+        d3.select("#toggleCrimetimeview").node().innerHTML="&uarr;";
+        d3.select("#timelineView").node().style.display='block'
+    } else {
+        d3.select("#toggleCrimetimeview").node().innerHTML="&darr;";
+        d3.select("#timelineView").node().style.display='none'
+    }
+}
 
 var crimeTimeMatrix;
 var matrixView = function() {
@@ -342,7 +351,7 @@ var matrixView = function() {
             left: 30
         },
         width = 960 - margin.left - margin.right,
-        height = 430 - margin.top - margin.bottom,
+        height = 275 - margin.top - margin.bottom,
         gridSize = Math.floor(width / (NUM_MONTHS+8)),
 
     crimeTimeMatrix = d3.select("#crimeTimeMatrix").append("svg")
@@ -351,8 +360,38 @@ var matrixView = function() {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+
+    var x = d3.time.scale().domain(([new Date(2010,11,1),new Date(2016,1,1)]))
+        .range([101,910]);
+    var timeAxis =
+        d3.svg.axis().scale(x)
+            .orient("bottom")
+            .ticks(d3.time.years)
+            .tickSize(0, 0)
+            .tickFormat(d3.time.format("%Y"));
+
+    crimeTimeMatrix.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + "-35" + ")")
+        .call(timeAxis)
+        .selectAll(".tick text")
+        .style("text-anchor","start")
+        .attr("x",70)
+        .attr("y",6)
+
+
+
     var monthIndex = 0;
     for (var j = 0; j < years.length; j++) {
+        crimeTimeMatrix.append("line")
+            .attr("x1",116+156*j)
+            .attr("y1",-50)
+            .attr("x2",116+156*j)
+            .attr("y2",230)
+            .attr("stroke", "gray")
+            .attr("id", "yearslash"+j)
+            .attr("stroke-width", 1);
+
         for (var k = 0; k < months.length; k++) {
             if (!(typeof data.crimeAggregates[years[j]] === 'undefined' || typeof data.crimeAggregates[years[j]][months[k]] === 'undefined')) {
                 for (var i = 0; i < data.getCrimeTypes().length; i++) {
