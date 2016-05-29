@@ -2,6 +2,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+	<title>London Crime Data</title>
 
 	<script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
 	<script src="http://leaflet.github.io/Leaflet.markercluster/dist/leaflet.markercluster.js"></script>
@@ -11,6 +12,11 @@
 	<script src="libs/d3.v3.min.js"></script>
 	<script src="libs/crossfilter.v1.min.js"></script>
 	<script src="libs/d3.slider.js"></script>
+	<script src="//cdn.rawgit.com/misoproject/d3.chart/master/d3.chart.min.js"></script>
+	<script src="//cdn.rawgit.com/d3/d3-plugins/master/superformula/superformula.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.3/d3-tip.min.js"></script>
+	<script src="libs/corrplot.min.js"></script>
 
 	<script src="scripts/dataController.js"></script>
 
@@ -30,6 +36,7 @@
 			<select multiple="false" height="2" id="vis_select">
 				<option value="crimeTimeMatrix" selected="true">Matrix View</option>
 				<option value="map_box">Map View</option>
+				<option value="corrplot">Correlation Matrix</option>
 			</select>
 		</div>
 	</div>
@@ -76,6 +83,27 @@
 					</div>
 				</div>
 		    </div>
+
+			<div id="corrplot">
+				<p>
+					<label for="order">Order</label>
+					<select id="order">
+						<option value="original">Original</option>
+						<option value="name" selected>by Name</option>
+						<option value="aoe">AOE</option>
+						<option value="fpc">FPC</option>
+					</select>
+
+					<label for="shape">Shape</label>
+					<select id="shape">
+						<option value="square">Square</option>
+						<option value="scaled-square">Scaled Square</option>
+						<option value="circle">Circle</option>
+						<option value="scaled-circle" selected>Scaled Circle</option>
+						<option value="ellipse">Ellipse</option>
+					</select>
+				</p>
+			</div>
 		</div>
 	</div>
 
@@ -95,4 +123,5 @@ sel.onchange = function () {
 
 <script type="text/javascript" src="scripts/crimeTimeViews.js"></script>
 <script type="text/javascript" src="scripts/pointCluster.js"></script>
+<script type="text/javascript" src="scripts/corrplot.js"></script>
 </body>
