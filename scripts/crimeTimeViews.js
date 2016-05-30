@@ -411,7 +411,6 @@ var matrixView = function() {
                             .on("click", function(d,i){
                                 var id = data.getCrimeIndexByVerboseName(d3.select(this).text());
                                 toggleCheckboxesOfCrimes(id);
-                                var box = document.getElementById('category_' + id);
                             })
                             .style("cursor","pointer");
                             
