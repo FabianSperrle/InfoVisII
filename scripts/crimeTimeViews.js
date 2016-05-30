@@ -335,10 +335,14 @@ var timelineView = function() {
 function toggleCrimetimeview(){
     if(d3.select("#timelineView").node().style.display=='none'){
         d3.select("#toggleCrimetimeview").node().innerHTML="&uarr;";
-        d3.select("#timelineView").node().style.display='block'
+        d3.select("#timelineView").node().style.display='block';
+        d3.select("#content").node().style.height = "calc(100% - 315px)";
+        map.invalidateSize();
     } else {
         d3.select("#toggleCrimetimeview").node().innerHTML="&darr;";
         d3.select("#timelineView").node().style.display='none'
+        d3.select("#content").node().style.height = "calc(100% - 110px)";
+        map.invalidateSize();
     }
 }
 
@@ -406,7 +410,8 @@ var matrixView = function() {
                             .text(data.getVerboseCrimeName(data.getCrimeTypes()[i]))
                             .on("click", function(d,i){
                                 var id = data.getCrimeIndexByVerboseName(d3.select(this).text());
-                                toggleCheckboxesOfCrimes(id);})
+                                toggleCheckboxesOfCrimes(id);
+                            })
                             .style("cursor","pointer");
                             
                     }
