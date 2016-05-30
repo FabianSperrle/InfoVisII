@@ -1,0 +1,13 @@
+crimetimelineVIEW:
+
+ ONHOVER LINE --> Crimetype
+
+ achse selection time
+
+ Year Selection
+
+ SOLVED CRIMES... dashed lines  MATRIXVIEW: TOOLTIP!!
+
+ DETAILED VIEW:: STATISTIK:: BALKEN DIAGRAMME  , KREIS DIAGRAMME
+
+ 
