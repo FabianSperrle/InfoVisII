@@ -79,13 +79,21 @@ function calculateCorrelationMatrix() {
         d.values = v;
     });
     
-    var results = new Array();
+    var results = new Array(groupData.length);
     for (var i = 0; i < groupData.length; i++) {
-        var valuesForI = new Array();
-        for (var j = 0; j < groupData.length; j++) {
-            valuesForI.push(getPearsonCorrelation(groupData[i].values, groupData[j].values));
+        results[i] = new Array(groupData.length);
+    }
+    
+    for (var i = 0; i < groupData.length; i++) {
+        for (var j = 0; j <= i; j++) {
+            if (i == j) {
+                results[i][j] = 1;
+                continue;
+            }
+            var r = getPearsonCorrelation(groupData[i].values, groupData[j].values);
+            results[i][j] = r;
+            results[j][i] = r;
         }
-        results.push(valuesForI);
     }
 
     var nodes = groupData.map(function (d) {
