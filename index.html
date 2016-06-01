@@ -118,6 +118,7 @@ sel.onchange = function () {
 	}
 	content[sel.value].style.display = 'block';
 	content[sel.value].style.visibility = 'visible';
+	map.invalidateSize();
 }
 </script>
 
