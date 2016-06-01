@@ -340,7 +340,7 @@ function toggleCrimetimeview(){
         map.invalidateSize();
     } else {
         d3.select("#toggleCrimetimeview").node().innerHTML="&darr;";
-        d3.select("#timelineView").node().style.display='none'
+        d3.select("#timelineView").node().style.display='none';
         d3.select("#content").node().style.height = "calc(100% - 110px)";
         map.invalidateSize();
     }
@@ -556,7 +556,9 @@ function highlightMatrixSelection(){
     for(var j = monthIndexLeft; j < monthIndexRight+1; j++){
         for (var i = 0; i < data.getCrimeTypes().length; i++) {
             if (data.crimeTypes[data.getCrimeTypes()[i]].visibility) {
-                d3.select("#m"+j+"-"+i).style("stroke","black");
+                if(parseFloat(d3.select("#m"+j+"-"+i).attr("numberOfCrimes"))>0){
+                    d3.select("#m"+j+"-"+i).style("stroke","black");
+                }
             }
         }
     }
