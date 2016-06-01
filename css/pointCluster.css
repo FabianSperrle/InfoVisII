@@ -6,7 +6,6 @@ html, body, #map {
 }
 
 #map_box {
-	float: right;
 	font: 16px sans-serif;
 	position: relative;
 	height: 100%;
