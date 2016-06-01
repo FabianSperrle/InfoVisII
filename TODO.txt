@@ -12,11 +12,17 @@ crimetimelineVIEW:
 
 
 PRESENTATION FEEDBACK:
-HIGHLIGHT CLUSTERS IN TIMELINE VIEW !! OTHER DIRECTION...
-linking and brushing from map to timeline!
+- visualize SEASONAL CORRELATIONs
 
-show more single crimes? only in selected area?
+- HIGHLIGHT CLUSTERS IN TIMELINE VIEW !! OTHER DIRECTION...
+  linking and brushing from map to timeline!
+
+- show more single crimes? only in selected area?
 
 SINGLE MAP:: SHOW NUMBER OF POINTS
 
 IMprove HeatMAP
+
+Crime Introduction WINDOW.. DIV
+
+WHERE DO I WANT TO MOVE TO?
