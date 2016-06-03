@@ -8,6 +8,7 @@ var map = L.map('choropleth', { center: latlng, zoom: 13, layers: [tiles] });
 
 
 function getColor(d) {
+ d=1000* Math.random(100);
     return d > 1000 ? '#800026' :
            d > 500  ? '#BD0026' :
            d > 200  ? '#E31A1C' :

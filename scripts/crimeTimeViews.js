@@ -133,7 +133,7 @@ function plotTimeviewLines(data) {
     for (var i = 0; i < crimeTime.crimeTypes.length; i++) {
         datas[crimeTime.crimeTypes[i]] = getCrimeData(crimeTime.crimeTypes[i], data);
     }
-    console.log(JSON.stringify(datas));
+
     for (var i = 0; i < crimeTime.crimeTypes.length; i++) {
         svg.append("path")
             .attr("id", crimeTime.crimeTypes[i])
