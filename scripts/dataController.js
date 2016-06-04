@@ -5,7 +5,8 @@ function DataController() {
 	this.crimesByType = {};
 	this.filtered = {};
 	this.crimeAggregates = {};
-    this.wards = {};
+    this.geo = {};
+    this.crimesAggGeo = {};
 
 	this.crimeTypes = {
 		allCrimes: {
@@ -204,11 +205,16 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisIIPreProcessing/
 	data.emit('loadAggregates');
 });
 
-d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/geo_oa.json", function(error, json) {//"https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/geo_oa_ex.json"
+d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/geo.json", function(error, json) {//"https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/geo_oa_ex.json"
     if(error) throw error;
-    console.log(json);
-    data.wards = json;
-    data.emit('loadWards');
+    data.geo = json;
+    data.emit('loadGeo');
+});
+
+d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/crimes_geoloc_agg_ex.json", function(error, json) {//"https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/geo_oa_ex.json"
+    if(error) throw error;
+    data.crimesAggGeo = json;
+    data.emit('loadAggregatedCrimesByGeo');
 });
 
 
