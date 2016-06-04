@@ -1,0 +1,32 @@
+crimetimelineVIEW:
+
+ ONHOVER LINE --> Crimetype
+
+ achse selection time
+
+ Year Selection BUTTONS 2011,2012,2013
+
+ SOLVED CRIMES... dashed lines  MATRIXVIEW: TOOLTIP!!
+
+ DETAILED VIEW:: STATISTIK:: BALKEN DIAGRAMME, KREIS DIAGRAMME
+
+Mathematical Operations: HIGHLIGHT MAX und MIN-VALUES
+
+PRESENTATION FEEDBACK:
+- use COLOR BREWER from D3 - 20 Items --> better Coloring
+- visualize SEASONAL CORRELATIONs
+- DEACTIVATE HIGHLIGHTING of CELLS WITH NO VALUES!
+- HIGHLIGHT CLUSTERS IN TIMELINE VIEW !! OTHER DIRECTION...
+  linking and brushing from map to timeline!
+
+- show more single crimes? only in selected area?
+
+SINGLE MAP:: SHOW NUMBER OF POINTS
+
+Improve HeatMAP
+
+Crime Introduction WINDOW.. DIV
+
+Ex. Questions: Buttons -- Show
+ WHERE DO I WANT TO MOVE TO? --> GREEN AREAS ARE FINE-- RED ARE BAD
+

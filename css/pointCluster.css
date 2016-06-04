@@ -1,104 +1,222 @@
 html, body, #map {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-#map {
-	float: right;
+#map_box {
+    font: 16px sans-serif;
+    position: relative;
+    height: 100%;
+}
+
+#too_many,
+#no_elements {
+    font: 16px sans-serif;
+    position: absolute;
+    z-index: 100000;
+    height: 100%;
+    width: 100%;
+    background: white;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s;
+}
+
+.pin {
+    width: 20px;
+    height: 20px;
+    -webkit-border-radius: 50% 50% 50% 0;
+    border-radius: 50% 50% 50% 0;
+    position: absolute;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    left: 50%;
+    top: 50%;
+    margin: -20px 0 0 -20px;
+}
+
+.pin:after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    margin: 7px 0 0 7px;
+    background: #2f2f2f;
+    position: absolute;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.AllCrimes {
+    background: red;
+}
+
+.Violenceandsexualoffences {
+    background: aqua
+}
+
+.Othertheft {
+    background: blue
+}
+
+.Burglary {
+    background: fuchsia
+}
+
+.Violentcrime {
+    background: gray
+}
+
+.Bicycletheft {
+    background: green
+}
+
+.Anti-socialbehaviour {
+    background: lime
+}
+
+.Othercrime {
+    background: maroon
+}
+
+.Shoplifting {
+    background: darkorange
+}
+
+.Drugs {
+    background: olive
+}
+
+.Criminaldamageandarson {
+    background: silver
+}
+
+.Vehiclecrime {
+    background: darkolivegreen
+}
+
+.Theftfromtheperson {
+    background: blueviolet
+}
+
+.Publicdisorderandweapons {
+    background: burlywood
+}
+
+.Publicorder {
+    background: darkcyan
+}
+
+.Robbery {
+    background: chocolate
+}
+
+.Possessionofweapons {
+    background: darkgoldenrod
+}
+
+.warning {
+    width: 400;
+    height: 400px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -20px 0 0 -20px;
+    background: white;
+    border: 10px solid firebrick;
+}
+
+.warning:after {
+    content: 'Too many points. It is impossible to render that many points. Please apply some filters, or use the other maps.';
+    width: 200px;
+    height: 200px;
+    margin: 100px 200px 0 100px;
+    position: absolute;
 }
 
 .stations, .stations svg {
-  position: absolute;
+    position: absolute;
 }
 
 .stations svg {
-  width: 60px;
-  height: 20px;
-  padding-right: 100px;
-  font: 10px sans-serif;
+    width: 60px;
+    height: 20px;
+    padding-right: 100px;
+    font: 10px sans-serif;
 }
 
 .stations circle {
-  fill: orange;
-  stroke: none;
-  stroke-width: 1.5px;
-  opacity: 0.5;
+    fill: orange;
+    stroke: none;
+    stroke-width: 1.5px;
+    opacity: 0.5;
 }
 
 .leaflet-cluster-anim .leaflet-marker-icon, .leaflet-cluster-anim .leaflet-marker-shadow {
-	-webkit-transition: -webkit-transform 0.3s ease-out, opacity 0.3s ease-in;
-	-moz-transition: -moz-transform 0.3s ease-out, opacity 0.3s ease-in;
-	-o-transition: -o-transform 0.3s ease-out, opacity 0.3s ease-in;
-	transition: transform 0.3s ease-out, opacity 0.3s ease-in;
-	}
+    -webkit-transition: -webkit-transform 0.3s ease-out, opacity 0.3s ease-in;
+    -moz-transition: -moz-transform 0.3s ease-out, opacity 0.3s ease-in;
+    -o-transition: -o-transform 0.3s ease-out, opacity 0.3s ease-in;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-in;
+}
 
 .marker-cluster-small {
-	background-color: rgba(181, 226, 140, 0.6);
-	}
+    /* background-color: rgba(181, 226, 140, 0.6); */
+    background-color: rgba(180, 180, 180, 0.6);
+}
+
 .marker-cluster-small div {
-	background-color: rgba(110, 204, 57, 0.6);
-	}
+    /*background-color: rgba(110, 204, 57, 0.6);*/
+    background-color: rgba(150, 150, 150, 0.7);
+}
 
 .marker-cluster-medium {
-	background-color: rgba(241, 211, 87, 0.6);
-	}
+    /*background-color: rgba(241, 211, 87, 0.6);*/
+    background-color: rgba(200, 200, 200, 0.6);
+}
+
 .marker-cluster-medium div {
-	background-color: rgba(240, 194, 12, 0.6);
-	}
+    /*background-color: rgba(240, 194, 12, 0.6);*/
+    background-color: rgba(170, 170, 170, 0.7);
+}
 
 .marker-cluster-large {
-	background-color: rgba(253, 156, 115, 0.6);
-	}
+    /*background-color: rgba(253, 156, 115, 0.6);*/
+    background-color: rgba(150, 150, 150, 0.6);
+}
+
 .marker-cluster-large div {
-	background-color: rgba(241, 128, 23, 0.6);
-	}
-
-	/* IE 6-8 fallback colors */
-.leaflet-oldie .marker-cluster-small {
-	background-color: rgb(181, 226, 140);
-	}
-.leaflet-oldie .marker-cluster-small div {
-	background-color: rgb(110, 204, 57);
-	}
-
-.leaflet-oldie .marker-cluster-medium {
-	background-color: rgb(241, 211, 87);
-	}
-.leaflet-oldie .marker-cluster-medium div {
-	background-color: rgb(240, 194, 12);
-	}
-
-.leaflet-oldie .marker-cluster-large {
-	background-color: rgb(253, 156, 115);
-	}
-.leaflet-oldie .marker-cluster-large div {
-	background-color: rgb(241, 128, 23);
+    /*background-color: rgba(241, 128, 23, 0.6);*/
+    background-color: rgba(120, 120, 120, 0.7);
 }
 
 .marker-cluster {
-	background-clip: padding-box;
-	border-radius: 20px;
-	}
-.marker-cluster div {
-	width: 30px;
-	height: 30px;
-	margin-left: 5px;
-	margin-top: 5px;
+    background-clip: padding-box;
+    border-radius: 20px;
+}
 
-	text-align: center;
-	border-radius: 15px;
-	font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
-	}
+.marker-cluster div {
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
+    margin-top: 5px;
+
+    text-align: center;
+    border-radius: 15px;
+    font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
 .marker-cluster span {
-	line-height: 30px;
-	}
+    line-height: 30px;
+}
 
 #map {
-	width: 800px; 
-	height: 600px; 
-	border: 1px solid #ccc;
+    width: 1000px;
+    height: calc(100% - 19px);
+    border: 1px solid #ccc;
 }
 
 #progress {
