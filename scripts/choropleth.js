@@ -21,7 +21,7 @@ function getColor(d) {
 
 function style(feature) {
     return {
-        fillColor: getColor(feature.properties.density),
+        fillColor: getColor(1),
         weight: 2,
         opacity: 1,
         color: 'white',
