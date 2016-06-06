@@ -1,0 +1,27 @@
+{
+  "outcome": [
+    "Awaiting court outcome",
+    "Court case unable to proceed",
+    "Court result unavailable",
+    "Defendant found not guilty",
+    "Defendant sent to Crown Court",
+    "Formal action is not in the public interest",
+    "Investigation complete; no suspect identified",
+    "Local resolution",
+    "Offender deprived of property",
+    "Offender fined",
+    "Offender given a caution",
+    "Offender given a drugs possession warning",
+    "Offender given absolute discharge",
+    "Offender given community sentence",
+    "Offender given conditional discharge",
+    "Offender given penalty notice",
+    "Offender given suspended prison sentence",
+    "Offender ordered to pay compensation",
+    "Offender otherwise dealt with",
+    "Offender sent to prison",
+    "Suspect charged as part of another case",
+    "Unable to prosecute suspect",
+    "Under investigation"
+  ]
+}
