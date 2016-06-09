@@ -4,8 +4,8 @@
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
 	<title>London Crime Data</title>
 
-	<script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
-	<script src="http://leaflet.github.io/Leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+	<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+	<script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js"></script>
 	<script src="libs/leaflet-heat.js"></script>
 	<script src="libs/rotatedMarker.js"></script>
 	<script src="libs/telegraph.min.js"></script>
@@ -33,7 +33,7 @@
 		<div id="crimeCheckboxes"> </div>
 		<div>
 			<h2>Please Select the Visualization</h2>
-			<select multiple="false" height="2" id="vis_select">
+			<select multiple="multiple" height="2" id="vis_select">
 				<option value="crimeTimeMatrix" selected="true">Matrix View</option>
 				<option value="map_box">Map View</option>
 				<option value="corrplot">Correlation Matrix</option>

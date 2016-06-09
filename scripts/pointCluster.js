@@ -79,7 +79,7 @@ var updateClusterLayer = function() {
 		chunkedLoading: true, 
 		maxClusterRadius: 80
 	});
-    
+
 	var markerList = [];
 	for (var i = 0; i < data.filtered.length; i++) {
 		var a = data.filtered[i];
@@ -93,11 +93,77 @@ var updateClusterLayer = function() {
 		}
 
 		var marker = L.marker(L.latLng(a.latitude, a.longitude), { title: title });
+        marker.options.month = a.month;
 		marker.bindPopup(title);
+
+        marker.on("mouseover",function(a){
+            createTimelineHighlight(a.target.options.month, a.target.options.title);
+        }).on("mouseout", function(){
+            d3.selectAll(".highlightDots").remove();
+        });
+
 		markerList.push(marker);
 	}
-    
-	layers.clusters.addLayers(markerList);
+
+    layers.clusters.addLayers(markerList);
+
+    function createTimelineHighlight(date, verboseCrimeTypeTitle){
+        // find CrimeTypeLine to highlight :: only activated lines!!
+        // IF not activated take "allCrimes" line for Highlighting!
+        var crimeIndex = data.getCrimeIndexByVerboseName(verboseCrimeTypeTitle);
+        var crimeType =  data.getCrimeTypes()[crimeIndex];
+        if (data.crimeTypes[crimeType].visibility === 0){
+            crimeType =  "allCrimes";
+            if(!data.crimeTypes[crimeType].visibility){
+                alert("Error happened");
+                return;
+            }
+        }
+        var year = date.getFullYear();
+        var mon = date.getMonth()+1;
+        // Take First of month for Correct Highlighting! TODO change to middle if possible!
+        var newDate = new Date(year, mon-1, 1);
+        if(mon < 10) mon = "0"+mon;
+        var y_value = data.crimeAggregates["y"+year]["m"+mon][crimeType];
+        log(crimeType + "_" + y_value);
+        svg.append("circle")
+            .attr("class", "highlightDots")
+            .attr("r",3.5)
+            .attr("cx", x(newDate))
+            .attr("cy", y(y_value))
+            .attr("stroke-width", 10)
+            .style("fill-opacity",0.3)
+            .attr("fill", data.getCrimeColor(crimeType));
+    }
+
+    layers.clusters.on('clustermouseover', function(a){
+        var children = a.layer.getAllChildMarkers();
+        var bins = [];
+        for(var i = 0; i < children.length; i++){
+            log("CLUSTER_" + i + ": " + title);
+            var date = children[i].options.month;
+            var crimeType = children[i].options.title;
+            createTimelineHighlight(date, crimeType);
+            var dateKey = date.getFullYear() + "-" + (date.getMonth()+1);
+            log(dateKey);
+            log(crimeType);
+            if(typeof bins[dateKey] === 'undefined'){
+                bins[dateKey] = "activated";
+                bins[dateKey][crimeType] = 1;
+            } else if (typeof bins[dateKey][crimeType] === 'undefined'){
+                bins[dateKey] = "activated";
+                bins[dateKey][crimeType] = 1;
+            } else {
+                bins[dateKey][crimeType]++;
+            }
+        }
+        log(bins);
+    });
+
+    layers.clusters.on('clustermouseout', function(a){
+        d3.selectAll(".highlightDots").remove();
+    });
+
 
     // Set clusters as default if nothing else is selected
     if (visibleLayer === undefined) {
@@ -130,7 +196,7 @@ var updatePointsLayer = function () {
             var marker = L.marker(L.latLng(a.latitude, a.longitude), {
                 title: title,
                 icon: divIcon,
-                rotationAngle: -45,
+                rotationAngle: -45
             });
             marker.bindPopup(title);
             markerList.push(marker);
@@ -138,7 +204,7 @@ var updatePointsLayer = function () {
     }
 
     layers.points = L.layerGroup(markerList);
-}
+};
 
 var updateHeatLayer = function () {
     var latlngList = [];
@@ -161,10 +227,11 @@ var updateHeatLayer = function () {
         blur: 40,
         radius: 40
     });
-}
+};
+
 var updateChloroplethLayer = function () {
     layers.choropleth = layers.clusters;
-}
+};
 
 function invalidateLayers() {
     Object.keys(layers).forEach(function (name) {
@@ -198,7 +265,6 @@ function removeTooManyPointsWarning() {
         .style('visibility', 'hidden');
 }
 data.once('filtered', updateClusterLayer);
-
 data.on('filtered', invalidateLayers);
 data.on('filtered', emptyDataList);
 data.on('filtered', updateCurrentLayer);

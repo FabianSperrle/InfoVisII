@@ -166,18 +166,18 @@ DataController.prototype.dateChangeBoth = function (from, to) {
     this.dates.from = from;
     this.dates.to = to;
     this.filterDate();
-}
+};
 DataController.prototype.dateChange = function (month, year, type) {
     this.dates[type] = new Date(year, month - 1, 15);
     this.filterDate();
-}
+};
 
 DataController.prototype.filterDate = function () {
     this.filtered = this.crimesByDate.filter(function (d) {
         return (d >= data.dates.from && d <= data.dates.to);
     }).top(Infinity);
     data.emit('filtered');
-}
+};
 
 DataController.prototype.toggleFilter = function (type) {
     this.toggleVisibilityFlag(type);
@@ -189,10 +189,10 @@ DataController.prototype.toggleFilter = function (type) {
         return false;
     }).top(Infinity);
     data.emit('filtered');
-}
+};
 
 DataController.prototype.mapFilterKeyword = function (key) {
-    return this.CrimeTypes[key].verboseName;
+    return this.crimeTypes[key].verboseName;
 };
 
 DataController.prototype.getCrimeTypes = function () {
@@ -241,7 +241,7 @@ DataController.prototype.groupByType = function () {
             return leaves.length;
         })
         .entries(this.filtered);
-}
+};
 
 var data = new DataController();
 
@@ -251,7 +251,7 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisIIPreProcessing/
 
     json.forEach(function (d, i) {
         d.month = new Date(d.month.substring(0, 4), d.month.substring(5, 7) - 1, 15);
-    })
+    });
 
     data.all = json;
     data.filtered = json;

@@ -47,7 +47,7 @@ var createCrimeCategoryButtons = function() {
     var divs = d3.select("#crimeCheckboxes").selectAll("input")
         .data(data.getCrimeTypes())
         .enter()
-        .append('div')
+        .append('div');
     divs.append("input")
         .attr("type", "checkbox")
         .attr("id", function(d, i) {
