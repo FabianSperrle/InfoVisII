@@ -97,7 +97,7 @@ var updateClusterLayer = function() {
 		marker.bindPopup(title);
 
         marker.on("mouseover",function(a){
-            createTimelineHighlight(a.target.options.month, a.target.options.title);
+            createTimelineHighlight(a.target.options.month, a.target.options.title,1,1);
         }).on("mouseout", function(){
             d3.selectAll(".highlightDots").remove();
         });
@@ -107,7 +107,9 @@ var updateClusterLayer = function() {
 
     layers.clusters.addLayers(markerList);
 
-    function createTimelineHighlight(date, verboseCrimeTypeTitle){
+    function createTimelineHighlight(date, verboseCrimeTypeTitle, number, opacity){
+        if (typeof number  === 'undefined') number = 1;
+        if (typeof opacity === 'undefined') opacity = 0.5;
         // find CrimeTypeLine to highlight :: only activated lines!!
         // IF not activated take "allCrimes" line for Highlighting!
         var crimeIndex = data.getCrimeIndexByVerboseName(verboseCrimeTypeTitle);
@@ -128,33 +130,47 @@ var updateClusterLayer = function() {
         log(crimeType + "_" + y_value);
         svg.append("circle")
             .attr("class", "highlightDots")
-            .attr("r",3.5)
+            .attr("r",3+Math.sqrt(number)*2)
             .attr("cx", x(newDate))
             .attr("cy", y(y_value))
             .attr("stroke-width", 10)
-            .style("fill-opacity",0.3)
+            .style("fill-opacity",opacity)
             .attr("fill", data.getCrimeColor(crimeType));
     }
 
     layers.clusters.on('clustermouseover', function(a){
         var children = a.layer.getAllChildMarkers();
-        var bins = [];
+        var bins = {};
         for(var i = 0; i < children.length; i++){
-            log("CLUSTER_" + i + ": " + title);
             var date = children[i].options.month;
             var crimeType = children[i].options.title;
-            createTimelineHighlight(date, crimeType);
-            var dateKey = date.getFullYear() + "-" + (date.getMonth()+1);
-            log(dateKey);
-            log(crimeType);
-            if(typeof bins[dateKey] === 'undefined'){
-                bins[dateKey] = "activated";
-                bins[dateKey][crimeType] = 1;
-            } else if (typeof bins[dateKey][crimeType] === 'undefined'){
-                bins[dateKey] = "activated";
-                bins[dateKey][crimeType] = 1;
+            var crimeIndex = data.getCrimeIndexByVerboseName(crimeType);
+            var crimeTypeVis =  data.getCrimeTypes()[crimeIndex];
+            if (data.crimeTypes[crimeTypeVis].visibility === 0){
+                crimeTypeVis =  "allCrimes";
+                if(!data.crimeTypes[crimeTypeVis].visibility){
+                    alert("Error happened");
+                    return;
+                }
+                crimeType = "All Crimes";
+            }
+            if(typeof bins[date] === 'undefined'){
+                bins[date] = {};
+                bins[date][crimeType] = 1;
+            } else if (typeof bins[date][crimeType] === 'undefined'){
+                bins[date][crimeType] = 1;
             } else {
-                bins[dateKey][crimeType]++;
+                bins[date][crimeType]++;
+            }
+        }
+
+        var firstKeys = Object.keys(bins);
+        log(firstKeys);
+        for (var i = 0; i < firstKeys.length; i++){
+            var secondKeys = Object.keys(bins[firstKeys[i]]);
+            for (var j = 0; j < secondKeys.length; j++){
+                var numberOfCrimes = bins[firstKeys[i]][secondKeys[j]];
+                createTimelineHighlight(new Date(firstKeys[i]),secondKeys[j],numberOfCrimes);
             }
         }
         log(bins);
