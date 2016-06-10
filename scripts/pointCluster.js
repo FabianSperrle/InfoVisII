@@ -165,7 +165,6 @@ var updateClusterLayer = function() {
         }
 
         var firstKeys = Object.keys(bins);
-        log(firstKeys);
         for (var i = 0; i < firstKeys.length; i++){
             var secondKeys = Object.keys(bins[firstKeys[i]]);
             for (var j = 0; j < secondKeys.length; j++){
@@ -173,7 +172,6 @@ var updateClusterLayer = function() {
                 createTimelineHighlight(new Date(firstKeys[i]),secondKeys[j],numberOfCrimes);
             }
         }
-        log(bins);
     });
 
     layers.clusters.on('clustermouseout', function(a){
