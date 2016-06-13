@@ -110,7 +110,7 @@ function DataController() {
 DataController.prototype.initializeFilters = function () {
     this.crimes = crossfilter(this.all);
     this.crimesByType = this.crimes.dimension(function (d) {
-        return d.crimetype;
+        return d.crime_type;
     });
     this.crimesByDate = this.crimes.dimension(function (d) {
         return d.month;
@@ -233,7 +233,7 @@ DataController.prototype.getCrimeIndexByVerboseName = function (crimeVerboseName
 
 DataController.prototype.groupByType = function () {
     this.groupedByType = d3.nest().key(function (d) {
-        return d.crimetype;
+        return d.crime_type;
     }).key(function (d) {
         return d.month.getFullYear() + "-" + ("0" + (d.month.getMonth() + 1)).slice(-2);
     }).sortKeys(d3.ascending)
@@ -246,7 +246,7 @@ DataController.prototype.groupByType = function () {
 var data = new DataController();
 
 
-d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisIIPreProcessing/master/DataComplete/crimes.json", function (error, json) {
+d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/master/data/crimes_with_correct_geoloc.json", function (error, json) {
     if (error) throw error;
 
     json.forEach(function (d, i) {

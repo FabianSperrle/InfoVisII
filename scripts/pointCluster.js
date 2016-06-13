@@ -83,7 +83,7 @@ var updateClusterLayer = function() {
 	var markerList = [];
 	for (var i = 0; i < data.filtered.length; i++) {
 		var a = data.filtered[i];
-		var title = a.crimetype;
+		var title = a.crime_type;
 
 		var lat = a.latitude;
 		var lng = a.longitude;
@@ -127,7 +127,7 @@ var updateClusterLayer = function() {
         var newDate = new Date(year, mon-1, 1);
         if(mon < 10) mon = "0"+mon;
         var y_value = data.crimeAggregates["y"+year]["m"+mon][crimeType];
-        log(crimeType + "_" + y_value);
+        //log(crimeType + "_" + y_value);
         svg.append("circle")
             .attr("class", "highlightDots")
             .attr("r",3+Math.sqrt(number)*2)
@@ -193,7 +193,7 @@ var updatePointsLayer = function () {
     if (data.filtered.length <= maxPoints) {
         for (var i = 0; i < data.filtered.length; i++) {
             var a = data.filtered[i];
-            var title = a.crimetype;
+            var title = a.crime_type;
 
             var lat = a.latitude;
             var lng = a.longitude;
@@ -224,7 +224,7 @@ var updateHeatLayer = function () {
     var latlngList = [];
     for (var i = 0; i < data.filtered.length; i++) {
         var a = data.filtered[i];
-        var title = a.crimetype;
+        var title = a.crime_type;
 
         var lat = a.latitude;
         var lng = a.longitude;
