@@ -267,7 +267,7 @@ var updateChloroplethLayer = function () {
         var activecrimes = [];
         var allcrimetypes = Object.keys(data.crimeTypes);
         for (var i = 0; i < allcrimetypes.length; i++) {
-            if (data.crimeTypes[allcrimetypes[i]].visibility == 1 || allcrimetypes[i] == "allCrimes") {
+            if (data.crimeTypes[allcrimetypes[i]].visibility == 1 || data.crimeTypes["allCrimes"].visibility == 1) {
                 if (allcrimetypes[i] == "allCrimes") continue;
                 activecrimes.push(data.crimeTypes[allcrimetypes[i]].verboseName);
             }
