@@ -7,6 +7,8 @@ function DataController() {
     this.filtered = {};
     this.crimeAggregates = {};
     this.groupedByType = {};
+    this.geo = {};
+    this.crimesAggGeo = {};
 
     this.dates = {
         from: new Date(2011, 4, 15),
@@ -263,6 +265,18 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisIIPreProcessing/
 
     data.crimeAggregates = json;
     data.emit('loadAggregates');
+});
+
+d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/geo.json", function(error, json) {//"https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/geo_oa_ex.json"
+    if(error) throw error;
+    data.geo = json;
+    data.emit('loadGeo');
+});
+
+d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/crimes_geoloc_agg_ex.json", function(error, json) {//"https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/geo_oa_ex.json"
+    if(error) throw error;
+    data.crimesAggGeo = json;
+    data.emit('loadAggregatedCrimesByGeo');
 });
 
 data.on('loadAll', data.initializeFilters);
