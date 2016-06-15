@@ -107,37 +107,6 @@ var updateClusterLayer = function() {
 
     layers.clusters.addLayers(markerList);
 
-    function createTimelineHighlight(date, verboseCrimeTypeTitle, number, opacity){
-        if (typeof number  === 'undefined') number = 1;
-        if (typeof opacity === 'undefined') opacity = 0.5;
-        // find CrimeTypeLine to highlight :: only activated lines!!
-        // IF not activated take "allCrimes" line for Highlighting!
-        var crimeIndex = data.getCrimeIndexByVerboseName(verboseCrimeTypeTitle);
-        var crimeType =  data.getCrimeTypes()[crimeIndex];
-        if (data.crimeTypes[crimeType].visibility === 0){
-            crimeType =  "allCrimes";
-            if(!data.crimeTypes[crimeType].visibility){
-                alert("Error happened");
-                return;
-            }
-        }
-        var year = date.getFullYear();
-        var mon = date.getMonth()+1;
-        // Take First of month for Correct Highlighting! TODO change to middle if possible!
-        var newDate = new Date(year, mon-1, 1);
-        if(mon < 10) mon = "0"+mon;
-        var y_value = data.crimeAggregates["y"+year]["m"+mon][crimeType];
-        //log(crimeType + "_" + y_value);
-        svg.append("circle")
-            .attr("class", "highlightDots")
-            .attr("r",3+Math.sqrt(number)*2)
-            .attr("cx", x(newDate))
-            .attr("cy", y(y_value))
-            .attr("stroke-width", 10)
-            .style("fill-opacity",opacity)
-            .attr("fill", data.getCrimeColor(crimeType));
-    }
-
     layers.clusters.on('clustermouseover', function(a){
         var children = a.layer.getAllChildMarkers();
         var bins = {};
@@ -212,13 +181,51 @@ var updatePointsLayer = function () {
                 icon: divIcon,
                 rotationAngle: -45
             });
+            marker.options.month = a.month;
             marker.bindPopup(title);
             markerList.push(marker);
+
+            marker.on("mouseover",function(a){
+                createTimelineHighlight(a.target.options.month, a.target.options.title,1,1);
+            }).on("mouseout", function(){
+                d3.selectAll(".highlightDots").remove();
+            });
         }
     }
 
     layers.points = L.layerGroup(markerList);
 };
+
+function createTimelineHighlight(date, verboseCrimeTypeTitle, number, opacity){
+    if (typeof number  === 'undefined') number = 1;
+    if (typeof opacity === 'undefined') opacity = 0.5;
+    // find CrimeTypeLine to highlight :: only activated lines!!
+    // IF not activated take "allCrimes" line for Highlighting!
+    var crimeIndex = data.getCrimeIndexByVerboseName(verboseCrimeTypeTitle);
+    var crimeType =  data.getCrimeTypes()[crimeIndex];
+    if (data.crimeTypes[crimeType].visibility === 0){
+        crimeType =  "allCrimes";
+        if(!data.crimeTypes[crimeType].visibility){
+            log("Error happened: " + crimeType +  " not existing!");
+            return;
+        }
+    }
+    var year = date.getFullYear();
+    var mon = date.getMonth()+1;
+    // Take First of month for Correct Highlighting! TODO change to middle if possible!
+    var newDate = new Date(year, mon-1, 1);
+    if(mon < 10) mon = "0"+mon;
+    var y_value = data.crimeAggregates["y"+year]["m"+mon][crimeType];
+    //log(crimeType + "_" + y_value);
+    svg.append("circle")
+        .attr("class", "highlightDots")
+        .attr("r",3+Math.sqrt(number)*2)
+        .attr("cx", x(newDate))
+        .attr("cy", y(y_value))
+        .attr("stroke-width", 10)
+        .style("fill-opacity",opacity)
+        .attr("fill", data.getCrimeColor(crimeType));
+}
 
 var updateHeatLayer = function () {
     var latlngList = [];
