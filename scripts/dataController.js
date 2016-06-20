@@ -181,14 +181,24 @@ DataController.prototype.filterDate = function () {
     data.emit('filtered');
 };
 
+DataController.prototype.filterLSOA = function () {
+    this.filtered = this.crimesByLocation.filter(function (d) {
+        return data.lsoa_codes.indexOf(d) >= 0;
+    }).top(Infinity);
+    data.emit('filtered');
+};
+
+DataController.prototype.toggleLSOA = function (code) {
+    this.lsoa_codes[code] = this.lsoa_codes[code] ? false : true;
+    this.filterLSOA();
+};
+
 DataController.prototype.toggleFilter = function (type) {
     this.toggleVisibilityFlag(type);
 
     // Apply all filters
     this.filtered = this.crimesByType.filter(function (d) {
-        if (data.visibleVerboseCrimeTypes.indexOf(d) >= 0)
-            return true;
-        return false;
+        return data.visibleVerboseCrimeTypes.indexOf(d) >= 0;
     }).top(Infinity);
     data.emit('filtered');
 };
