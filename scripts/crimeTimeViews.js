@@ -126,13 +126,48 @@ function plotTimeviewLines() {
             .attr("class", "line")
             .attr("d", plotCrimePath)
             .attr("stroke-width", 10)
-            .attr("stroke", data.getCrimeColor(data.getCrimeTypes()[i]));
+            .attr("stroke", data.getCrimeColor(data.getCrimeTypes()[i]))
+            .on("mouseover", function () {
+                var tooltip = d3.select("#tooltip");
+                var mine = d3.select(this);
+                tooltip.style("color", mine.attr("stroke"));
+                tooltip.html(data.getVerboseCrimeName(mine.attr("id")));
+                tooltip.style("visibility", "visible");
+                highlightCrimeSelection(mine.attr("id"), true);
+            })
+            .on("mousemove", function () {
+                tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
+            })
+            .on("mouseout", function () {
+                highlightCrimeSelection(d3.select(this).attr("id"), false);
+                return d3.select("#tooltip").style("visibility", "hidden");
+            });
+
         if (!data.crimeTypes[data.getCrimeTypes()[i]].visibility) {
             d3.select("#" + data.getCrimeTypes()[i]).attr("display", "none");
         }
     }
     resizeTimeLine(data.crimeAggregates);
 }
+
+function highlightCrimeSelection(id, status){
+    if(status){
+        d3.selectAll(".line").each(function(){
+            var mine = d3.select(this);
+            if(mine.attr("id") !== id){
+                mine.attr("stroke-opacity", 0.2);
+            }
+        })
+    } else {
+        d3.selectAll(".line").each(function(){
+            var mine = d3.select(this);
+            if(mine.attr("id" !== id)){
+                mine.attr("stroke-opacity", 1);
+            }
+        })
+    }
+}
+
 
 function toggleTimeviewLines(crimeLineID) {
     var line = d3.select('#' + data.getCrimeTypes()[crimeLineID]);
