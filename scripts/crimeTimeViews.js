@@ -69,7 +69,7 @@ var createCrimeCategoryButtons = function() {
     });
 
     // Make sure they're all unchecked
-    d3.selectAll('input').property('checked', false);
+    d3.select('#crimeCheckboxes').selectAll('input').property('checked', false);
     // And select the default ones from the boolean array
     for (var i = 0; i < data.getCrimeTypes().length; i++) {
         d3.select("#category_" + i).property("checked", data.crimeTypes[data.getCrimeTypes()[i]].visibility);
