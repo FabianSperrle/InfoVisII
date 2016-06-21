@@ -103,6 +103,20 @@ function DataController() {
         }
     };
     this.visibleVerboseCrimeTypes = ["Other theft"];
+    this.outcomeTypes = {
+        na_inprogress: {
+            visibility: 0,
+            list: ["Under investigation", "Awaiting court outcome", "Defendant sent to Crown Court", "Court result unavailable"]
+        },
+        solved: {
+            visibility: 1,
+            list:["Suspect charged as part of another case", "Local resolution", "Offender given a caution", "Offender otherwise dealt with", "Offender fined", "Offender given community sentence", "Offender given conditional discharge", "Offender deprived of property", "Offender given penalty notice", "Offender sent to prison", "Offender given absolute discharge", "Offender given a drugs possession warning", "Defendant found not guilty", "Offender ordered to pay compensation", "Offender given suspended prison sentence"]
+        },
+        failed: {
+            visibility: 0,
+            list:["Court case unable to proceed", "Formal action is not in the public interest", "Unable to prosecute suspect", "Investigation complete; no suspect identified"]
+        }
+    };
 }
 
 /**

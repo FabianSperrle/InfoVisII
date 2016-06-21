@@ -41,7 +41,13 @@ body {
     cursor: pointer;
 }
 
-
+#toggleallbutton {
+   width: 50px;
+   height: 15px;
+   font-size: 8px;
+   margin-left: -2px;
+   padding-left: -2px;
+}
 
 
 rect.bordered {

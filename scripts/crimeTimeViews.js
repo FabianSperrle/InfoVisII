@@ -43,8 +43,18 @@ var yAxis = d3.svg.axis().scale(y).orient("left");
 var svg1;
 
 var createCrimeCategoryButtons = function() {
+
+    // toggleAll button
+    var form = d3.select("#crimeCheckboxes")
+          .append("input")
+          .attr("type", "button")
+          .attr("name", "toggle")
+          .attr("value", "Toggle All")
+          .attr("id", "toggleallbutton")
+          .attr("onclick", "toggleAllCrimes()");
+
     // Generate list of checkboxes
-    var divs = d3.select("#crimeCheckboxes").selectAll("input")
+    var divs = d3.select("#crimeCheckboxes").append("div").selectAll("input")
         .data(data.getCrimeTypes())
         .enter()
         .append('div');
@@ -75,6 +85,33 @@ var createCrimeCategoryButtons = function() {
         d3.select("#category_" + i).property("checked", data.crimeTypes[data.getCrimeTypes()[i]].visibility);
     }
 };
+
+function toggleAllCrimes(){
+    var s = 0;
+    for(var i=0; i < data.getCrimeTypes().length; i++){
+        s+=data.crimeTypes[data.getCrimeTypes()[i]].visibility;
+    }
+    var bo = 1;
+    if(s>0){
+        bo = 0;
+    }
+
+    for(var i=0; i < data.getCrimeTypes().length; i++){
+            data.crimeTypes[data.getCrimeTypes()[i]].visibility = bo;
+            d3.select("#category_" + i).property("checked", data.crimeTypes[data.getCrimeTypes()[i]].visibility);
+
+            var line = d3.select('#' + data.getCrimeTypes()[i]);
+            if (bo==1) {
+                line.attr("display", "block");
+            } else {
+                line.attr("display", "none");
+            }
+    }    
+
+    resizeTimeLine(data.crimeAggregates);
+    highlightMatrixSelection();
+
+}
 
 function toggleCheckboxesOfCrimes(checkboxID) {
     // Trigger 'toggle' event of the DataController
