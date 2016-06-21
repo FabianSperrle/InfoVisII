@@ -297,3 +297,4 @@ data.on('loadAll', data.initializeFilters);
 data.on('toggle', data.toggleFilter);
 data.on('dateChange', data.dateChange);
 data.on('filtered', data.groupByType);
+data.on('refreshCrimeTypeFilter', data.toggleFilterAll);

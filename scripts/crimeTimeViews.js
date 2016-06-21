@@ -111,15 +111,23 @@ function toggleAllCrimes(){
     resizeTimeLine(data.crimeAggregates);
     highlightMatrixSelection();
 
+    data.emit('refreshCrimeTypeFilter');
+
 }
 
 function toggleCheckboxesOfCrimes(checkboxID) {
     // Trigger 'toggle' event of the DataController
+
+    //
     data.emit('toggle', data.getCrimeTypes()[checkboxID]);
+    //data.crimeTypes[data.getCrimeTypes()[checkboxID]].visibility = !data.crimeTypes[data.getCrimeTypes()[checkboxID]].visibility;
+
     toggleTimeviewLines(checkboxID);
     resizeTimeLine(data.crimeAggregates);
     highlightMatrixSelection();
     d3.select("#category_" + checkboxID).property("checked", data.crimeTypes[data.getCrimeTypes()[checkboxID]].visibility);
+
+
     
 }
 
