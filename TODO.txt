@@ -4,8 +4,6 @@ crimetimelineVIEW:
 
  achse selection time
 
- Year Selection BUTTONS 2011,2012,2013
-
  SOLVED CRIMES... dashed lines  MATRIXVIEW: TOOLTIP!!
 
  DETAILED VIEW:: STATISTIK:: BALKEN DIAGRAMME, KREIS DIAGRAMME
@@ -29,4 +27,26 @@ Crime Introduction WINDOW.. DIV
 
 Ex. Questions: Buttons -- Show
  WHERE DO I WANT TO MOVE TO? --> GREEN AREAS ARE FINE-- RED ARE BAD
+
+########################
+
+Matthias Miller:
+git Matrix View:
+Normalisierung
+Timeline
+Solved Crimes -- three kinds: dots-- dashed -- stars..  Checkbox
+
+ausgrauen - Highlight
+
+Matze Kraus:
+Toggle All
+
+Detail pane:: INFO BOX for SELECTED ELEMENTS (Information about crimes)
+              evtl.  stacked bar charts..
+
+Fabi:
+PREDICtION:
+Location Filter... CROSS
+--> adjust timeline respecting location filter
+
 

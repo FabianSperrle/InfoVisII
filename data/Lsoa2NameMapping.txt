@@ -1,0 +1,25 @@
+E05009288	Aldersgate
+E05009289	Aldgate
+E05009290	Bassishaw
+E05009291	Billingsgate
+E05009292	Bishopsgate
+E05009293	Bread Street
+E05009294	Bridge
+E05009295	Broad Street
+E05009296	Candlewick
+E05009297	Castle Baynard
+E05009298	Cheap
+E05009299	Coleman Street
+E05009300	Cordwainer
+E05009301	Cornhill
+E05009302	Cripplegate
+E05009303	Dowgate
+E05009304	Farringdon Within
+E05009305	Farringdon Without
+E05009306	Langbourn
+E05009307	Lime Street
+E05009308	Portsoken
+E05009309	Queenhithe
+E05009310	Tower
+E05009311	Vintry
+E05009312	Walbrook
