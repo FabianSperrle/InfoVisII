@@ -5,6 +5,11 @@ var marginBar = {top: 40, right: 20, bottom: 70, left: 80},
     widthBar = 1000 - marginBar.left - marginBar.right,
     heightBar = 300 - marginBar.top - marginBar.bottom;
 
+
+var rb_buttons = ["solved", "running", "failed", "N/A"];
+var rb_selection = 0;
+
+
 function initBarChart(width) {
 
     if(width==undefined) width = 300;
@@ -23,6 +28,43 @@ function initBarChart(width) {
     yAxisBarChart = d3.svg.axis()
         .scale(yBar)
         .orient("left");
+
+
+    d3.select("#rb_div").remove();
+    var form = d3.select("#detailPanel")
+        .append("div")
+        .attr("id","rb_div")
+        .style("margin-left", "20px")
+        .append("text")
+        .style("font-size","12px")
+        .text("Outcome-Type:")
+        .append("form")
+        .attr("id","rb_form");
+
+    var labels = form.selectAll("label")
+        .data(rb_buttons)
+        .enter()
+        .append("label")
+        .style("padding", "5px")
+        .text(function(d) {return d;})
+        .insert("input")
+        .attr("id","rb_input")
+        .attr({
+            type: "radio",
+            class: "shape",
+            name: "mode",
+            value: function(d, i) {return i;}
+        })
+        .property("checked", function(d, i) {
+            return i===rb_selection;
+        });
+
+    d3.selectAll("#rb_input").on('change', function(d){
+        rb_selection = rb_buttons.indexOf(d);
+        reloadDetailPanel();
+    });
+
+
 
     d3.select("#barChart").remove();
     
@@ -52,7 +94,7 @@ function initBarChart(width) {
         .attr("x", legendX+5)
         .attr("y", legendY+40)
         .attr("dy", ".35em")
-        .text("solved");
+        .text(rb_buttons[rb_selection]);
 
     d3.select("#barChartG")
         .append("text")
@@ -70,6 +112,8 @@ function initBarChart(width) {
         .attr("height", 20)
         .attr("fill", "black")
         .style("opacity",0.3);
+
+    
 }
 
 
@@ -130,7 +174,7 @@ function reloadDetailPanel(){//flight, color){
 
             var htmlToolTip  = "<div style='border: 1px solid gray; background-color:#fff; background-color: rgba(255,255,255,0.8);'><table>";
             htmlToolTip += " <tr><td><strong><span style='color:red'>"+d.key+"</span></strong></td></tr>";
-            htmlToolTip += " <tr><td><span style='color:red'># of solved crimes</span></td></tr>";
+            htmlToolTip += " <tr><td><span style='color:red'># of "+rb_buttons[rb_selection]+" investigations</span></td></tr>";
             htmlToolTip += " <tr><td><strong>total crimes:</strong></td><td><span style='color:red'>"+d3.select("#bar_"+data.getCrimeVarName(d.key)).data()[0].values+"</span></td></tr>";
             htmlToolTip += " <tr><td><strong>total solved:</strong></td><td><span style='color:red'>"+solved+"</span></td></tr>";
             htmlToolTip += " <tr><td><strong>in progress:</strong></td><td><span style='color:red'>"+inprogress+"</span></td></tr>";
@@ -156,7 +200,7 @@ function reloadDetailPanel(){//flight, color){
         .rollup(function (leaves) {
             return leaves.length;
         })
-        .entries(this.filtered);
+        .entries(data.filtered);
 
     if(data.crimeTypes["allCrimes"].visibility == 1){
         groupedByCrimeType.push({key: "All Crimes", values: d3.sum(Object.keys(groupedByCrimeType).map(function(v){return groupedByCrimeType[v].values;}))});
@@ -249,7 +293,7 @@ function reloadDetailPanel(){//flight, color){
         .rollup(function (leaves) {
             return leaves.length;
         })
-        .entries(this.filtered);
+        .entries(data.filtered);
 
 
 
@@ -303,7 +347,15 @@ function reloadDetailPanel(){//flight, color){
                     default: na=d.values[index].values; break;
                 }
             }
-            return yBar(solved);
+            if(rb_selection==0){
+                return yBar(solved);
+            } else if (rb_selection == 1){
+                return yBar(inprogress);
+            } else if(rb_selection == 2){
+                return yBar(failed);
+            } else {
+                return yBar(na);
+            }
         })
         .attr("height", function (d) {
             var solved = 0, inprogress = 0, failed = 0, na = 0;
@@ -315,7 +367,16 @@ function reloadDetailPanel(){//flight, color){
                     default: na=d.values[index].values; break;
                 }
             }
-            return heightBar - yBar(solved);
+            if(rb_selection==0){
+                return heightBar - yBar(solved);
+            } else if (rb_selection == 1){
+                return heightBar - yBar(inprogress);
+            } else if(rb_selection == 2){
+                return heightBar - yBar(failed);
+            } else {
+                return heightBar - yBar(na);
+            }
+            
         })
         .attr("fill", function (d) {
             return "black";//data.crimeTypes[data.getCrimeVarName(d.key)].color;
