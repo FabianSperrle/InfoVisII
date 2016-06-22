@@ -283,6 +283,7 @@ DataController.prototype.groupByType = function () {
         .entries(this.filtered);
 };
 
+
 var data = new DataController();
 
 
