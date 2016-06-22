@@ -144,8 +144,10 @@ DataController.prototype.initializeFilters = function () {
  * @return {[type]}
  */
 DataController.prototype.toggleVisibilityFlag = function (type) {
+
     var old = this.crimeTypes[type].visibility;
     this.crimeTypes[type].visibility = (old + 1) % 2;
+    
     var current = this.crimeTypes[type].visibility;
 
     // Handle special case
@@ -178,6 +180,16 @@ DataController.prototype.toggleVisibilityFlag = function (type) {
     }
 };
 
+DataController.prototype.switchAllVisibilityFlags = function (switchOn) {
+   this.visibleVerboseCrimeTypes = [];
+    for (var key in this.crimeTypes) {
+        this.crimeTypes[key].visibility = switchOn;
+        if(switchOn){
+            this.visibleVerboseCrimeTypes.push(this.crimeTypes[key].verboseName);
+        } 
+    }
+};
+
 DataController.prototype.dateChangeBoth = function (from, to) {
     this.dates.from = from;
     this.dates.to = to;
@@ -193,6 +205,18 @@ DataController.prototype.filterDate = function () {
         return (d >= data.dates.from && d <= data.dates.to);
     }).top(Infinity);
     data.emit('filtered');
+};
+
+DataController.prototype.toggleFilterAll = function (switchOn) {
+    this.switchAllVisibilityFlags(switchOn);
+
+    this.filtered = this.crimesByType.filter(function (d) {
+        if (data.visibleVerboseCrimeTypes.indexOf(d) >= 0)
+            return true;
+        return false;
+    }).top(Infinity);
+
+    data.emit('filtered');  
 };
 
 DataController.prototype.toggleFilter = function (type) {
@@ -295,6 +319,7 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/ge
 
 data.on('loadAll', data.initializeFilters);
 data.on('toggle', data.toggleFilter);
+data.on('activateAllCrimes', data.toggleFilterAll);
 data.on('dateChange', data.dateChange);
 data.on('filtered', data.groupByType);
-data.on('refreshCrimeTypeFilter', data.toggleFilterAll);
+
