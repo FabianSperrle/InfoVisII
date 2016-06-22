@@ -9,6 +9,9 @@ function CrimeTime() {
     this.height = 200 - this.margin.top - this.margin.bottom;
 }
 
+var countMax = {},
+    countMin = {},
+    countTotal = {};
 // Tooltip of Cluster Points
 var tooltip = d3.select("body")
     .append("div")
@@ -529,7 +532,6 @@ var matrixView = function () {
 
 var test;
 
-var countMax, countMin, countTotal;
 function crimeTimeViewRequirements() {
     // Define Max and Min Values
     countMax = {};
@@ -734,6 +736,6 @@ data.on('loadAggregates', createTimeDropdowns);
 data.on('loadAggregates', createCrimeCategoryButtons);
 data.on('loadAggregates', crimeTimeViewRequirements);
 data.on('loadAggregates', matrixView);
-data.on('loadAggregates', timelineView);
+data.on('loadAggregatedCrimesByGeo', timelineView);
 data.on('filtered', plotTimeviewLines);
 
