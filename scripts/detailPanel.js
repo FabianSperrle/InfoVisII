@@ -32,8 +32,8 @@ function initBarChart(width) {
         .append("g")
         .attr("transform", "translate(" + marginBar.left + "," + marginBar.top + ")");
 }
-var gg;
 
+var gg;
 function reloadDetailPanel(){//flight, color){
     initBarChart();
 
@@ -56,7 +56,6 @@ function reloadDetailPanel(){//flight, color){
     if(data.crimeTypes["allCrimes"].visibility == 1){
         groupedByCrimeType.push({key: "All Crimes", values: d3.sum(Object.keys(groupedByCrimeType).map(function(v){return groupedByCrimeType[v].values;}))});
     }
-    gg = groupedByCrimeType;
 
     xBar.domain(xDomain);
     var ymax = d3.max(Object.keys(groupedByCrimeType).map(function(v){return groupedByCrimeType[v].values;})); //if(groupedByCrimeType[v].key != "All Crimes") 
@@ -98,7 +97,7 @@ function reloadDetailPanel(){//flight, color){
         .data(groupedByCrimeType)
         .enter().append("rect")
         .attr("id", function (d) {
-            return "bar_";
+            return "bar_"+data.getCrimeVarName(d.key);
         })
         .attr("class", "bar")
         .attr("x", function (d) {
@@ -114,6 +113,75 @@ function reloadDetailPanel(){//flight, color){
         .attr("fill", function (d) {
             return data.crimeTypes[data.getCrimeVarName(d.key)].color;
         });
+
+
+    var groupedByOutcomePerCrimeType = d3.nest()
+        .key(function (d) {
+            return d.crime_type;
+        })
+        .key(function (d) {
+            if(data.outcomeTypes.solved.list.includes(d.last_outcome)){ 
+                return "solved"; 
+            } else if (data.outcomeTypes.na_inprogress.list.includes(d.last_outcome)){
+                return "inprogress";
+            } else if (data.outcomeTypes.failed.list.includes(d.last_outcome)){
+                return "failed";
+            } else{
+                return "na";
+            }
+        })
+        .sortKeys(d3.ascending)
+        .rollup(function (leaves) {
+            return leaves.length;
+        })
+        .entries(this.filtered);
+
+    //if(data.crimeTypes["allCrimes"].visibility == 1){
+    //    groupedByCrimeType.push({key: "All Crimes", values: d3.sum(Object.keys(groupedByCrimeType).map(function(v){return groupedByCrimeType[v].values;}))});
+    //}
+    gg = groupedByOutcomePerCrimeType;
+
+ 
+
+    barChart.selectAll(".subbar")
+        .data(groupedByOutcomePerCrimeType)
+        .enter().append("rect")
+        .attr("id", function (d) {
+            return "subbar_"+data.getCrimeVarName(d.key);
+        })
+        .attr("class", "subbar")
+        .attr("x", function (d) {
+            return xBar(d.key);
+        })
+        .attr("width",  xBar.rangeBand())
+        .attr("y", function (d) {
+            var solved = 0, inprogress = 0, failed = 0, na = 0;
+            for(index in Object.keys(d.values)){
+                switch(d.values[index].key){
+                    case "solved": solved=d.values[index].values; break;
+                    case "inprogress": inprogress=d.values[index].values; break;
+                    case "failed": failed=d.values[index].values; break;
+                    default: na=d.values[index].values; break;
+                }
+            }
+            return yBar(solved);
+        })
+        .attr("height", function (d) {
+            var solved = 0, inprogress = 0, failed = 0, na = 0;
+            for(index in Object.keys(d.values)){
+                switch(d.values[index].key){
+                    case "solved": solved=d.values[index].values; break;
+                    case "inprogress": inprogress=d.values[index].values; break;
+                    case "failed": failed=d.values[index].values; break;
+                    default: na=d.values[index].values; break;
+                }
+            }
+            return heightBar - yBar(solved);
+        })
+        .attr("fill", function (d) {
+            return "black";//data.crimeTypes[data.getCrimeVarName(d.key)].color;
+        })                               
+        .style('opacity',0.4);
     
         //.on("mouseover", function (d) {
          //   colorBarHighlight(d[0] + "-" + d[1],"blue");
