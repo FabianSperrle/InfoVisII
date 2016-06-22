@@ -130,6 +130,7 @@ function getCrimeData(crimeType) {
             'value': returndata[key]
         })
     }
+    countMax[crimeType] = max;
     return r;
 }
 
@@ -206,8 +207,9 @@ function resizeTimeLine() {
     var maxValue = 0;
     for (var i = 0; i < data.getCrimeTypes().length; i++) {
         if (data.crimeTypes[data.getCrimeTypes()[i]].visibility) {
-            if (countMax[i] > maxValue)
-                maxValue = countMax[i];
+            let key = data.getCrimeTypes(i);
+            if (countMax[key] > maxValue)
+                maxValue = countMax[key];
         }
     }
     y.domain([0, maxValue + 0.2 * maxValue]);
@@ -485,8 +487,9 @@ var matrixView = function () {
                         .attr("height", gridSize)
                         .attr("class", "field bordered")
                         .style("fill-opacity", function () {
-                            var val = data.crimeAggregates[years[j]][months[k]][data.getCrimeTypes()[i]];
-                            return (val - countMin[i]) / (countMax[i] - countMin[i]);
+                            let key = data.getCrimeTypes(i);
+                            var val = data.crimeAggregates[years[j]][months[k]][key];
+                            return (val - countMin[key]) / (countMax[key] - countMin[key]);
                         })
                         .style("fill", data.getCrimeColor(data.getCrimeTypes()[i]))
                         .attr("numberOfCrimes", data.crimeAggregates[years[j]][months[k]][data.getCrimeTypes()[i]])
@@ -522,19 +525,21 @@ var test;
 var countMax, countMin, countTotal;
 function crimeTimeViewRequirements() {
     // Define Max and Min Values
-    countMax = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    countTotal = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    countMin = [Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE];
+    countMax = {};
+    countTotal = {};
+    countMin = {};
     for (var j = 0; j < years.length; j++) {
         for (var k = 0; k < months.length; k++) {
             for (var i = 0; i < data.getCrimeTypes().length; i++) {
                 if (!(typeof data.crimeAggregates[years[j]] === 'undefined' || typeof data.crimeAggregates[years[j]][months[k]] === 'undefined')) {
                     var val = data.crimeAggregates[years[j]][months[k]][data.getCrimeTypes()[i]];
+                    let key = data.getCrimeTypes(i);
                     if (typeof val !== "undefined") {
-                        if (countMax[i] < val) countMax[i] = val;
-                        if (countMin[i] > val) countMin[i] = val;
+                        if (countMax[key] == undefined || countMax[key] < val) countMax[key] = val;
+                        if (countMin[key] == undefined || countMin[key] > val) countMin[key] = val;
                     }
-                    countTotal[i] += val;
+                    if (countTotal[key] == undefined) countTotal[key] = 0;
+                    countTotal[key] += val;
                 }
             }
         }

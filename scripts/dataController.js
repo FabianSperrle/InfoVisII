@@ -240,11 +240,14 @@ DataController.prototype.mapFilterKeyword = function (key) {
     return this.crimeTypes[key].verboseName;
 };
 
-DataController.prototype.getCrimeTypes = function () {
+DataController.prototype.getCrimeTypes = function (i) {
     var names = [];
     for (var key in this.crimeTypes) {
         names.push(key);
     }
+    
+    if (i != undefined)
+        return names[i];
 
     return names;
 };
