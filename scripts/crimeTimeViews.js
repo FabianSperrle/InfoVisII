@@ -114,11 +114,6 @@ var plotCrimePath = d3.svg.line()
     });
 
 function plotTimeviewLines() {
-    //var datas  = {};
-    //for (var i = 0; i < crimeTime.crimeTypes.length; i++) {
-    //    datas[crimeTime.crimeTypes[i]] = getCrimeData(crimeTime.crimeTypes[i], data);
-    //}
-    //console.log(JSON.stringify(datas));
     for (var i = 0; i < data.getCrimeTypes().length; i++) {
         svg.append("path")
             .attr("id", data.getCrimeTypes()[i])
@@ -130,8 +125,20 @@ function plotTimeviewLines() {
             .on("mouseover", function () {
                 var tooltip = d3.select("#tooltip");
                 var mine = d3.select(this);
+
+                var xcoo = d3.mouse(this)[0];
+                var date = x.invert(xcoo);
+
+                var dateStr;
+                if(date.getMonth() < 9){
+                    dateStr = "0"+(date.getMonth() + 1) + '/' + date.getFullYear();
+                } else {
+                    dateStr = (date.getMonth() + 1) + '/' + date.getFullYear()
+                }
+                var numberOfCrimes = data.crimeAggregates[years[date.getFullYear()-2010]][months[date.getMonth()]][mine.attr("id")];
+
                 tooltip.style("color", mine.attr("stroke"));
-                tooltip.html(data.getVerboseCrimeName(mine.attr("id")));
+                tooltip.html(data.getVerboseCrimeName(mine.attr("id")) + "<br>" + dateStr +" - #: " + numberOfCrimes);
                 tooltip.style("visibility", "visible");
                 highlightCrimeSelection(mine.attr("id"), true);
             })
@@ -156,6 +163,8 @@ function highlightCrimeSelection(id, status){
             var mine = d3.select(this);
             if(mine.attr("id") !== id){
                 mine.attr("stroke-opacity", 0.2);
+            } else {
+                mine.attr("stroke-opacity", 1);
             }
         })
     } else {

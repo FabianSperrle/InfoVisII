@@ -9,6 +9,7 @@ function DataController() {
     this.groupedByType = {};
     this.geo = {};
     this.crimesAggGeo = {};
+    this.crimesBySolvedCategory = {};
 
     this.dates = {
         from: new Date(2011, 4, 15),
@@ -103,6 +104,21 @@ function DataController() {
         }
     };
     this.visibleVerboseCrimeTypes = ["Other theft"];
+
+    this.outcomeTypes = {
+        na_inprogress: {
+            visibility: 0,
+            list: ["Under investigation", "Awaiting court outcome", "Defendant sent to Crown Court", "Court result unavailable"]
+        },
+        solved: {
+            visibility: 1,
+            list: ["Suspect charged as part of another case", "Local resolution", "Offender given a caution", "Offender otherwise dealt with", "Offender fined", "Offender given community sentence", "Offender given conditional discharge", "Offender deprived of property", "Offender given penalty notice", "Offender sent to prison", "Offender given absolute discharge", "Offender given a drugs possession warning", "Defendant found not guilty", "Offender ordered to pay compensation", "Offender given suspended prison sentence"]
+        },
+        failed: {
+            visibility: 0,
+            list: ["Court case unable to proceed", "Formal action is not in the public interest", "Unable to prosecute suspect", "Investigation complete; no suspect identified"]
+        }
+    };
 }
 
 /**
@@ -119,7 +135,7 @@ DataController.prototype.initializeFilters = function () {
     });
     this.filterDate();
     this.filtered = this.crimesByType.filterAll().top(Infinity);
-    this.visibleVerboseCrimeTypes = ["Violence and sexual offences", "Other theft", "Burglary", "Violent crime", "Bicycle theft", "Anti-social behaviour", "Other crime", "Shoplifting", "Drugs", "Criminal damage and arson", "Vehicle  crime", "Theft from the person", "Public disorder and weapons", "Public order", "Robbery", "Possession of weapons"];
+    this.visibleVerboseCrimeTypes = ["All Crimes", "Violence and sexual offences", "Other theft", "Burglary", "Violent crime", "Bicycle theft", "Anti-social behaviour", "Other crime", "Shoplifting", "Drugs", "Criminal damage and arson", "Vehicle  crime", "Theft from the person", "Public disorder and weapons", "Public order", "Robbery", "Possession of weapons"];
 
     data.emit('filtered');
 };
@@ -186,7 +202,7 @@ DataController.prototype.toggleFilter = function (type) {
 
     // Apply all filters
     this.filtered = this.crimesByType.filter(function (d) {
-        if (data.visibleVerboseCrimeTypes.indexOf(d) >= 0)
+        if (data.visibleVerboseCrimeTypes.indexOf(d) >= 0 || data.visibleVerboseCrimeTypes.indexOf("All Crimes") >= 0)
             return true;
         return false;
     }).top(Infinity);
@@ -245,6 +261,40 @@ DataController.prototype.groupByType = function () {
         .entries(this.filtered);
 };
 
+DataController.prototype.prepareSolvedCrimesForTimeline = function (){
+    function getCategoryByOutcomeType(outcomeType, data){
+        var outcomeCategories = Object.keys(data.outcomeTypes);
+        for(var cat in outcomeCategories){
+            if(data.outcomeTypes[outcomeCategories[cat]].list.indexOf(outcomeType) >= 0){
+                return outcomeCategories[cat];
+            }
+        }
+    }
+
+    this.crimesBySolvedCategory = [];
+    for (var key_ in this.solvedCrimesAgg){
+        var crimeOutcome = this.solvedCrimesAgg[key_];
+        var aggOutcomes = {};
+        for(var category in Object.keys(this.outcomeTypes)){
+            aggOutcomes[Object.keys(this.outcomeTypes)[category]] = 0;
+        }
+        var outcomeEntity = {
+            "crime_type" : crimeOutcome.crime_type,
+            "month" : crimeOutcome.month,
+            "outcomes": aggOutcomes
+        };
+
+        var outcomeKeys = Object.keys(crimeOutcome.outcomes);
+        for (var key in outcomeKeys){
+            var number = parseFloat(crimeOutcome.outcomes[outcomeKeys[key]]);
+            var category = getCategoryByOutcomeType(outcomeKeys[key], this);
+            outcomeEntity["outcomes"][category] += number;
+        }
+        this.crimesBySolvedCategory.push(outcomeEntity);
+    }
+    
+};
+
 var data = new DataController();
 
 
@@ -279,7 +329,14 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/ge
     data.emit('loadAggregatedCrimesByGeo');
 });
 
+d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/master/data/outcomes_aggby_month-crimetype.json", function(error, json) {
+    if(error) throw error;
+    data.solvedCrimesAgg = json;
+    data.emit('loadSolvedCrimes');
+});
+
 data.on('loadAll', data.initializeFilters);
 data.on('toggle', data.toggleFilter);
 data.on('dateChange', data.dateChange);
 data.on('filtered', data.groupByType);
+data.on('loadSolvedCrimes', data.prepareSolvedCrimesForTimeline);
