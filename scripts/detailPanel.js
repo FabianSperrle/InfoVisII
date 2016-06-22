@@ -37,6 +37,36 @@ var gg;
 function reloadDetailPanel(){//flight, color){
     initBarChart();
 
+
+    var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function(d) {
+            var dat = d3.select("#subbar_"+data.getCrimeVarName(d.key)).data()[0].values;
+
+            var solved = 0, inprogress = 0, failed = 0, na = 0;
+            for(index in Object.keys(dat)){
+                switch(dat[index].key){
+                    case "solved": solved=dat[index].values; break;
+                    case "inprogress": inprogress=dat[index].values; break;
+                    case "failed": failed=dat[index].values; break;
+                    default: na=dat[index].values; break;
+                }
+            }
+
+            var htmlToolTip  = "<div style='border: 1px solid gray; background-color:#fff; background-color: rgba(255,255,255,0.8);'><table>";
+            htmlToolTip += " <tr><td><strong><span style='color:red'>"+d.key+"</span></strong></td></tr>";
+            htmlToolTip += " <tr><td><strong>total crimes:</strong></td><td><span style='color:red'>"+d.values+"</span></td></tr>";
+            htmlToolTip += " <tr><td><strong>total solved:</strong></td><td><span style='color:red'>"+solved+"</span></td></tr>";
+            htmlToolTip += " <tr><td><strong>in progress:</strong></td><td><span style='color:red'>"+inprogress+"</span></td></tr>";
+            htmlToolTip += " <tr><td><strong>case droped:</strong></td><td><span style='color:red'>"+failed+"</span></td></tr>";
+            htmlToolTip += " </table></div>";
+
+            return htmlToolTip;
+
+        })
+
+
     var xDomain = [];
     for (var i = 0; i < data.getCrimeTypes().length; i++) {
         if(data.crimeTypes[data.getCrimeTypes()[i]].visibility == 1 || data.crimeTypes[data.getCrimeTypes()[0]].visibility == 1){
@@ -92,6 +122,7 @@ function reloadDetailPanel(){//flight, color){
         //.on("mouseout", function(d){
         //    colorBarHighlight(d,"red");
         //});
+    svg.call(tip);
 
     barChart.selectAll(".bar")
         .data(groupedByCrimeType)
@@ -112,6 +143,15 @@ function reloadDetailPanel(){//flight, color){
         })
         .attr("fill", function (d) {
             return data.crimeTypes[data.getCrimeVarName(d.key)].color;
+        })
+        .style('opacity',0.6)
+        .on('mouseover', function(d){
+            tip.show(d);
+            d3.select(this).style('opacity',1);
+        })
+        .on('mouseout', function(d){
+            tip.hide(d);
+            d3.select(this).style('opacity',0.6);
         });
 
 
@@ -136,9 +176,34 @@ function reloadDetailPanel(){//flight, color){
         })
         .entries(this.filtered);
 
-    //if(data.crimeTypes["allCrimes"].visibility == 1){
-    //    groupedByCrimeType.push({key: "All Crimes", values: d3.sum(Object.keys(groupedByCrimeType).map(function(v){return groupedByCrimeType[v].values;}))});
-    //}
+
+
+    var AllCrimesGrouped = d3.nest()
+        .key(function (d) {
+            return d.crime_type;
+        })
+        .sortKeys(d3.ascending)
+        .rollup(function (leaves) {
+            return leaves.length;
+        })
+        .entries(groupedByOutcomePerCrimeType);
+
+
+    if(data.crimeTypes["allCrimes"].visibility == 1){
+        var solved = 0, inprogress = 0, failed = 0, na = 0;
+        for(var i=0; i<groupedByOutcomePerCrimeType.length; i++){
+        var obj = groupedByOutcomePerCrimeType[i];
+            for(index in Object.keys(obj.values)){
+                switch(obj.values[index].key){
+                    case "solved": solved+=obj.values[index].values; break;
+                    case "inprogress": inprogress+=obj.values[index].values; break;
+                    case "failed": failed+=obj.values[index].values; break;
+                    default: na+=obj.values[index].values; break;
+                }
+            }
+        }
+        groupedByOutcomePerCrimeType.push({key: "All Crimes", values: [{key: "solved", values: solved},{key: "inprogress", values: inprogress},{key: "failed", values: failed},{key: "na", values: na}]})
+    }
     gg = groupedByOutcomePerCrimeType;
 
  
