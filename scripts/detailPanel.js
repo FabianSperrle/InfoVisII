@@ -40,7 +40,7 @@ function reloadDetailPanel(){//flight, color){
     var xDomain = [];
     for (var i = 0; i < data.getCrimeTypes().length; i++) {
         if(data.crimeTypes[data.getCrimeTypes()[i]].visibility == 1 || data.crimeTypes[data.getCrimeTypes()[0]].visibility == 1){
-            if(data.crimeTypes[data.getCrimeTypes()[i]].verboseName != "All Crimes")
+            //if(data.crimeTypes[data.getCrimeTypes()[i]].verboseName != "All Crimes")
                 xDomain.push(data.crimeTypes[data.getCrimeTypes()[i]].verboseName);
         }
     };
@@ -52,10 +52,14 @@ function reloadDetailPanel(){//flight, color){
             return leaves.length;
         })
         .entries(this.filtered);
+
+    if(data.crimeTypes["allCrimes"].visibility == 1){
+        groupedByCrimeType.push({key: "All Crimes", values: d3.sum(Object.keys(groupedByCrimeType).map(function(v){return groupedByCrimeType[v].values;}))});
+    }
     gg = groupedByCrimeType;
 
     xBar.domain(xDomain);
-    var ymax = d3.max(Object.keys(groupedByCrimeType).map(function(v){if(groupedByCrimeType[v].key != "All Crimes") return groupedByCrimeType[v].values;}));
+    var ymax = d3.max(Object.keys(groupedByCrimeType).map(function(v){return groupedByCrimeType[v].values;})); //if(groupedByCrimeType[v].key != "All Crimes") 
     yBar.domain([0,ymax]);
 
     barChart.append("g")
