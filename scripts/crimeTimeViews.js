@@ -109,20 +109,22 @@ function getCrimeData(crimeType, data) {
 
 function plotTimeviewLines() {
     var plotCrimePath = d3.svg.line()
-        .x(function(d) {
-            return x(dateFormat.parse(d.date));
-        })
-        .y(function(d) {
-            return y(d.value);
-        })
-        .interpolate(currentInterpolationType);
+            .x(function(d) {
+                return x(dateFormat.parse(d.date));
+            })
+            .y(function(d) {
+                return y(d.value);
+            })
+            .interpolate(currentInterpolationType);
+
     for (var i = 0; i < data.getCrimeTypes().length; i++) {
         svg.append("path")
             .attr("id", data.getCrimeTypes()[i])
+            .attr("crime_type", data.getCrimeTypes()[i])
             .datum(getCrimeData(data.getCrimeTypes()[i], data.crimeAggregates))
             .attr("class", "line")
             .attr("d", plotCrimePath)
-            .attr("stroke-width", 10)
+            .attr("stroke-width", "1.5px")
             .attr("stroke", data.getCrimeColor(data.getCrimeTypes()[i]))
             .on("mouseover", function () {
                 var tooltip = d3.select("#tooltip");
@@ -140,20 +142,134 @@ function plotTimeviewLines() {
                 var numberOfCrimes = data.crimeAggregates[years[date.getFullYear()-2010]][months[date.getMonth()]][mine.attr("id")];
 
                 tooltip.style("color", mine.attr("stroke"));
-                tooltip.html(data.getVerboseCrimeName(mine.attr("id")) + "<br>" + dateStr +" - #: " + numberOfCrimes);
+                tooltip.html(data.getVerboseCrimeName(mine.attr("crime_type")) + "<br>" + dateStr +" - #: " + numberOfCrimes);
                 tooltip.style("visibility", "visible");
-                highlightCrimeSelection(mine.attr("id"), true);
+                highlightCrimeSelection(mine.attr("crime_type"), true);
             })
             .on("mousemove", function () {
                 tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
             })
             .on("mouseout", function () {
-                highlightCrimeSelection(d3.select(this).attr("id"), false);
+                highlightCrimeSelection(d3.select(this).attr("crime_type"), false);
                 return d3.select("#tooltip").style("visibility", "hidden");
             });
 
         if (!data.crimeTypes[data.getCrimeTypes()[i]].visibility) {
             d3.select("#" + data.getCrimeTypes()[i]).attr("display", "none");
+        }
+    }
+    plotSolvedRatesOnTimeLine();
+    resizeTimeLine(data.crimeAggregates);
+}
+
+function plotSolvedRatesOnTimeLine() {
+    var plotSolve_FAILED_Path = d3.svg.line()
+        .x(function(d) {
+            return x(dateFormat.parse(d.month));
+        })
+        .y(function(d) {
+            return y(d.outcomes.failed);
+        })
+        .interpolate(currentInterpolationType);
+    var plotSolve_INPROGRRESS_Path = d3.svg.line()
+        .x(function(d) {
+            return x(dateFormat.parse(d.month));
+        })
+        .y(function(d) {
+            return y(d.outcomes.na_inprogress);
+        })
+        .interpolate(currentInterpolationType);
+    var plotSolve_SOLVED_Path = d3.svg.line()
+        .x(function(d) {
+            return x(dateFormat.parse(d.month));
+        })
+        .y(function(d) {
+            return y(d.outcomes.solved);
+        })
+        .interpolate(currentInterpolationType);
+
+    function plotSolvedCategoryLinesByCrime(crimeType){
+        var verboseCrimeName = data.getVerboseCrimeName(crimeType);
+        var category_values_crime = data.crimesSolvedByCategoryNtype[verboseCrimeName];
+        if(category_values_crime == undefined) return false;
+        /*for(var i in Object.keys(data.outcomeTypes)){
+            var category = Object.keys(data.outcomeTypes)[i];
+            /*function prepareSolvedLineDatum(crimeType, category){
+                var resultDatumForPlot = [];
+                var verboseCrimeName = data.getVerboseCrimeName(crimeType);
+                var category_values_crime = data.crimesSolvedByCategoryNtype[verboseCrimeName];
+                for(var j in category_values_crime){
+
+                }
+            }*/
+        function plotSolvedLineByCategory(crimeType, catogoryPlotFunc, category_values, category){
+            svg.append("path")
+                .attr("id", crimeType+"_"+category)
+                .attr("crime_type", crimeType)
+                .datum(category_values)
+                .attr("class", "line")
+                .attr("d", catogoryPlotFunc)
+                .attr("stroke-width", "1.5px")
+                .attr("stroke", data.getCrimeColor(crimeType))
+                .attr("stroke-dasharray", function(){
+                    if(category == "failed"){
+                        return ("10,3")
+                    } else if(category == "solved"){
+                        return ("2, 2")
+                    } else if(category == "inprogress"){
+                        return ("5, 5")
+                    }
+                })
+                .on("mouseover", function () {
+                    var tooltip = d3.select("#tooltip");
+                    var mine = d3.select(this);
+
+                    var xcoo = d3.mouse(this)[0];
+                    var date = x.invert(xcoo);
+                    var mo = date.getFullYear()+"-"+ ("0"+(date.getMonth()+1)).slice(-2);
+                    var dateStr = ("0"+(date.getMonth()+1)).slice(-2) + '/' + date.getFullYear();
+                    //var numberOfCrimes = data.crimeAggregates[years[date.getFullYear()-2010]][months[date.getMonth()]][mine.attr("id")];
+                    var numberOfCrimes = "TODOOO";
+                    for(var i in category_values){
+                        if(category_values[i].month == mo){
+                            if(category == "failed"){
+                                numberOfCrimes = category_values[i].outcomes.failed;
+                            } else if(category == "solved"){
+                                numberOfCrimes = category_values[i].outcomes.solved;
+                            } else if(category == "inprogress"){
+                                numberOfCrimes = category_values[i].outcomes.na_inprogress;
+                            }
+                            break;
+                        }
+                    }
+
+                    tooltip.style("color", mine.attr("stroke"));
+                    tooltip.html(data.getVerboseCrimeName(crimeType) + " - " + category + "<br>" + dateStr +" - #: " + numberOfCrimes);
+                    tooltip.style("visibility", "visible");
+                    log(mine.attr("id"));
+                    highlightCrimeSelection(mine.attr("crime_type"), true);
+                })
+                .on("mousemove", function () {
+                    tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
+                })
+                .on("mouseout", function () {
+                    highlightCrimeSelection(d3.select(this).attr("crime_type"), false);
+                    return d3.select("#tooltip").style("visibility", "hidden");
+                });
+        }
+        plotSolvedLineByCategory(crimeType,plotSolve_FAILED_Path,category_values_crime, "failed");
+        plotSolvedLineByCategory(crimeType,plotSolve_INPROGRRESS_Path,category_values_crime, "inprogress");
+        plotSolvedLineByCategory(crimeType,plotSolve_SOLVED_Path,category_values_crime, "solved");
+        return true;
+        //}
+    }
+    for (var i = 0; i < data.getCrimeTypes().length; i++) {
+        if(plotSolvedCategoryLinesByCrime(data.getCrimeTypes()[i])){
+            if (!data.crimeTypes[data.getCrimeTypes()[i]].visibility) {
+                d3.select("#" + data.getCrimeTypes()[i] + "_failed").attr("display", "none");
+                d3.select("#" + data.getCrimeTypes()[i] + "_inprogress").attr("display", "none");
+                d3.select("#" + data.getCrimeTypes()[i] + "_solved").attr("display", "none");
+            }
         }
     }
     resizeTimeLine(data.crimeAggregates);
@@ -163,16 +279,19 @@ function highlightCrimeSelection(id, status){
     if(status){
         d3.selectAll(".line").each(function(){
             var mine = d3.select(this);
-            if(mine.attr("id") !== id){
+            if(mine.attr("crime_type") !== id){
                 mine.attr("stroke-opacity", 0.2);
+                mine.attr("stroke-width", "0.5px");
             } else {
                 mine.attr("stroke-opacity", 1);
+                mine.attr("stroke-width", "3px");
             }
         })
     } else {
         d3.selectAll(".line").each(function(){
             var mine = d3.select(this);
-            if(mine.attr("id" !== id)){
+            mine.attr("stroke-width", "1.5px");
+            if(mine.attr("crime_type" !== id)){
                 mine.attr("stroke-opacity", 1);
             }
         })
@@ -182,10 +301,20 @@ function highlightCrimeSelection(id, status){
 
 function toggleTimeviewLines(crimeLineID) {
     var line = d3.select('#' + data.getCrimeTypes()[crimeLineID]);
+    var failedLine = d3.select('#' + data.getCrimeTypes()[crimeLineID] + "_failed");
+    var inProgressLine = d3.select('#' + data.getCrimeTypes()[crimeLineID] + "_inprogress");
+    var solvedLine = d3.select('#' + data.getCrimeTypes()[crimeLineID] + "_solved");
+
     if (data.crimeTypes[data.getCrimeTypes()[crimeLineID]].visibility) {
         line.attr("display", "block");
+        failedLine.attr("display", "block");
+        inProgressLine.attr("display", "block");
+        solvedLine.attr("display", "block");
     } else {
         line.attr("display", "none");
+        failedLine.attr("display", "none");
+        inProgressLine.attr("display", "none");
+        solvedLine.attr("display", "none");
     }
 }
 
@@ -199,6 +328,31 @@ function resizeTimeLine(transition) {
             return y(d.value);
         })
         .interpolate(currentInterpolationType);
+    var plotSolve_FAILED_Path = d3.svg.line()
+        .x(function(d) {
+            return x(dateFormat.parse(d.month));
+        })
+        .y(function(d) {
+            return y(d.outcomes.failed);
+        })
+        .interpolate(currentInterpolationType);
+    var plotSolve_INPROGRRESS_Path = d3.svg.line()
+        .x(function(d) {
+            return x(dateFormat.parse(d.month));
+        })
+        .y(function(d) {
+            return y(d.outcomes.na_inprogress);
+        })
+        .interpolate(currentInterpolationType);
+    var plotSolve_SOLVED_Path = d3.svg.line()
+        .x(function(d) {
+            return x(dateFormat.parse(d.month));
+        })
+        .y(function(d) {
+            return y(d.outcomes.solved);
+        })
+        .interpolate(currentInterpolationType);
+
     var maxValue = 0;
     for (var i = 0; i < data.getCrimeTypes().length; i++) {
         if (data.crimeTypes[data.getCrimeTypes()[i]].visibility) {
@@ -210,10 +364,16 @@ function resizeTimeLine(transition) {
     for (i = 0; i < data.getCrimeTypes().length; i++) {
         var duration;
         transition?duration=750:duration=0;
+        var solvedLinesOfCrime = data.crimesSolvedByCategoryNtype[data.getVerboseCrimeName(data.getCrimeTypes()[i])];
+        if(solvedLinesOfCrime != undefined){
+            d3.select("#" + data.getCrimeTypes()[i] + "_failed").transition().duration(duration).attr("d", plotSolve_FAILED_Path(solvedLinesOfCrime));
+            d3.select("#" + data.getCrimeTypes()[i] + "_inprogress").transition().duration(duration).attr("d", plotSolve_INPROGRRESS_Path(solvedLinesOfCrime));
+            d3.select("#" + data.getCrimeTypes()[i] + "_solved").transition().duration(duration).attr("d", plotSolve_SOLVED_Path(solvedLinesOfCrime));
+        }
         d3.select("#" + data.getCrimeTypes()[i]).transition().duration(duration).attr("d", plotCrimePath(getCrimeData(data.getCrimeTypes()[i], data.crimeAggregates)));
     }
     svg.select(".y.axis") // change the y axis
-        .transition().duration(750)
+        .transition().duration(transition?750:0)
         .call(yAxis);
 }
 
@@ -255,7 +415,7 @@ var timelineView = function() {
 
     plotTimeviewLines();
 
-    // SLIDER
+    // ADD SLIDER to TIMELINE
     var dragSliderLine1 = null;
     var dragSliderLine2 = null;
     var slider1 = svg1.append("g");
