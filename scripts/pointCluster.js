@@ -356,7 +356,19 @@ var updateChloroplethLayer = function () {
             fillOpacity: 0.7
         };
     }
-    layers.choropleth = L.geoJson(data.geo, {style: style});
+
+    function onEachFeature(feature, layer) {
+        layer.on('click', function (e) {
+            let id = e.target.feature.id;
+            console.log("id = " + id);
+            document.getElementById(id).click();
+        });
+    }
+    
+    layers.choropleth = L.geoJson(data.geo, {
+        style: style,
+        onEachFeature: onEachFeature
+    });
 };
 
 function invalidateLayers() {
