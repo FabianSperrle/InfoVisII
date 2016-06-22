@@ -106,6 +106,11 @@ function getCrimeData(crimeType) {
         if (data.lsoa_codes[key] === true)
             activeCodes.push(key);
     }
+    
+    let types = [verboseCrimeType];
+    if (crimeType == "allCrimes") {
+        types = data.getVerboseCrimeName();
+    }
 
     months.forEach(function (month) {
         activeCodes.forEach(function (code) {
@@ -113,9 +118,11 @@ function getCrimeData(crimeType) {
                 throw new Error(code + " is undefined");
             }
             if (data.crimesAggGeo[code][month] != undefined) {
-                if (data.crimesAggGeo[code][month][verboseCrimeType] != undefined) {
-                    returndata[month] += parseInt(data.crimesAggGeo[code][month][verboseCrimeType]);
-                }
+                types.forEach(function (verboseCrimeType) {
+                    if (data.crimesAggGeo[code][month][verboseCrimeType] != undefined) {
+                        returndata[month] += parseInt(data.crimesAggGeo[code][month][verboseCrimeType]);
+                    }
+                });
             }
         })
     });

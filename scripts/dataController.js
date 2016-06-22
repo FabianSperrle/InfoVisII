@@ -253,7 +253,15 @@ DataController.prototype.getCrimeTypes = function (i) {
 };
 
 DataController.prototype.getVerboseCrimeName = function (crime) {
-    return this.crimeTypes[crime].verboseName;
+    if (crime != undefined) {
+        return this.crimeTypes[crime].verboseName;
+    }
+
+    let names = [];
+    for (var key in this.crimeTypes) {
+        names.push(this.crimeTypes[key].verboseName);
+    }
+    return names;
 };
 
 DataController.prototype.getCrimeColor = function (crime) {
