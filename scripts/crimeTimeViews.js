@@ -103,7 +103,8 @@ function getCrimeData(crimeType) {
     let activeCodes = [];
     for (var key in data.lsoa_codes) {
         if (!data.lsoa_codes.hasOwnProperty(key)) continue;
-        activeCodes.push(key);
+        if (data.lsoa_codes[key] === true)
+            activeCodes.push(key);
     }
 
     months.forEach(function (month) {
@@ -118,14 +119,17 @@ function getCrimeData(crimeType) {
             }
         })
     });
+    let max = 0;
     let r = [];
     for (key in returndata) {
+        if (returndata[key] > max) {
+            max = returndata[key];
+        }
         r.push({
-            'date': key,
+            'date': key.substr(0, key.length -3),
             'value': returndata[key]
         })
     }
-    console.log(r);
     return r;
 }
 
@@ -138,11 +142,7 @@ var plotCrimePath = d3.svg.line()
     });
 
 function plotTimeviewLines() {
-    //var datas  = {};
-    //for (var i = 0; i < crimeTime.crimeTypes.length; i++) {
-    //    datas[crimeTime.crimeTypes[i]] = getCrimeData(crimeTime.crimeTypes[i], data);
-    //}
-    //console.log(JSON.stringify(datas));
+    svg.selectAll("path").remove();
     for (var i = 0; i < data.getCrimeTypes().length; i++) {
         svg.append("path")
             .attr("id", data.getCrimeTypes()[i])
@@ -171,7 +171,7 @@ function plotTimeviewLines() {
             d3.select("#" + data.getCrimeTypes()[i]).attr("display", "none");
         }
     }
-    resizeTimeLine(data.crimeAggregates);
+    resizeTimeLine();
 }
 
 function highlightCrimeSelection(id, status) {
@@ -723,4 +723,5 @@ data.on('loadAggregates', createCrimeCategoryButtons);
 data.on('loadAggregates', crimeTimeViewRequirements);
 data.on('loadAggregates', matrixView);
 data.on('loadAggregates', timelineView);
+data.on('filtered', plotTimeviewLines);
 
