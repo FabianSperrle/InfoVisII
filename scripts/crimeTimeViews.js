@@ -22,6 +22,7 @@ var tooltip = d3.select("body")
 var crimeTime = new CrimeTime();
 var xSliderLeft = 100;
 var xSliderRight = 300;
+var currentInterpolationType = "basis";
 
 var dateFormat = d3.time.format("%Y-%m");
 var formatDate = d3.time.format("%B %Y");
@@ -105,15 +106,16 @@ function getCrimeData(crimeType, data) {
     return returndata;
 }
 
-var plotCrimePath = d3.svg.line()
-    .x(function(d) {
-        return x(dateFormat.parse(d.date));
-    })
-    .y(function(d) {
-        return y(d.value);
-    });
 
 function plotTimeviewLines() {
+    var plotCrimePath = d3.svg.line()
+        .x(function(d) {
+            return x(dateFormat.parse(d.date));
+        })
+        .y(function(d) {
+            return y(d.value);
+        })
+        .interpolate(currentInterpolationType);
     for (var i = 0; i < data.getCrimeTypes().length; i++) {
         svg.append("path")
             .attr("id", data.getCrimeTypes()[i])
@@ -187,7 +189,16 @@ function toggleTimeviewLines(crimeLineID) {
     }
 }
 
-function resizeTimeLine() {
+function resizeTimeLine(transition) {
+    if( typeof transition === 'undefined') transition = true;
+    var plotCrimePath = d3.svg.line()
+        .x(function(d) {
+            return x(dateFormat.parse(d.date));
+        })
+        .y(function(d) {
+            return y(d.value);
+        })
+        .interpolate(currentInterpolationType);
     var maxValue = 0;
     for (var i = 0; i < data.getCrimeTypes().length; i++) {
         if (data.crimeTypes[data.getCrimeTypes()[i]].visibility) {
@@ -197,7 +208,9 @@ function resizeTimeLine() {
     }
     y.domain([0, maxValue + 0.2 * maxValue]);
     for (i = 0; i < data.getCrimeTypes().length; i++) {
-        d3.select("#" + data.getCrimeTypes()[i]).transition().duration(750).attr("d", plotCrimePath(getCrimeData(data.getCrimeTypes()[i], data.crimeAggregates)));
+        var duration;
+        transition?duration=750:duration=0;
+        d3.select("#" + data.getCrimeTypes()[i]).transition().duration(duration).attr("d", plotCrimePath(getCrimeData(data.getCrimeTypes()[i], data.crimeAggregates)));
     }
     svg.select(".y.axis") // change the y axis
         .transition().duration(750)
@@ -698,6 +711,11 @@ function getDateOfSlider(slider){
     } else {
         log("Slider not defined. Can't return date!");
     }
+}
+
+function changeChartInterpolation(type){
+    currentInterpolationType = type;
+    resizeTimeLine(false);
 }
 
 function log(text) {

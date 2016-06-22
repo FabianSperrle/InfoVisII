@@ -9,7 +9,7 @@ function DataController() {
     this.groupedByType = {};
     this.geo = {};
     this.crimesAggGeo = {};
-    this.crimesBySolvedCategory = {};
+    this.crimesSolvedByCategoryNtype = {};
 
     this.dates = {
         from: new Date(2011, 4, 15),
@@ -112,11 +112,11 @@ function DataController() {
         },
         solved: {
             visibility: 1,
-            list: ["Suspect charged as part of another case", "Local resolution", "Offender given a caution", "Offender otherwise dealt with", "Offender fined", "Offender given community sentence", "Offender given conditional discharge", "Offender deprived of property", "Offender given penalty notice", "Offender sent to prison", "Offender given absolute discharge", "Offender given a drugs possession warning", "Defendant found not guilty", "Offender ordered to pay compensation", "Offender given suspended prison sentence"]
+            list: ["Suspect charged as part of another case", "Local resolution", "Offender given a caution", "Offender otherwise dealt with", "Offender fined", "Offender given community sentence", "Offender given conditional discharge", "Offender deprived of property", "Offender given penalty notice", "Offender sent to prison", "Offender given absolute discharge", "Offender given a drugs possession warning", "Defendant found not guilty", "Offender ordered to pay compensation", "Offender given suspended prison sentence", "Formal action is not in the public interest"]
         },
         failed: {
             visibility: 0,
-            list: ["Court case unable to proceed", "Formal action is not in the public interest", "Unable to prosecute suspect", "Investigation complete; no suspect identified"]
+            list: ["Court case unable to proceed", "Unable to prosecute suspect", "Investigation complete; no suspect identified"]
         }
     };
 }
@@ -270,8 +270,7 @@ DataController.prototype.prepareSolvedCrimesForTimeline = function (){
             }
         }
     }
-
-    this.crimesBySolvedCategory = [];
+    this.crimesSolvedByCategoryNtype = [];
     for (var key_ in this.solvedCrimesAgg){
         var crimeOutcome = this.solvedCrimesAgg[key_];
         var aggOutcomes = {};
@@ -290,9 +289,22 @@ DataController.prototype.prepareSolvedCrimesForTimeline = function (){
             var category = getCategoryByOutcomeType(outcomeKeys[key], this);
             outcomeEntity["outcomes"][category] += number;
         }
-        this.crimesBySolvedCategory.push(outcomeEntity);
+        this.crimesSolvedByCategoryNtype.push(outcomeEntity);
     }
-    
+    // Prepare Object for line plotting
+    var tempSolvedByCatNType = {};
+    for(var i in this.crimesSolvedByCategoryNtype){
+        var ent = this.crimesSolvedByCategoryNtype[i];
+        var crimeType = ent.crime_type;
+        if(tempSolvedByCatNType[crimeType] === undefined){
+            tempSolvedByCatNType[crimeType] = [];
+        }
+        tempSolvedByCatNType[crimeType].push({
+            "month" : ent.month,
+            "outcomes" : ent.outcomes
+        })
+    }
+    this.crimesSolvedByCategoryNtype = tempSolvedByCatNType;
 };
 
 var data = new DataController();
@@ -326,7 +338,7 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/ge
 d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/crimes_geoloc_agg_ex.json", function(error, json) {//"https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/geo_oa_ex.json"
     if(error) throw error;
     data.crimesAggGeo = json;
-    data.emit('loadAggregatedCrimesByGeo');
+    //data.emit('loadAggregatedCrimesByGeo');
 });
 
 d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/master/data/outcomes_aggby_month-crimetype.json", function(error, json) {
@@ -335,8 +347,8 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/master/data/o
     data.emit('loadSolvedCrimes');
 });
 
+data.on('loadSolvedCrimes', data.prepareSolvedCrimesForTimeline);
 data.on('loadAll', data.initializeFilters);
 data.on('toggle', data.toggleFilter);
 data.on('dateChange', data.dateChange);
 data.on('filtered', data.groupByType);
-data.on('loadSolvedCrimes', data.prepareSolvedCrimesForTimeline);

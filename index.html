@@ -52,6 +52,19 @@
 					<select id="monthdropdownLeft" class="leftDate" onchange="updateDate(this)"></select>
 					<select id="yeardropdownLeft" class="leftDate" onchange="updateDate(this)"></select>
 				</form>
+				<form style="margin-left: 200px; float: left">
+					<select onchange="changeChartInterpolation(this.value)">
+						<option value="linear">Linear</option>
+						<option selected="selected" value="basis">Basis</option>
+						<option value="monotone">Monotone</option>
+						<option value="step-before">Step-Before</option>
+						<option value="step-after">Step-After</option>
+						<option value="bundle">Bundle</option>
+						<option value="cardinal">Cardinal</option>
+						<option value="basis-open">Basis-Open</option>
+						<option value="cardinal-open">Cardinal-Open</option>
+					</select>
+				</form>
 				<form style="float:right" action="" name="timeRightBorder">
 					<select id="monthdropdownRight" class="rightDate" onchange="updateDate(this)"></select>
 					<select id="yeardropdownRight" class="rightDate" onchange="updateDate(this)"></select>
