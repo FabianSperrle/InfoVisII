@@ -95,7 +95,9 @@ function toggleAllCrimes(){
     if(s>0){
         bo = 0;
     }
-
+    if(bo==0){
+        data.emit('resetDetailPanel');
+    };
     for(var i=0; i < data.getCrimeTypes().length; i++){
             d3.select("#category_" + i).property("checked", 0+!!bo);
             data.crimeTypes[data.getCrimeTypes()[i]].visibility = bo;
@@ -110,6 +112,7 @@ function toggleAllCrimes(){
     resizeTimeLine(data.crimeAggregates);
     highlightMatrixSelection();
    data.emit('activateAllCrimes', bo);
+
 }
 
 function toggleCheckboxesOfCrimes(checkboxID) {

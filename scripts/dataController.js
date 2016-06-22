@@ -209,12 +209,15 @@ DataController.prototype.filterDate = function () {
 
 DataController.prototype.toggleFilterAll = function (switchOn) {
     this.switchAllVisibilityFlags(switchOn);
-
-    this.filtered = this.crimesByType.filter(function (d) {
-        if (data.visibleVerboseCrimeTypes.indexOf(d) >= 0)
-            return true;
-        return false;
-    }).top(Infinity);
+    if(switchOn){
+        this.filtered = this.crimesByType.filter(function (d) {
+            if (data.visibleVerboseCrimeTypes.indexOf(d) >= 0)
+                return true;
+            return false;
+        }).top(Infinity);
+    }else {
+        this.filtered = [];
+    }
 
     data.emit('filtered');  
 };

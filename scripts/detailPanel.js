@@ -1,38 +1,38 @@
 var barChart;
-var x, y, xAxisBarChart, yAxisBarChart;
+var xBar, yBar, xAxisBarChart, yAxisBarChart;
 
-var margin = {top: 40, right: 20, bottom: 70, left: 80},
-    width = 1000 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+var marginBar = {top: 40, right: 20, bottom: 70, left: 80},
+    widthBar = 1000 - marginBar.left - marginBar.right,
+    heightBar = 300 - marginBar.top - marginBar.bottom;
 
 function initBarChart(width) {
 
     if(width==undefined) width = 300;
 
-    x = d3.scale.ordinal()
+    xBar = d3.scale.ordinal()
         .rangeRoundBands([0, width], .1);
 
-    y = d3.scale.linear()
-        .range([height, 0]);
+    yBar = d3.scale.linear()
+        .range([heightBar, 0]);
 
     xAxisBarChart = d3.svg.axis()
-        .scale(x)
+        .scale(xBar)
         .ticks(0)
         .orient("bottom");
 
     yAxisBarChart = d3.svg.axis()
-        .scale(y)
+        .scale(yBar)
         .orient("left");
 
     d3.select("#barChart").remove();
     barChart = d3.select("#detailPanel").append("svg")
         .attr("id", "barChart")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("width", width + marginBar.left + marginBar.right)
+        .attr("height", heightBar + marginBar.top + marginBar.bottom)
         .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .attr("transform", "translate(" + marginBar.left + "," + marginBar.top + ")");
 }
-
+var gg;
 
 function reloadDetailPanel(){//flight, color){
     initBarChart();
@@ -52,17 +52,17 @@ function reloadDetailPanel(){//flight, color){
             return leaves.length;
         })
         .entries(this.filtered);
-    
+    gg = groupedByCrimeType;
 
-    x.domain(xDomain);
-    var ymax = d3.max(Object.keys(groupedByCrimeType).map(function(v){return groupedByCrimeType[v].values;}));
-    y.domain([0,ymax]);
+    xBar.domain(xDomain);
+    var ymax = d3.max(Object.keys(groupedByCrimeType).map(function(v){if(groupedByCrimeType[v].key != "All Crimes") return groupedByCrimeType[v].values;}));
+    yBar.domain([0,ymax]);
 
     barChart.append("g")
         .attr("class", "y axis")
         .call(yAxisBarChart)
         .append("text")
-        .attr("x", width / 1.75)
+        .attr("x", widthBar / 1.75)
         .attr("y", -25)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
@@ -70,7 +70,7 @@ function reloadDetailPanel(){//flight, color){
 
     var xAx = barChart.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
+        .attr("transform", "translate(0," + heightBar + ")")
         .call(xAxisBarChart);
 
     xAx.selectAll("text")
@@ -94,20 +94,22 @@ function reloadDetailPanel(){//flight, color){
         .data(groupedByCrimeType)
         .enter().append("rect")
         .attr("id", function (d) {
-            return "bar_"+d.key;
+            return "bar_";
         })
         .attr("class", "bar")
         .attr("x", function (d) {
-            return x(d.key);
+            return xBar(d.key);
         })
-        .attr("width",  x.rangeBand())
+        .attr("width",  xBar.rangeBand())
         .attr("y", function (d) {
-            return y(d.values); //d[6]
+            return yBar(d.values);
         })
         .attr("height", function (d) {
-            return height - y(d.values);
+            return heightBar - yBar(d.values);
         })
-        .attr("fill", "black");
+        .attr("fill", function (d) {
+            return data.crimeTypes[data.getCrimeVarName(d.key)].color;
+        });
     
         //.on("mouseover", function (d) {
          //   colorBarHighlight(d[0] + "-" + d[1],"blue");
@@ -119,3 +121,4 @@ function reloadDetailPanel(){//flight, color){
 
 data.on('loadAggregates', initBarChart);
 data.on('filtered', reloadDetailPanel);
+data.on('resetDetailPanel', initBarChart);
