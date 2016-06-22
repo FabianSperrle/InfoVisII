@@ -4,6 +4,7 @@ function DataController() {
     this.crimes = {};
     this.crimesByType = {};
     this.crimesByDate = {};
+    this.crimesByLocation = {};
     this.filtered = {};
     this.crimeAggregates = {};
     this.groupedByType = {};
@@ -13,6 +14,34 @@ function DataController() {
     this.dates = {
         from: new Date(2011, 4, 15),
         to: new Date(2012, 6, 15)
+    };
+
+    this.lsoa_codes = {
+        E05009293: true,
+        E05009312: true,
+        E05009289: true,
+        E05009296: true,
+        E05009310: true,
+        E05009292: true,
+        E05009305: true,
+        E05009298: true,
+        E05009294: true,
+        E05009297: true,
+        E05009290: true,
+        E05009304: true,
+        E05009311: true,
+        E05009300: true,
+        E05009291: true,
+        E05009302: true,
+        E05009301: true,
+        E05009306: true,
+        E05009295: true,
+        E05009299: true,
+        E05009288: true,
+        E05009303: true,
+        E05009307: true,
+        E05009308: true,
+        E05009309: true
     };
 
     this.crimeTypes = {
@@ -117,6 +146,9 @@ DataController.prototype.initializeFilters = function () {
     this.crimesByDate = this.crimes.dimension(function (d) {
         return d.month;
     });
+    this.crimesByLocation = this.crimes.dimension(function (d) {
+        return d.lsoa_code;
+    });
     this.filterDate();
     this.filtered = this.crimesByType.filterAll().top(Infinity);
     this.visibleVerboseCrimeTypes = ["Violence and sexual offences", "Other theft", "Burglary", "Violent crime", "Bicycle theft", "Anti-social behaviour", "Other crime", "Shoplifting", "Drugs", "Criminal damage and arson", "Vehicle  crime", "Theft from the person", "Public disorder and weapons", "Public order", "Robbery", "Possession of weapons"];
@@ -182,8 +214,9 @@ DataController.prototype.filterDate = function () {
 };
 
 DataController.prototype.filterLSOA = function () {
+    let self = this;
     this.filtered = this.crimesByLocation.filter(function (d) {
-        return data.lsoa_codes.indexOf(d) >= 0;
+        return self.lsoa_codes[d];
     }).top(Infinity);
     data.emit('filtered');
 };
@@ -267,6 +300,7 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/master/data/c
 
     data.all = json;
     data.filtered = json;
+    console.log(json);
     data.emit('loadAll');
 });
 
