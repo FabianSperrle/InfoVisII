@@ -72,7 +72,7 @@ function initBarChart(width) {
         .append("svg")
         .attr("id", "barChart")
         .attr("width", width + marginBar.left + marginBar.right)
-        .attr("height", heightBar + marginBar.top + marginBar.bottom)
+        .attr("height", heightBar + 100 + marginBar.top + marginBar.bottom)
         .append("g")
         .attr("id", "barChartG")
         .attr("transform", "translate(" + marginBar.left + "," + marginBar.top + ")");
@@ -117,7 +117,7 @@ function initBarChart(width) {
 }
 
 
-function reloadDetailPanel(){//flight, color){
+function reloadDetailPanel(){
 
     if(data.filtered == []){
         resetDetailPanel();
@@ -271,6 +271,10 @@ function reloadDetailPanel(){//flight, color){
         .on('mouseout', function(d){
             tip.hide(d);
             d3.select(this).style('opacity',0.6);
+        })
+        .on('click', function(d){
+            tip.hide(d);
+            loadSingleOutcomesChart(d.key);
         });
 
 
@@ -389,6 +393,10 @@ function reloadDetailPanel(){//flight, color){
         .on('mouseout', function(d){
             tip2.hide(d);
             d3.select(this).style('opacity',0.6);
+        })
+        .on('click', function(d){
+            tip2.hide(d);
+            loadSingleOutcomesChart(d.key);
         });
     
         //.on("mouseover", function (d) {
@@ -399,6 +407,183 @@ function reloadDetailPanel(){//flight, color){
         //});
 }
 
+
+function initSingleOutcomesChart(width) {
+
+    if(width==undefined) width = 300;
+
+    xBar = d3.scale.ordinal()
+        .rangeRoundBands([0, width], .1);
+
+    yBar = d3.scale.linear()
+        .range([heightBar, 0]);
+
+    xAxisBarChart = d3.svg.axis()
+        .scale(xBar)
+        .ticks(0)
+        .orient("bottom");
+
+    yAxisBarChart = d3.svg.axis()
+        .scale(yBar)
+        .orient("left");
+
+    d3.select("#barChart").remove();
+    d3.select("#rb_div").remove();
+    d3.selectAll("#back_button").remove();
+    
+    d3.select("#detailPanel")
+        .append("div")
+        .style("margin-left","15px")
+        .attr("id", "singleOutcomesChartMenu")
+        .append("div")
+        .style("text-align","center")
+        .style("margin-left", "-140px")
+        .append("h2")
+        .append("text")
+        .text(currentCrimeType);
+
+    d3.select("#singleOutcomesChartMenu")
+        .append("div")
+        .append("button")
+        .attr("type","button")
+        .attr("class","btn-btn")
+        .attr("id","back_button")
+        .append("div")
+        .attr("class","label")
+        .text("BACK")
+        .on("click", function(d){
+            d3.selectAll("#singleOutcomesChartMenu").remove();
+            reloadDetailPanel();
+        });
+
+    barChart = d3.select("#detailPanel")
+        .append("svg")
+        .attr("id", "barChart")
+        .attr("width", width + marginBar.left + marginBar.right)
+        .attr("height", heightBar + 150 + marginBar.top + marginBar.bottom)
+        .append("g")
+        .attr("id", "barChartG")
+        .attr("transform", "translate(" + marginBar.left + "," + marginBar.top + ")");
+}
+
+var test;
+var currentCrimeType;
+function loadSingleOutcomesChart(crimeType){
+    if(crimeType == undefined){
+        crimeType = currentCrimeType;
+    } else {
+        currentCrimeType = crimeType;
+    }
+    if(crimeType == undefined) return;
+    
+    initSingleOutcomesChart();
+
+    var filterForCrimeType = data.filtered.filter(function(d) {
+       if(crimeType=="All Crimes" || d.crime_type == crimeType)
+       return d; 
+    });
+
+    var singleOutcomesOfOneCrimeType = d3.nest()
+        .key(function (d) {
+            return d.last_outcome;
+        })
+        .rollup(function (leaves) {
+            return leaves.length;
+        })
+        .entries(data.filtered)
+        .sort(function(a, b){ return d3.descending(a.values, b.values); });
+
+    
+    var keys = singleOutcomesOfOneCrimeType.map(function(a) { if(a.key != "null") return a.key; });
+    keys = keys.filter(function(d) { if(d!=undefined) return true; });
+
+    singleOutcomesOfOneCrimeType = singleOutcomesOfOneCrimeType.filter(function(d) {
+       if(d.key != 'null')
+            return d; 
+        });
+
+    test = singleOutcomesOfOneCrimeType;
+    
+    xBar.domain(keys);
+    var ymax = d3.max(Object.keys(singleOutcomesOfOneCrimeType).map(function(v){return singleOutcomesOfOneCrimeType[v].values;})); //if(groupedByCrimeType[v].key != "All Crimes") 
+    yBar.domain([0,ymax]);
+
+    barChart.append("g")
+        .attr("class", "y axis")
+        .call(yAxisBarChart)
+        .append("text")
+        .attr("x", widthBar / 1.75)
+        .attr("y", -25)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("Distribution - Crime Types");
+
+    var xAx = barChart.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + heightBar + ")")
+        .call(xAxisBarChart);
+
+    xAx.selectAll("text")
+        .attr("id", function(d){
+            return "label_" + d.replace(/ /g, "");
+        })
+        .attr("y", 0)
+        .attr("x", 10)
+        .attr("dy", ".35em")
+        .attr("fill", "black")
+        .attr("transform", "rotate(90)")
+        .style("text-anchor", "start");
+
+
+
+    barChart.selectAll(".bar")
+        .data(singleOutcomesOfOneCrimeType)
+        .enter().append("rect")
+        .attr("id", function (d) {
+            return "bar_"+keys.indexOf(d.key); 
+        })
+        .attr("class", "bar")
+        .attr("x", function (d) {
+            return xBar(d.key);
+        })
+        .attr("width", xBar.rangeBand())
+        .attr("y", function (d) {
+            return yBar(d.values);
+        })
+        .attr("height", function (d) {
+            return heightBar - yBar(d.values);
+        })
+        .attr("fill", function (d) {
+            return "blue";//data.crimeTypes[data.getCrimeVarName(d.key)].color;
+        })
+        .style('opacity',0.6);
+        /*.on('mouseover', function(d){
+            tip.show(d);
+            d3.select(this).style('opacity',1);
+        })
+        .on('mouseout', function(d){
+            tip.hide(d);
+            d3.select(this).style('opacity',0.6);
+        })
+        .on('click', function(d){
+            tip.hide(d);
+            loadSingleOutcomesChart(d.key);
+        });*/
+
+
+}
+
+
+
+function refresh(){
+    if(d3.select("#singleOutcomesChartMenu")[0][0] == null){
+        reloadDetailPanel();
+    } else {
+        loadSingleOutcomesChart();
+    }
+}
+
+
 data.on('loadAggregates', initBarChart);
-data.on('filtered', reloadDetailPanel);
+data.on('filtered', refresh);
 data.on('resetDetailPanel', initBarChart);
