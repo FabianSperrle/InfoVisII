@@ -127,7 +127,7 @@ function toggleCheckboxesOfCrimes(checkboxID) {
     highlightMatrixSelection();
     d3.select("#category_" + checkboxID).property("checked", data.crimeTypes[data.getCrimeTypes()[checkboxID]].visibility);
 
-
+    
     
 }
 

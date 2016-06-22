@@ -25,16 +25,61 @@ function initBarChart(width) {
         .orient("left");
 
     d3.select("#barChart").remove();
-    barChart = d3.select("#detailPanel").append("svg")
+    
+    barChart = d3.select("#detailPanel")
+        .append("svg")
         .attr("id", "barChart")
         .attr("width", width + marginBar.left + marginBar.right)
         .attr("height", heightBar + marginBar.top + marginBar.bottom)
         .append("g")
+        .attr("id", "barChartG")
         .attr("transform", "translate(" + marginBar.left + "," + marginBar.top + ")");
+
+    var legendX = -40;
+    var legendY = 200;
+    d3.select("#barChartG")
+        .append("rect")
+        .attr("x", legendX)
+        .attr("y", legendY)
+        .attr("width", 40)
+        .attr("height", 50)
+        .attr("fill", "gray")
+        .style("opacity",0.3);
+
+    d3.select("#barChartG")
+        .append("text")
+        .attr("fill", "black")
+        .attr("x", legendX+5)
+        .attr("y", legendY+40)
+        .attr("dy", ".35em")
+        .text("solved");
+
+    d3.select("#barChartG")
+        .append("text")
+        .attr("fill", "black")
+        .attr("x", legendX+2)
+        .attr("y", legendY+10)
+        .attr("dy", ".35em")
+        .text("#crimes");
+
+    d3.select("#barChartG")
+        .append("rect")
+        .attr("x", legendX)
+        .attr("y", legendY+30)
+        .attr("width", 40)
+        .attr("height", 20)
+        .attr("fill", "black")
+        .style("opacity",0.3);
 }
 
-var gg;
+
 function reloadDetailPanel(){//flight, color){
+
+    if(data.filtered == []){
+        resetDetailPanel();
+        return;
+    }
+
     initBarChart();
 
 
@@ -204,10 +249,7 @@ function reloadDetailPanel(){//flight, color){
         }
         groupedByOutcomePerCrimeType.push({key: "All Crimes", values: [{key: "solved", values: solved},{key: "inprogress", values: inprogress},{key: "failed", values: failed},{key: "na", values: na}]})
     }
-    gg = groupedByOutcomePerCrimeType;
-
  
-
     barChart.selectAll(".subbar")
         .data(groupedByOutcomePerCrimeType)
         .enter().append("rect")

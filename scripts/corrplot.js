@@ -70,6 +70,10 @@ function getPearsonCorrelation(x, y) {
 }
 
 function calculateCorrelationMatrix() {
+    if(data.filtered.length == 0){
+        return;
+    }
+
     var groupData = data.groupedByType;
     if (groupData == []) {
         return;
