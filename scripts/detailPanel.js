@@ -101,7 +101,37 @@ function reloadDetailPanel(){//flight, color){
 
             var htmlToolTip  = "<div style='border: 1px solid gray; background-color:#fff; background-color: rgba(255,255,255,0.8);'><table>";
             htmlToolTip += " <tr><td><strong><span style='color:red'>"+d.key+"</span></strong></td></tr>";
+            htmlToolTip += " <tr><td><span style='color:red'>total # of crimes</span></td></tr>";
             htmlToolTip += " <tr><td><strong>total crimes:</strong></td><td><span style='color:red'>"+d.values+"</span></td></tr>";
+            htmlToolTip += " <tr><td><strong>total solved:</strong></td><td><span style='color:red'>"+solved+"</span></td></tr>";
+            htmlToolTip += " <tr><td><strong>in progress:</strong></td><td><span style='color:red'>"+inprogress+"</span></td></tr>";
+            htmlToolTip += " <tr><td><strong>case droped:</strong></td><td><span style='color:red'>"+failed+"</span></td></tr>";
+            htmlToolTip += " </table></div>";
+
+            return htmlToolTip;
+
+        })
+
+    var tip2 = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function(d) {
+            
+            var dat = d3.select("#subbar_"+data.getCrimeVarName(d.key)).data()[0].values;
+            var solved = 0, inprogress = 0, failed = 0, na = 0;
+            for(index in Object.keys(dat)){
+                switch(dat[index].key){
+                    case "solved": solved=dat[index].values; break;
+                    case "inprogress": inprogress=dat[index].values; break;
+                    case "failed": failed=dat[index].values; break;
+                    default: na=dat[index].values; break;
+                }
+            }
+
+            var htmlToolTip  = "<div style='border: 1px solid gray; background-color:#fff; background-color: rgba(255,255,255,0.8);'><table>";
+            htmlToolTip += " <tr><td><strong><span style='color:red'>"+d.key+"</span></strong></td></tr>";
+            htmlToolTip += " <tr><td><span style='color:red'># of solved crimes</span></td></tr>";
+            htmlToolTip += " <tr><td><strong>total crimes:</strong></td><td><span style='color:red'>"+d3.select("#bar_"+data.getCrimeVarName(d.key)).data()[0].values+"</span></td></tr>";
             htmlToolTip += " <tr><td><strong>total solved:</strong></td><td><span style='color:red'>"+solved+"</span></td></tr>";
             htmlToolTip += " <tr><td><strong>in progress:</strong></td><td><span style='color:red'>"+inprogress+"</span></td></tr>";
             htmlToolTip += " <tr><td><strong>case droped:</strong></td><td><span style='color:red'>"+failed+"</span></td></tr>";
@@ -250,6 +280,8 @@ function reloadDetailPanel(){//flight, color){
         groupedByOutcomePerCrimeType.push({key: "All Crimes", values: [{key: "solved", values: solved},{key: "inprogress", values: inprogress},{key: "failed", values: failed},{key: "na", values: na}]})
     }
  
+    svg.call(tip2);
+
     barChart.selectAll(".subbar")
         .data(groupedByOutcomePerCrimeType)
         .enter().append("rect")
@@ -288,7 +320,15 @@ function reloadDetailPanel(){//flight, color){
         .attr("fill", function (d) {
             return "black";//data.crimeTypes[data.getCrimeVarName(d.key)].color;
         })                               
-        .style('opacity',0.4);
+        .style('opacity',0.4)
+        .on('mouseover', function(d){
+            tip2.show(d);
+            d3.select(this).style('opacity',1);
+        })
+        .on('mouseout', function(d){
+            tip2.hide(d);
+            d3.select(this).style('opacity',0.6);
+        });
     
         //.on("mouseover", function (d) {
          //   colorBarHighlight(d[0] + "-" + d[1],"blue");
