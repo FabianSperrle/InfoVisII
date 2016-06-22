@@ -290,6 +290,12 @@ DataController.prototype.groupByType = function () {
 
 var data = new DataController();
 
+d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/crimes_geoloc_agg_ex.json", function(error, json) {//"https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/geo_oa_ex.json"
+    if(error) throw error;
+    data.crimesAggGeo = json;
+    data.emit('loadAggregatedCrimesByGeo');
+    //data.emit('loadAggregates');
+});
 
 d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/master/data/crimes_with_correct_geoloc.json", function (error, json) {
     if (error) throw error;
@@ -315,12 +321,6 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/ge
     if(error) throw error;
     data.geo = json;
     data.emit('loadGeo');
-});
-
-d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/crimes_geoloc_agg_ex.json", function(error, json) {//"https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/geo_oa_ex.json"
-    if(error) throw error;
-    data.crimesAggGeo = json;
-    data.emit('loadAggregatedCrimesByGeo');
 });
 
 data.on('loadAll', data.initializeFilters);
