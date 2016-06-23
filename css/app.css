@@ -4,12 +4,12 @@ html, body {
 
 .sidebar {
 	float: left;
-	width: calc(100% - 1050px);
+	width: 400px;
 	margin: 8px;
 }
 
 .main {
-	float: right;
+	float: left;
 	width: 1005px;
 	overflow-x: hidden;
 	height: 100%;
@@ -47,4 +47,8 @@ html, body {
 
 #corrplot svg {
 	margin-left:  50px!important;
+}
+
+#detail-Panel{
+	margin-left:-10px;
 }

@@ -67,6 +67,7 @@ function initBarChart(width) {
 
 
     d3.select("#barChart").remove();
+    d3.select("#barChartG").remove();
     
     barChart = d3.select("#detailPanel")
         .append("svg")
@@ -119,13 +120,11 @@ function initBarChart(width) {
 
 function reloadDetailPanel(){
 
-    if(data.filtered == []){
-        resetDetailPanel();
-        return;
-    }
-
     initBarChart();
 
+    if(data.filtered == []){
+        return;
+    }
 
     var tip = d3.tip()
         .attr('class', 'd3-tip')
@@ -437,14 +436,7 @@ function initSingleOutcomesChart(width) {
         .style("margin-left","15px")
         .attr("id", "singleOutcomesChartMenu")
         .append("div")
-        .style("text-align","center")
-        .style("margin-left", "-140px")
-        .append("h2")
-        .append("text")
-        .text(currentCrimeType);
-
-    d3.select("#singleOutcomesChartMenu")
-        .append("div")
+        .attr("id", "singleOutcomesChartMenu2")
         .append("button")
         .attr("type","button")
         .attr("class","btn-btn")
@@ -456,6 +448,12 @@ function initSingleOutcomesChart(width) {
             d3.selectAll("#singleOutcomesChartMenu").remove();
             reloadDetailPanel();
         });
+    d3.select("#singleOutcomesChartMenu2")
+        .append("text")
+        .style("margin-left", "10px")
+        .style("font-size", "12px")
+        .style("font-weight", "bold")
+        .text(currentCrimeType);
 
     barChart = d3.select("#detailPanel")
         .append("svg")
@@ -536,6 +534,29 @@ function loadSingleOutcomesChart(crimeType){
         .style("text-anchor", "start");
 
 
+    var tip3 = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function(d) {
+
+            var countOutcome;
+            for(k in Object.keys(singleOutcomesOfOneCrimeType)){
+                if(singleOutcomesOfOneCrimeType[k].key == d.key){
+                    countOutcome = singleOutcomesOfOneCrimeType[k].values;
+                    continue;
+                }
+            }
+
+            var htmlToolTip  = "<div style='border: 1px solid gray; background-color:#fff; background-color: rgba(255,255,255,0.8);'><table>";
+            htmlToolTip += " <tr><td><strong><span style='color:red'>"+d.key+"</span></strong></td></tr>";
+            htmlToolTip += " <tr><td><span style='color:red'># of crimes with that outcome</span></td></tr>";
+            htmlToolTip += " </table>"
+            htmlToolTip += " <p style='color:red; text-align: center; width: 100%; height: 10px;'>"+countOutcome+"</p></div>";
+
+            return htmlToolTip;
+        });
+
+    svg.call(tip3)
 
     barChart.selectAll(".bar")
         .data(singleOutcomesOfOneCrimeType)
@@ -557,20 +578,18 @@ function loadSingleOutcomesChart(crimeType){
         .attr("fill", function (d) {
             return "blue";//data.crimeTypes[data.getCrimeVarName(d.key)].color;
         })
-        .style('opacity',0.6);
-        /*.on('mouseover', function(d){
-            tip.show(d);
+        .style('opacity',0.6)
+        .on('mouseover', function(d){
+            tip3.show(d);
             d3.select(this).style('opacity',1);
         })
         .on('mouseout', function(d){
-            tip.hide(d);
+            tip3.hide(d);
             d3.select(this).style('opacity',0.6);
         })
         .on('click', function(d){
-            tip.hide(d);
-            loadSingleOutcomesChart(d.key);
-        });*/
-
+           // tip3.hide(d);
+        });
 
 }
 
