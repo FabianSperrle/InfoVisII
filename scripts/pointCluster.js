@@ -275,7 +275,7 @@ var updateHeatLayer = function () {
     }
 
     layers.heat = L.heatLayer(latlngList, {
-        max: 0.1,
+        max: data.filtered.length / 800,
         blur: 40,
         radius: 40
     });

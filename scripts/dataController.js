@@ -227,9 +227,10 @@ DataController.prototype.toggleFilter = function (type) {
 
     // Apply all filters
     this.filtered = this.crimesByType.filter(function (d) {
-        if (data.visibleVerboseCrimeTypes.indexOf(d) >= 0)
+        if (data.crimeTypes.allCrimes.visibility == true) {
             return true;
-        return false;
+        }
+        return data.visibleVerboseCrimeTypes.indexOf(d) >= 0;
     }).top(Infinity);
     data.emit('filtered');
 };
