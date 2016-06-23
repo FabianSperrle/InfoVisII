@@ -433,6 +433,7 @@ function initSingleOutcomesChart(width) {
     
     d3.select("#detailPanel")
         .append("div")
+        .style("overflow","none")
         .style("margin-left","15px")
         .attr("id", "singleOutcomesChartMenu")
         .append("div")
@@ -459,7 +460,7 @@ function initSingleOutcomesChart(width) {
         .append("svg")
         .attr("id", "barChart")
         .attr("width", width + marginBar.left + marginBar.right)
-        .attr("height", heightBar + 150 + marginBar.top + marginBar.bottom)
+        .attr("height", heightBar + 200 + marginBar.top + marginBar.bottom)
         .append("g")
         .attr("id", "barChartG")
         .attr("transform", "translate(" + marginBar.left + "," + marginBar.top + ")");
@@ -570,34 +571,6 @@ function loadSingleOutcomesChart(crimeType){
         .style("text-anchor", "end")
         .text("Distribution - Crime Types");
 
-    var xAx = barChart.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + heightBar + ")")
-        .call(xAxisBarChart);
-
-    xAx.selectAll("text")
-        .attr("id", function(d){
-            return "label_" + d.replace(/ /g, "");
-        })
-        .attr("y", 0)
-        .attr("x", 10)
-        .attr("dy", ".35em")
-        .attr("fill", function(d){
-            if(data.outcomeTypes.solved.list.includes(d)){
-                return "green";
-            } else if (data.outcomeTypes.na_inprogress.list.includes(d)){
-                return "orange";
-            } else if (data.outcomeTypes.failed.list.includes(d)){
-                return "red";
-            } else {
-                return "purple";
-            }
-            
-        })
-        .attr("transform", "rotate(90)")
-        .style("text-anchor", "start");
-
-
     var tip3 = d3.tip()
         .attr('class', 'd3-tip')
         .offset([-10, 0])
@@ -621,6 +594,43 @@ function loadSingleOutcomesChart(crimeType){
         });
 
     svg.call(tip3)
+
+    var xAx = barChart.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + heightBar + ")")
+        .call(xAxisBarChart);
+
+    xAx.selectAll("text")
+        .attr("class", function(d){
+            if(data.outcomeTypes.solved.list.includes(d)){
+                return "label_solved";
+            } else if (data.outcomeTypes.na_inprogress.list.includes(d)){
+                return "label_running";
+            } else if (data.outcomeTypes.failed.list.includes(d)){
+                return "label_failed";
+            } else {
+                return "purple";
+            };
+        })
+        .attr("y", 0)
+        .attr("x", 10)
+        .attr("dy", ".35em")
+        .attr("fill", function(d){
+            if(data.outcomeTypes.solved.list.includes(d)){
+                return "green";
+            } else if (data.outcomeTypes.na_inprogress.list.includes(d)){
+                return "orange";
+            } else if (data.outcomeTypes.failed.list.includes(d)){
+                return "red";
+            } else {
+                return "purple";
+            }
+        })
+        .attr("transform", "rotate(90)")
+        .style("text-anchor", "start");
+
+
+    
 
     barChart.selectAll(".bar")
         .data(singleOutcomesOfOneCrimeType)
@@ -756,16 +766,32 @@ function loadSingleOutcomesChart(crimeType){
         .attr("class", "arc");
 
     g.append("path")
-      .attr("d", arc)
-      .style("fill", function(d) { 
-        switch(d.data[0]){
-            case "solved": return "green"; break;
-            case "inprogress": return "orange"; break;
-            case "failed": return "red"; break;
-        }
-        return "black"; 
-      })
-      .style("opacity",0.8);
+        .attr("d", arc)
+        .style("fill", function(d) { 
+            switch(d.data[0]){
+                case "solved": return "green"; break;
+                case "inprogress": return "orange"; break;
+                case "failed": return "red"; break;
+            }
+            return "black"; 
+        })
+        .style("opacity",0.7)
+        .on('mouseover', function(d){
+            d3.select(this).style('opacity',1);
+            
+            if(d.data[0] != "solved") d3.selectAll(".label_solved").style("font-size","7");
+            if(d.data[0] != "inprogress") d3.selectAll(".label_running").style("font-size","7");
+            if(d.data[0] != "failed") d3.selectAll(".label_failed").style("font-size","7");
+            d3.selectAll(".label_"+(d.data[0]=="inprogress"?"running":d.data[0])).style("font-size","12").style("font-weight","bold");
+
+        })
+        .on('mouseout', function(d){
+            d3.select(this).style('opacity',0.7);
+            d3.selectAll(".label_solved").style("font-size","10").style("font-weight","normal");
+            d3.selectAll(".label_running").style("font-size","10").style("font-weight","normal");
+            d3.selectAll(".label_failed").style("font-size","10").style("font-weight","normal");
+            //d3.selectAll(".label_"+(d.data[0]=="inprogress"?"running":d.data[0])).style("font-size","10").style("font-weight","normal");
+        });
 
 }
 
