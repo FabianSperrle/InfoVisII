@@ -211,12 +211,10 @@ function reloadDetailPanel(){
     barChart.append("g")
         .attr("class", "y axis")
         .call(yAxisBarChart)
-        .append("text")
         .attr("x", widthBar / 2)
         .attr("y", -25)
         .attr("dy", ".71em")
-        .style("text-anchor", "end")
-        .text("Distribution - Crime Types");
+        .style("text-anchor", "end");
 
     var xAx = barChart.append("g")
         .attr("class", "x axis")
@@ -408,7 +406,7 @@ function reloadDetailPanel(){
 
 function initSingleOutcomesChart(width) {
 
-    if(width==undefined) width = 300;
+    if(width==undefined) width = 480;
 
     xBar = d3.scale.ordinal()
         .rangeRoundBands([0, width], .1);
@@ -563,12 +561,10 @@ function loadSingleOutcomesChart(crimeType){
     barChart.append("g")
         .attr("class", "y axis")
         .call(yAxisBarChart)
-        .append("text")
         .attr("x", widthBar / 1.75)
         .attr("y", -25)
         .attr("dy", ".71em")
-        .style("text-anchor", "end")
-        .text("Distribution - Crime Types");
+        .style("text-anchor", "end");
 
     var tip3 = d3.tip()
         .attr('class', 'd3-tip')
@@ -757,7 +753,7 @@ function loadSingleOutcomesChart(crimeType){
     var svg2 = d3.select("#barChart")
         .append("g")
         .attr("id", "piechart")
-        .attr("transform", "translate(330,80)");
+        .attr("transform", "translate(500,80)");
 
     var g = svg2.selectAll(".arc")
         .data(pie(aggregatedOutcomeTypes))
