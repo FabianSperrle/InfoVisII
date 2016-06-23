@@ -117,7 +117,7 @@ function initBarChart(width) {
     
 }
 
-
+var groupedByOutcomePerCrimeType;
 function reloadDetailPanel(){
 
     initBarChart();
@@ -277,7 +277,7 @@ function reloadDetailPanel(){
         });
 
 
-    var groupedByOutcomePerCrimeType = d3.nest()
+    groupedByOutcomePerCrimeType = d3.nest()
         .key(function (d) {
             return d.crime_type;
         })
@@ -517,20 +517,19 @@ function initSingleOutcomesChart(width) {
         .attr("y", legendY+45)
         .attr("dy", ".35em")
         .text("failed");
-
-    
 }
 
 var test;
 var currentCrimeType;
 function loadSingleOutcomesChart(crimeType){
+
     if(crimeType == undefined){
         crimeType = currentCrimeType;
     } else {
         currentCrimeType = crimeType;
     }
     if(crimeType == undefined) return;
-    
+
     initSingleOutcomesChart();
 
     var filterForCrimeType = data.filtered.filter(function(d) {
@@ -545,7 +544,7 @@ function loadSingleOutcomesChart(crimeType){
         .rollup(function (leaves) {
             return leaves.length;
         })
-        .entries(data.filtered)
+        .entries(filterForCrimeType)
         .sort(function(a, b){ return d3.descending(a.values, b.values); });
 
     
@@ -556,8 +555,6 @@ function loadSingleOutcomesChart(crimeType){
        if(d.key != 'null')
             return d; 
         });
-
-    test = singleOutcomesOfOneCrimeType;
 
     xBar.domain(keys);
     var ymax = d3.max(Object.keys(singleOutcomesOfOneCrimeType).map(function(v){return singleOutcomesOfOneCrimeType[v].values;})); //if(groupedByCrimeType[v].key != "All Crimes") 
@@ -657,6 +654,118 @@ function loadSingleOutcomesChart(crimeType){
         .on('click', function(d){
            // tip3.hide(d);
         });
+
+
+    groupedByOutcomePerCrimeType = d3.nest()
+        .key(function (d) {
+            return d.crime_type;
+        })
+        .key(function (d) {
+            if(data.outcomeTypes.solved.list.includes(d.last_outcome)){ 
+                return "solved"; 
+            } else if (data.outcomeTypes.na_inprogress.list.includes(d.last_outcome)){
+                return "inprogress";
+            } else if (data.outcomeTypes.failed.list.includes(d.last_outcome)){
+                return "failed";
+            } else{
+                return "na";
+            }
+        })
+        .sortKeys(d3.ascending)
+        .rollup(function (leaves) {
+            return leaves.length;
+        })
+        .entries(data.filtered);
+
+
+
+    var AllCrimesGrouped = d3.nest()
+        .key(function (d) {
+            return d.crime_type;
+        })
+        .sortKeys(d3.ascending)
+        .rollup(function (leaves) {
+            return leaves.length;
+        })
+        .entries(groupedByOutcomePerCrimeType);
+
+
+    if(data.crimeTypes["allCrimes"].visibility == 1){
+        var solved = 0, inprogress = 0, failed = 0, na = 0;
+        for(var i=0; i<groupedByOutcomePerCrimeType.length; i++){
+        var obj = groupedByOutcomePerCrimeType[i];
+            for(index in Object.keys(obj.values)){
+                switch(obj.values[index].key){
+                    case "solved": solved+=obj.values[index].values; break;
+                    case "inprogress": inprogress+=obj.values[index].values; break;
+                    case "failed": failed+=obj.values[index].values; break;
+                    default: na+=obj.values[index].values; break;
+                }
+            }
+        }
+        groupedByOutcomePerCrimeType.push({key: "All Crimes", values: [{key: "solved", values: solved},{key: "inprogress", values: inprogress},{key: "failed", values: failed},{key: "na", values: na}]})
+    }
+
+
+    //PIE CHART
+    var aggregatedOutcomeTypes = groupedByOutcomePerCrimeType.filter(function(d) {
+        if(d.key == crimeType)
+            return d; 
+        });
+
+    if(aggregatedOutcomeTypes == []){return;}  
+    aggregatedOutcomeTypes = aggregatedOutcomeTypes[0].values; //Object.keys(aggregatedOutcomeTypes).map(function(v){return [aggregatedOutcomeTypes[v].key, aggregatedOutcomeTypes[v].values];})
+ 
+    //var aggregatedOutcomeTypesKeys = Object.keys(aggregatedOutcomeTypes).map(function(v){return aggregatedOutcomeTypes[v].key;});
+    //var aggregatedOutcomeTypesValues = Object.keys(aggregatedOutcomeTypes).map(function(v){return aggregatedOutcomeTypes[v].values;});
+    aggregatedOutcomeTypes = Object.keys(aggregatedOutcomeTypes).map(function(v){return [aggregatedOutcomeTypes[v].key, aggregatedOutcomeTypes[v].values];});
+    var aggregatedOutcomeTypes = aggregatedOutcomeTypes.filter(function(d) {
+        if(d[0] != "na")
+            return d; 
+        });
+
+    test = aggregatedOutcomeTypes;
+    
+    var width = 100,
+        height = 100,
+        radius = Math.min(width, height) / 2;
+
+    var color = d3.scale.ordinal()
+        .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+    var arc = d3.svg.arc()
+        .outerRadius(radius - 10)
+        .innerRadius(0);
+
+    var labelArc = d3.svg.arc()
+        .outerRadius(radius - 40)
+        .innerRadius(radius - 40);
+
+    var pie = d3.layout.pie()
+        .sort(null)
+        .value(function(d) { return d[1]; });
+
+    var svg2 = d3.select("#barChart")
+        .append("g")
+        .attr("id", "piechart")
+        .attr("transform", "translate(330,80)");
+
+    var g = svg2.selectAll(".arc")
+        .data(pie(aggregatedOutcomeTypes))
+        .enter().append("g")
+        .attr("class", "arc");
+
+    g.append("path")
+      .attr("d", arc)
+      .style("fill", function(d) { 
+        switch(d.data[0]){
+            case "solved": return "green"; break;
+            case "inprogress": return "orange"; break;
+            case "failed": return "red"; break;
+        }
+        return "black"; 
+      })
+      .style("opacity",0.8);
 
 }
 
