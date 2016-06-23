@@ -267,6 +267,25 @@ DataController.prototype.toggleLSOA = function (code) {
     this.filterLSOA();
 };
 
+DataController.prototype.toggleAllLSOA = function () {
+    let status = false;
+    for (let key in this.lsoa_codes) {
+        if (this.lsoa_codes.hasOwnProperty(key)) {
+            status = status | this.lsoa_codes[key];
+        }
+    }
+    status = !status;
+
+    for (let key in this.lsoa_codes) {
+        if (this.lsoa_codes.hasOwnProperty(key)) {
+            this.lsoa_codes[key] = status;
+        }
+    }
+
+    this.filterLSOA();
+    return status;
+};
+
 DataController.prototype.toggleFilter = function (type) {
     this.toggleVisibilityFlag(type);
 
