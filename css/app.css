@@ -41,8 +41,9 @@ html, body {
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
+	overflow:hidden;
 	border: none;
-	width: 80%;
+	width: 50%;
 }
 
 #corrplot svg {

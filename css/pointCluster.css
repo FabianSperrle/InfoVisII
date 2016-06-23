@@ -8,7 +8,7 @@ html, body, #map {
 #map_box {
     font: 16px sans-serif;
     position: relative;
-    height: 100%;
+    height: 99%;
 }
 
 #too_many,
