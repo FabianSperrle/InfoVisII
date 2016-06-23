@@ -463,6 +463,62 @@ function initSingleOutcomesChart(width) {
         .append("g")
         .attr("id", "barChartG")
         .attr("transform", "translate(" + marginBar.left + "," + marginBar.top + ")");
+
+
+    var legendX = 30;
+    var legendY = 250;
+    d3.select("#barChart")
+        .append("rect")
+        .attr("x", legendX)
+        .attr("y", legendY)
+        .attr("width", 10)
+        .attr("height", 10)
+        .attr("fill", "green")
+        .style("opacity",0.8);
+
+    d3.select("#barChart")
+        .append("rect")
+        .attr("x", legendX)
+        .attr("y", legendY+20)
+        .attr("width", 10)
+        .attr("height", 10)
+        .attr("fill", "orange")
+        .style("opacity",0.8);
+
+    d3.select("#barChart")
+        .append("rect")
+        .attr("x", legendX)
+        .attr("y", legendY+40)
+        .attr("width", 10)
+        .attr("height", 10)
+        .attr("fill", "red")
+        .style("opacity",0.8);
+
+    d3.select("#barChart")
+        .append("text")
+        .attr("fill", "green")
+        .attr("x", legendX+15)
+        .attr("y", legendY+5)
+        .attr("dy", ".35em")
+        .text("solved");
+
+    d3.select("#barChart")
+        .append("text")
+        .attr("fill", "orange")
+        .attr("x", legendX+15)
+        .attr("y", legendY+25)
+        .attr("dy", ".35em")
+        .text("running");
+
+    d3.select("#barChart")
+        .append("text")
+        .attr("fill", "red")
+        .attr("x", legendX+15)
+        .attr("y", legendY+45)
+        .attr("dy", ".35em")
+        .text("failed");
+
+    
 }
 
 var test;
@@ -529,7 +585,18 @@ function loadSingleOutcomesChart(crimeType){
         .attr("y", 0)
         .attr("x", 10)
         .attr("dy", ".35em")
-        .attr("fill", "black")
+        .attr("fill", function(d){
+            if(data.outcomeTypes.solved.list.includes(d)){
+                return "green";
+            } else if (data.outcomeTypes.na_inprogress.list.includes(d)){
+                return "orange";
+            } else if (data.outcomeTypes.failed.list.includes(d)){
+                return "red";
+            } else {
+                return "purple";
+            }
+            
+        })
         .attr("transform", "rotate(90)")
         .style("text-anchor", "start");
 
