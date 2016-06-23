@@ -430,6 +430,7 @@ function initSingleOutcomesChart(width) {
     d3.select("#barChart").remove();
     d3.select("#rb_div").remove();
     d3.selectAll("#back_button").remove();
+    d3.selectAll("#singleOutcomesChartMenu").remove();
     
     d3.select("#detailPanel")
         .append("div")
@@ -503,7 +504,7 @@ function loadSingleOutcomesChart(crimeType){
         });
 
     test = singleOutcomesOfOneCrimeType;
-    
+
     xBar.domain(keys);
     var ymax = d3.max(Object.keys(singleOutcomesOfOneCrimeType).map(function(v){return singleOutcomesOfOneCrimeType[v].values;})); //if(groupedByCrimeType[v].key != "All Crimes") 
     yBar.domain([0,ymax]);
