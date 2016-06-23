@@ -12,7 +12,7 @@ var rb_selection = 0;
 
 function initBarChart(width) {
 
-    if(width==undefined) width = 300;
+    if(width==undefined) width = 480;
 
     xBar = d3.scale.ordinal()
         .rangeRoundBands([0, width], .1);
@@ -34,7 +34,6 @@ function initBarChart(width) {
     var form = d3.select("#detailPanel")
         .append("div")
         .attr("id","rb_div")
-        .style("margin-left", "20px")
         .append("text")
         .style("font-size","12px")
         .text("Outcome-Type:")
@@ -213,7 +212,7 @@ function reloadDetailPanel(){
         .attr("class", "y axis")
         .call(yAxisBarChart)
         .append("text")
-        .attr("x", widthBar / 1.75)
+        .attr("x", widthBar / 2)
         .attr("y", -25)
         .attr("dy", ".71em")
         .style("text-anchor", "end")

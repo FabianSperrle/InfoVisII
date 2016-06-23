@@ -216,9 +216,9 @@ var updatePointsLayer = function () {
             marker.bindPopup(title);
             markerList.push(marker);
 
-            marker.on("mouseover",function(a){
-                createTimelineHighlight(a.target.options.month, a.target.options.title,1,1);
-            }).on("mouseout", function(){
+            marker.on("mouseover", function (a) {
+                createTimelineHighlight(a.target.options.month, a.target.options.title, 1, 1);
+            }).on("mouseout", function () {
                 d3.selectAll(".highlightDots").remove();
             });
         }
@@ -227,34 +227,34 @@ var updatePointsLayer = function () {
     layers.points = L.layerGroup(markerList);
 };
 
-function createTimelineHighlight(date, verboseCrimeTypeTitle, number, opacity){
-    if (typeof number  === 'undefined') number = 1;
+function createTimelineHighlight(date, verboseCrimeTypeTitle, number, opacity) {
+    if (typeof number === 'undefined') number = 1;
     if (typeof opacity === 'undefined') opacity = 0.5;
     // find CrimeTypeLine to highlight :: only activated lines!!
     // IF not activated take "allCrimes" line for Highlighting!
     var crimeIndex = data.getCrimeIndexByVerboseName(verboseCrimeTypeTitle);
-    var crimeType =  data.getCrimeTypes()[crimeIndex];
-    if (data.crimeTypes[crimeType].visibility === 0){
-        crimeType =  "allCrimes";
-        if(!data.crimeTypes[crimeType].visibility){
-            log("Error happened: " + crimeType +  " not existing!");
+    var crimeType = data.getCrimeTypes()[crimeIndex];
+    if (data.crimeTypes[crimeType].visibility === 0) {
+        crimeType = "allCrimes";
+        if (!data.crimeTypes[crimeType].visibility) {
+            log("Error happened: " + crimeType + " not existing!");
             return;
         }
     }
     var year = date.getFullYear();
-    var mon = date.getMonth()+1;
+    var mon = date.getMonth() + 1;
     // Take First of month for Correct Highlighting! TODO change to middle if possible!
-    var newDate = new Date(year, mon-1, 1);
-    if(mon < 10) mon = "0"+mon;
-    var y_value = data.crimeAggregates["y"+year]["m"+mon][crimeType];
+    var newDate = new Date(year, mon - 1, 1);
+    if (mon < 10) mon = "0" + mon;
+    var y_value = data.crimeAggregates["y" + year]["m" + mon][crimeType];
     //log(crimeType + "_" + y_value);
     svg.append("circle")
         .attr("class", "highlightDots")
-        .attr("r",3+Math.sqrt(number)*2)
+        .attr("r", 3 + Math.sqrt(number) * 2)
         .attr("cx", x(newDate))
         .attr("cy", y(y_value))
         .attr("stroke-width", 10)
-        .style("fill-opacity",opacity)
+        .style("fill-opacity", opacity)
         .attr("fill", data.getCrimeColor(crimeType));
 }
 
@@ -282,50 +282,39 @@ var updateHeatLayer = function () {
 };
 
 var updateChloroplethLayer = function () {
-    function getColor(d) {
-        var district = d;
-        var districtContainer = data.crimesAggGeo[d];
-
-        var datefrom = data.dates.from;
-        var dateto = data.dates.to;
-
-        /*var months = [];
-        var nrmonth = monthDiff(datefrom, dateto);
-        console.log("nrmonth = " + nrmonth);
-        for (var c = 0; c <= nrmonth + 1; c++) {
-            months.push(new Date(datefrom.setMonth(datefrom.getMonth() + 1)));
-            months[c] = months[c].getFullYear() + "-" + ((months[c].getMonth()) + 1) + "-01";
-        }*/ 
-        var months = d3.time.months(data.dates.from, data.dates.to);
-        months = months.map(function (d) {
-            return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-01";
-        });
-        var nrmonth = months.length;
-
-        var activecrimes = [];
-        var allcrimetypes = Object.keys(data.crimeTypes);
-        for (var i = 0; i < allcrimetypes.length; i++) {
-            if (data.crimeTypes[allcrimetypes[i]].visibility == 1 || data.crimeTypes["allCrimes"].visibility == 1) {
-                if (allcrimetypes[i] == "allCrimes") continue;
-                activecrimes.push(data.crimeTypes[allcrimetypes[i]].verboseName);
-            }
+    var activecrimes = [];
+    var allcrimetypes = Object.keys(data.crimeTypes);
+    for (var i = 0; i < allcrimetypes.length; i++) {
+        if (data.crimeTypes[allcrimetypes[i]].visibility == 1 || data.crimeTypes["allCrimes"].visibility == 1) {
+            if (allcrimetypes[i] == "allCrimes") continue;
+            activecrimes.push(data.crimeTypes[allcrimetypes[i]].verboseName);
         }
+    }
 
+    function getColor(d) {
         var weight = 0;
-        for (var i = 0; i < months.length; i++) {
-            var a = districtContainer[months[i]];
-            if (a == undefined) {
-                continue;
-            }
-            for (var j = 0; j < activecrimes.length; j++) {
-                var count = a[activecrimes[j]];
-                if (count != undefined) {
-                    weight += +count;
+
+        if (data.lsoa_codes[d]) {
+            var districtContainer = data.crimesAggGeo[d];
+            var months = d3.time.months(data.dates.from, data.dates.to);
+            months = months.map(function (d) {
+                return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-01";
+            });
+
+            for (var i = 0; i < months.length; i++) {
+                var a = districtContainer[months[i]];
+                if (a == undefined) {
+                    continue;
+                }
+                for (var j = 0; j < activecrimes.length; j++) {
+                    var count = a[activecrimes[j]];
+                    if (count != undefined) {
+                        weight += +count;
+                    }
                 }
             }
+            weight = weight / data.filtered.length * 25;
         }
-        weight = weight / data.filtered.length * 25;
-        //console.log(weight +" "+ nrmonth);
 
         return weight > 2 ? '#800026' :
             weight > 1 ? '#BD0026' :
@@ -334,7 +323,8 @@ var updateChloroplethLayer = function () {
                         weight > 0.3 ? '#FD8D3C' :
                             weight > 0.2 ? '#FEB24C' :
                                 weight > 0.1 ? '#FED976' :
-                                    '#FFEDA0';
+                                    weight == 0 ? '#DDD' :
+                                        '#FFEDA0';
 
 
         function monthDiff(d1, d2) {
@@ -356,7 +346,18 @@ var updateChloroplethLayer = function () {
             fillOpacity: 0.7
         };
     }
-    layers.choropleth = L.geoJson(data.geo, {style: style});
+
+    function onEachFeature(feature, layer) {
+        layer.on('click', function (e) {
+            let id = e.target.feature.id;
+            document.getElementById(id).click();
+        });
+    }
+
+    layers.choropleth = L.geoJson(data.geo, {
+        style: style,
+        onEachFeature: onEachFeature
+    });
 };
 
 function invalidateLayers() {
