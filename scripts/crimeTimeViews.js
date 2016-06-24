@@ -302,7 +302,7 @@ function plotTimeviewLines() {
         svg.append("path")
             .attr("id", data.getCrimeTypes()[i])
             .attr("crime_type", data.getCrimeTypes()[i])
-            .datum(getCrimeData(data.getCrimeTypes()[i], data.crimeAggregates))
+            .datum(getCrimeData(data.getCrimeTypes()[i]))
             .attr("class", "line")
             .attr("d", plotCrimePath)
             .attr("stroke-width", "1.5px")
@@ -313,14 +313,20 @@ function plotTimeviewLines() {
 
                 var xcoo = d3.mouse(this)[0];
                 var date = x.invert(xcoo);
-
-                var dateStr;
                 if (date.getMonth() < 9) {
                     dateStr = "0" + (date.getMonth() + 1) + '/' + date.getFullYear();
                 } else {
                     dateStr = (date.getMonth() + 1) + '/' + date.getFullYear()
                 }
-                var numberOfCrimes = data.crimeAggregates[years[date.getFullYear() - 2010]][months[date.getMonth()]][mine.attr("id")];
+
+                var currentCrimeNumbers = getCrimeData(mine.attr("crime_type"));
+                var numberOfCrimes;
+                var date_code = date.getFullYear() + "-" + ("0" + (x.invert(xcoo).getMonth() + 1)).slice(-2);
+                for(var j in currentCrimeNumbers){
+                    if(currentCrimeNumbers[j].date == date_code){
+                        numberOfCrimes = currentCrimeNumbers[j].value;
+                    }
+                }
 
                 tooltip.style("color", mine.attr("stroke"));
                 tooltip.html(data.getVerboseCrimeName(mine.attr("crime_type")) + "<br>" + dateStr + " - #: " + numberOfCrimes);
