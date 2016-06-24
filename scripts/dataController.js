@@ -312,14 +312,18 @@ var data = new DataController();
 
 d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/master/data/crimes_with_correct_geoloc.json", function (error, json) {
     if (error) throw error;
-
     json.forEach(function (d, i) {
         d.month = new Date(d.month.substring(0, 4), d.month.substring(5, 7) - 1, 15);
     });
 
     data.all = json;
     data.filtered = json;
-    data.emit('loadAll');
+});
+
+d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/master/data/outcomes_aggby_month-crimetype.json", function(error, json) {
+    if(error) throw error;
+    data.solvedCrimesAgg = json;
+    data.emit('loadSolvedCrimes');
 });
 
 d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisIIPreProcessing/master/crimeAggregates.json", function (error, json) {
@@ -332,7 +336,6 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisIIPreProcessing/
 d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/geo.json", function(error, json) {//"https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/geo_oa_ex.json"
     if(error) throw error;
     data.geo = json;
-    data.emit('loadGeo');
 });
 
 d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/crimes_geoloc_agg_ex.json", function(error, json) {//"https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/geo_oa_ex.json"
@@ -341,14 +344,13 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/ge
     //data.emit('loadAggregatedCrimesByGeo');
 });
 
-d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/master/data/outcomes_aggby_month-crimetype.json", function(error, json) {
-    if(error) throw error;
-    data.solvedCrimesAgg = json;
-    data.emit('loadSolvedCrimes');
-});
-
 data.on('loadSolvedCrimes', data.prepareSolvedCrimesForTimeline);
 data.on('loadAll', data.initializeFilters);
 data.on('toggle', data.toggleFilter);
 data.on('dateChange', data.dateChange);
 data.on('filtered', data.groupByType);
+
+setTimeout(function(){
+    data.emit('loadAll');
+    data.emit('loadGeo');
+},2000);

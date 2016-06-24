@@ -139,6 +139,7 @@ var updateClusterLayer = function () {
     }
 
     layers.clusters.on('clustermouseover', function (a) {
+        if(ONLY_CRIME_STATUS) return;
         var children = a.layer.getAllChildMarkers();
         var bins = {};
         for (var i = 0; i < children.length; i++) {
