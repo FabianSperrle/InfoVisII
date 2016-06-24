@@ -587,7 +587,6 @@ function resizeTimeLine(transition) {
             }
         }
     }
-    log(maxValue);
     y.domain([0, maxValue + 0.2 * maxValue]);
     for (i = 0; i < data.getCrimeTypes().length; i++) {
         var duration = transition ? 750 : 0;
@@ -655,6 +654,8 @@ var timelineView = function () {
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text("Number of Crimes");
+
+    plotTimeviewLines();
 
     // ADD SLIDER to TIMELINE
     var dragSliderLine1 = null;
@@ -1206,5 +1207,3 @@ data.on('loadAggregates', createCrimeCategoryButtons);
 data.on('loadAggregates', crimeTimeViewRequirements);
 data.on('loadAggregates', matrixView);
 data.on('loadAggregatedCrimesByGeo', timelineView);
-data.on('filtered', plotTimeviewLines);
-
