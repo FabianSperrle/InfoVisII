@@ -416,13 +416,17 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisIIPreProcessing/
     if (error) throw error;
 
     data.crimeAggregates = json;
-    data.emit('loadAggregates');
+    setTimeout(function(){
+        data.emit('loadAggregates');
+    }, 500);
 });
 
 d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/crimes_geoloc_agg_ex.json", function(error, json) {//"https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/geo_oa_ex.json"
     if(error) throw error;
     data.crimesAggGeo = json;
-    data.emit('loadAggregatedCrimesByGeo');
+    setTimeout(function(){
+        data.emit('loadAggregatedCrimesByGeo');
+    }, 500);
 });
 
 d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/master/data/outcomes_aggby_month-crimetype.json", function(error, json) {
@@ -457,4 +461,4 @@ data.on('filtered', data.groupByType);
 
 setTimeout(function(){
     data.emit('loadAll');
-},2000);
+},1000);

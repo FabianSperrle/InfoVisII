@@ -463,7 +463,7 @@ function initSingleOutcomesChart(width) {
         .attr("transform", "translate(" + marginBar.left + "," + marginBar.top + ")");
 
 
-    var legendX = 30;
+    var legendX = 10;
     var legendY = 250;
     d3.select("#barChart")
         .append("rect")

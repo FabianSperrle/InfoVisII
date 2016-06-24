@@ -614,6 +614,7 @@ function resizeTimeLine(transition) {
 }
 
 var timelineView = function () {
+    
     svg1 = d3.select("#timelineView").append("svg:svg")
         .attr("width", crimeTime.width + crimeTime.margin.left + crimeTime.margin.right) //
         .attr("height", crimeTime.height + crimeTime.margin.top + crimeTime.margin.bottom);
@@ -1103,9 +1104,10 @@ function highlightMatrixSelection() {
     for (var j = monthIndexLeft; j < monthIndexRight + 1; j++) {
         for (var i = 0; i < data.getCrimeTypes().length; i++) {
             if (data.crimeTypes[data.getCrimeTypes()[i]].visibility) {
-                if (parseFloat(d3.select("#m" + j + "-" + i).attr("numberOfCrimes")) > 0) {
-                    d3.select("#m" + j + "-" + i).style("stroke", "black");
-                }
+                //if(d3.select("#m" + j + "-" + i)[0][0] != null)
+                    if (parseFloat(d3.select("#m" + j + "-" + i).attr("numberOfCrimes")) > 0) {
+                        d3.select("#m" + j + "-" + i).style("stroke", "black");
+                    }
             }
         }
     }
