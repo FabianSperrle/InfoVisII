@@ -27,13 +27,15 @@ body {
 }
 
 
-#slider1{
+#slider1,
+#slider2{
     stroke: GRAY;
     stroke-width: 2;
     opacity: 0.5;
     cursor: pointer;
 }
-#slider2{
+#left_slider_matrix,
+#right_slider_matrix{
     stroke: GRAY;
     stroke-width: 2;
     opacity: 0.5;

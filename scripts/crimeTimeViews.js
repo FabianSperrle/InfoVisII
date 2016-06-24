@@ -493,7 +493,7 @@ function resizeTimeLine(transition) {
                     for (var j in SOLVED_TYPES) {
                         var solvedType = SOLVED_TYPES[j];
                         if (solvedType == "inprogress") solvedType = "na_" + solvedType;
-                        if (d3.select("#" + SOLVED_TYPES[j]).property("checked")) {
+                        if (SOLVED_TYPES_VISIBILITY[SOLVED_TYPES.indexOf(SOLVED_TYPES[j])]) {
                             var obj_list = data.crimesSolvedByCategoryNtype[data.getVerboseCrimeName(crimeTypes[l])];
                             for (var k in obj_list) {
                                 if (obj_list[k].outcomes[solvedType] > maxValue) {
@@ -506,6 +506,7 @@ function resizeTimeLine(transition) {
             }
         }
     }
+    log(maxValue);
     y.domain([0, maxValue + 0.2 * maxValue]);
     for (i = 0; i < data.getCrimeTypes().length; i++) {
         var duration = transition ? 750 : 0;
@@ -767,7 +768,6 @@ var matrixView = function () {
         .attr("x", 70)
         .attr("y", 6);
 
-
     var monthIndex = 0;
     for (var j = 0; j < years.length; j++) {
         crimeTimeMatrix.append("line")
@@ -845,7 +845,38 @@ var matrixView = function () {
             }
         }
     }
+    crimeTimeMatrix.append("line")
+        .attr("id","left_slider_matrix")
+        .attr("x1", xSliderLeft)
+        .attr("x2", xSliderLeft)
+        .attr("y1", 20)
+        .attr("y2", 300)
+        .attr("stroke-dasharray", function () {
+                return ("8, 3")
+        });
+    crimeTimeMatrix.append("line")
+        .attr("id","right_slider_matrix")
+        .attr("x1", xSliderRight)
+        .attr("x2", xSliderRight)
+        .attr("y1", 20)
+        .attr("y2", 300)
+        .attr("stroke-dasharray", function () {
+            return ("8, 3")
+        });
 };
+
+function updateMatrixSliders(){
+        d3.select("#left_slider_matrix")
+            .attr("x1", xSliderLeft+53)
+            .attr("x2", xSliderLeft+53)
+            .attr("y1", -100)
+            .attr("y2", 300);
+        d3.select("#right_slider_matrix")
+            .attr("x1", xSliderRight+53)
+            .attr("x2", xSliderRight+53)
+            .attr("y1", -100)
+            .attr("y2", 300);
+}
 
 
 var test;
@@ -960,6 +991,8 @@ function updateDateLimits() {
     }
     highlightMatrixSelection();
 
+    // UPDATE SLIDER POSITIONS FOR MATRIX
+    updateMatrixSliders();
     // UPDATE OPACITY RECT FOR HIGHLIGHT SELECTED TIME SPAN
     d3.select("#left_overlay_rect").attr("width",x(lowerDate));
     d3.select("#right_overlay_rect")
