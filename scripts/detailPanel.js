@@ -72,7 +72,7 @@ function initBarChart(width) {
         .append("svg")
         .attr("id", "barChart")
         .attr("width", width + marginBar.left + marginBar.right)
-        .attr("height", heightBar + 100 + marginBar.top + marginBar.bottom)
+        .attr("height", heightBar + 189 + marginBar.top + marginBar.bottom)
         .append("g")
         .attr("id", "barChartG")
         .attr("transform", "translate(" + marginBar.left + "," + marginBar.top + ")");

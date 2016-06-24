@@ -1,6 +1,6 @@
 html, body {
 
-	min-width: 1920px;
+	min-width: 1940px;
 }
 
 .sidebar {
@@ -21,7 +21,7 @@ html, body {
 
 #content {
 	width: 100%;
-	overflow-x: hidden;
+	overflow: none;
 	margin-top: 30px;
 	height: 100%;
 }
