@@ -139,10 +139,11 @@ var createCrimeCategoryButtons = function () {
     var SOLVED_TYPES = ["solved", "inprogress", "failed"];
     var SOLVED_TYPES_VISIBILITY = [0, 0, 0];
     var ONLY_CRIME_STATUS = 0;
-    function updateSolvedTypeLines(solvedType) {
+    function updateSolvedTypeLines(solvedType, toggle) {
+        if (typeof toggle == "undefined") toggle = true;
         var crimeList = data.getCrimeTypes();
-        if (solvedType == "only_crime_status") {
-            ONLY_CRIME_STATUS = (ONLY_CRIME_STATUS + 1) % 2;
+        if (solvedType == "only_crime_status" || solvedType == "undefined") {
+            if(toggle) ONLY_CRIME_STATUS = (ONLY_CRIME_STATUS + 1) % 2;
             if (ONLY_CRIME_STATUS) {
                 for (var i in crimeList) {
                     d3.select("#" + crimeList[i]).attr("display", "none");
@@ -167,7 +168,7 @@ var createCrimeCategoryButtons = function () {
         }
         for (var j in solvedType) {
             var currentSolvedType = solvedType[j];
-            SOLVED_TYPES_VISIBILITY[SOLVED_TYPES.indexOf(currentSolvedType)] = (SOLVED_TYPES_VISIBILITY[SOLVED_TYPES.indexOf(currentSolvedType)] + 1) % 2;
+            if(toggle) SOLVED_TYPES_VISIBILITY[SOLVED_TYPES.indexOf(currentSolvedType)] = (SOLVED_TYPES_VISIBILITY[SOLVED_TYPES.indexOf(currentSolvedType)] + 1) % 2;
             if (SOLVED_TYPES_VISIBILITY[SOLVED_TYPES.indexOf(currentSolvedType)]) {
                 for (var i in crimeList) {
                     var id = "#" + crimeList[i] + "_" + currentSolvedType;
@@ -286,7 +287,6 @@ function getCrimeData(crimeType) {
     return r;
 }
 
-
 function plotTimeviewLines() {
     var plotCrimePath = d3.svg.line()
         .x(function (d) {
@@ -297,6 +297,7 @@ function plotTimeviewLines() {
         })
         .interpolate(currentInterpolationType);
 
+    svg.selectAll("path").remove();
     for (var i = 0; i < data.getCrimeTypes().length; i++) {
         svg.append("path")
             .attr("id", data.getCrimeTypes()[i])
@@ -338,8 +339,8 @@ function plotTimeviewLines() {
             d3.select("#" + data.getCrimeTypes()[i]).attr("display", "none");
         }
     }
+    plotSolvedRatesOnTimeLine();
     resizeTimeLine();
-    setTimeout(plotSolvedRatesOnTimeLine, 1000);
 }
 
 function plotSolvedRatesOnTimeLine() {
@@ -372,17 +373,9 @@ function plotSolvedRatesOnTimeLine() {
         var verboseCrimeName = data.getVerboseCrimeName(crimeType);
         var category_values_crime = data.crimesSolvedByCategoryNtype[verboseCrimeName];
         if (category_values_crime == undefined) return false;
-        /*for(var i in Object.keys(data.outcomeTypes)){
-         var category = Object.keys(data.outcomeTypes)[i];
-         /*function prepareSolvedLineDatum(crimeType, category){
-         var resultDatumForPlot = [];
-         var verboseCrimeName = data.getVerboseCrimeName(crimeType);
-         var category_values_crime = data.crimesSolvedByCategoryNtype[verboseCrimeName];
-         for(var j in category_values_crime){
 
-         }
-         }*/
         function plotSolvedLineByCategory(crimeType, catogoryPlotFunc, category_values, category) {
+            d3.select("#"+crimeType + "_" + category).remove();
             var PATH = svg.append("path")
                 .attr("id", crimeType + "_" + category)
                 .attr("crime_type", crimeType)
@@ -436,9 +429,7 @@ function plotSolvedRatesOnTimeLine() {
                     highlightCrimeSelection(d3.select(this).attr("crime_type"), false);
                     return d3.select("#tooltip").style("visibility", "hidden");
                 });
-            //PATH.style("stroke-opacity",0);
             PATH.attr("stroke-opacity", 1);
-            //PATH.transition().duration(1000).style("stroke-opacity",1);
         }
 
         plotSolvedLineByCategory(crimeType, plotSolve_FAILED_Path, category_values_crime, "failed");
@@ -449,13 +440,25 @@ function plotSolvedRatesOnTimeLine() {
 
     for (var i = 0; i < data.getCrimeTypes().length; i++) {
         if (plotSolvedCategoryLinesByCrime(data.getCrimeTypes()[i])) {
-            //if (!data.crimeTypes[data.getCrimeTypes()[i]].visibility) {
-            d3.select("#" + data.getCrimeTypes()[i] + "_failed").attr("display", "none");
-            d3.select("#" + data.getCrimeTypes()[i] + "_inprogress").attr("display", "none");
-            d3.select("#" + data.getCrimeTypes()[i] + "_solved").attr("display", "none");
-            //}
+            if (data.crimeTypes[data.getCrimeTypes()[i]].visibility == 0) {
+                d3.select("#" + data.getCrimeTypes()[i] + "_failed").attr("display", "none");
+                d3.select("#" + data.getCrimeTypes()[i] + "_inprogress").attr("display", "none");
+                d3.select("#" + data.getCrimeTypes()[i] + "_solved").attr("display", "none");
+            } else {
+                if(SOLVED_TYPES_VISIBILITY[0] == 0){
+                    d3.select("#" + data.getCrimeTypes()[i] + "_solved").attr("display", "none");
+                }
+                if(SOLVED_TYPES_VISIBILITY[1] == 0){
+                    d3.select("#" + data.getCrimeTypes()[i] + "_inprogress").attr("display", "none");
+                }
+                if(SOLVED_TYPES_VISIBILITY[2] == 0){
+                    d3.select("#" + data.getCrimeTypes()[i] + "_failed").attr("display", "none");
+                }
+
+            }
         }
     }
+    updateSolvedTypeLines('undefined', false);
     //resizeTimeLine();
 }
 
@@ -1207,3 +1210,4 @@ data.on('loadAggregates', createCrimeCategoryButtons);
 data.on('loadAggregates', crimeTimeViewRequirements);
 data.on('loadAggregates', matrixView);
 data.on('loadAggregatedCrimesByGeo', timelineView);
+data.on('filtered',plotTimeviewLines);
