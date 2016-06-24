@@ -529,6 +529,8 @@ var timelineView = function () {
         .attr("height", crimeTime.height + crimeTime.margin.top + crimeTime.margin.bottom);
     svg = svg1.append("g")
         .attr("transform", "translate(" + crimeTime.margin.left + "," + crimeTime.margin.top + ")");
+    var overlayRect = svg1.append("g")
+        .attr("transform", "translate(" + crimeTime.margin.left + "," + crimeTime.margin.top + ")");
 
     x.domain(timeRange);
     y.domain([0, 500]);
@@ -537,6 +539,19 @@ var timelineView = function () {
         .attr("class", "x axis")
         .attr("transform", "translate(0," + crimeTime.height + ")")
         .call(xAxis);
+
+    overlayRect.append("rect")
+        .attr("id", "left_overlay_rect")
+        .attr("width", 0)
+        .attr("height", 151)
+        .attr("opacity",0.8)
+        .attr("fill", "white");
+    overlayRect.append("rect")
+        .attr("id", "right_overlay_rect")
+        .attr("width", 0)
+        .attr("height", 151)
+        .attr("opacity",0.8)
+        .attr("fill", "white");
 
     //add small ticks for months
     svg.append("g")
@@ -944,6 +959,12 @@ function updateDateLimits() {
         deactivateOptions(leftDate[1], upperDate.getMonth() + 2);
     }
     highlightMatrixSelection();
+
+    // UPDATE OPACITY RECT FOR HIGHLIGHT SELECTED TIME SPAN
+    d3.select("#left_overlay_rect").attr("width",x(lowerDate));
+    d3.select("#right_overlay_rect")
+        .attr("x",x(upperDate))
+        .attr("width",870-x(upperDate));
 }
 
 
