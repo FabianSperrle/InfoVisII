@@ -173,26 +173,26 @@
                 </div>
             </div>
         </div>
-
-        <script type="text/javascript">
-            var sel = document.getElementById('vis_select');
-            var content = document.getElementById('content').children;
-            sel.onchange = function () {
-                console.log("Selected value is " + sel.value);
-                for (var i = content.length - 1; i >= 0; i--) {
-                    content[i].style.display = 'none';
-                    content[i].style.visibility = 'hidden';
-                }
-                content[sel.value].style.display = 'block';
-                content[sel.value].style.visibility = 'visible';
-                map.invalidateSize();
-            }
-        </script>
-
-        <script type="text/javascript" src="scripts/crimeTimeViews.js"></script>
-        <script type="text/javascript" src="scripts/pointCluster.js"></script>
-        <script type="text/javascript" src="scripts/corrplot.js"></script>
-        <script type="text/javascript" src="scripts/detailPanel.js"></script>
-        <script type="text/javascript" src="scripts/geoController.js"></script>
     </div>
+
+<script type="text/javascript">
+    var sel = document.getElementById('vis_select');
+    var content = document.getElementById('content_left').children;
+    sel.onchange = function () {
+        console.log("Selected value is " + sel.value);
+        for (var i = content.length - 1; i >= 0; i--) {
+            content[i].style.display = 'none';
+            content[i].style.visibility = 'hidden';
+        }
+        content[sel.value].style.display = 'block';
+        content[sel.value].style.visibility = 'visible';
+        map.invalidateSize();
+    }
+</script>
+
+<script type="text/javascript" src="scripts/crimeTimeViews.js"></script>
+<script type="text/javascript" src="scripts/pointCluster.js"></script>
+<script type="text/javascript" src="scripts/corrplot.js"></script>
+<script type="text/javascript" src="scripts/detailPanel.js"></script>
+<script type="text/javascript" src="scripts/geoController.js"></script>
 </body>
