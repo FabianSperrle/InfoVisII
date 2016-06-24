@@ -72,127 +72,127 @@
 		</div>
 	</div>
 
-
-<div class="main">
-    <div id="crimeTimeVieWrapper" class="filter clearfix">
-        <h2>Please Select the Time Frame</h2>
-        <div id="solvedCrimeCheckboxes" style="position: absolute; margin-top: 0px; margin-left: 140px">
-            <span style="font-size: 120%">
-                <b>Crime Status:</b>
-                <input name="OnlySolved" id="only_solved" type="checkbox" onclick="updateSolvedTypeLines('only_crime_status')"><text id="only_text"></text>
-                <input name="Solved" id="solved" type="checkbox" onclick="updateSolvedTypeLines('solved')"><text id="solved_text"></text>
-                <input name="In Progress" id="inprogress" type="checkbox" onclick="updateSolvedTypeLines('inprogress')"><text id="inprogress_text"></text>
-                <input name="Unresolved" id="failed" type="checkbox" onclick="updateSolvedTypeLines('failed')"><text id="failed_text"></text>
-            </span>
-        </div>
-        <div>
-            <form id="interpolation" style="position: absolute; margin-left: 800px;">
+    <div class="main">
+        <div id="crimeTimeVieWrapper" class="filter clearfix">
+            <h2>Please Select the Time Frame</h2>
+            <div id="solvedCrimeCheckboxes" style="position: absolute; margin-top: 0px; margin-left: 140px">
                 <span style="font-size: 120%">
-                    Interpolation:
+                    <b>Crime Status:</b>
+                    <input name="OnlySolved" id="only_solved" type="checkbox" onclick="updateSolvedTypeLines('only_crime_status')"><text id="only_text"></text>
+                    <input name="Solved" id="solved" type="checkbox" onclick="updateSolvedTypeLines('solved')"><text id="solved_text"></text>
+                    <input name="In Progress" id="inprogress" type="checkbox" onclick="updateSolvedTypeLines('inprogress')"><text id="inprogress_text"></text>
+                    <input name="Unresolved" id="failed" type="checkbox" onclick="updateSolvedTypeLines('failed')"><text id="failed_text"></text>
                 </span>
-                <select onchange="changeChartInterpolation(this.value)">
-                    <option value="linear">Linear</option>
-                    <option selected="selected" value="basis">Basis</option>
-                    <option value="monotone">Monotone</option>
-                    <option value="step-before">Step-Before</option>
-                    <option value="step-after">Step-After</option>
-                    <option value="bundle">Bundle</option>
-                    <option value="cardinal">Cardinal</option>
-                    <option value="basis-open">Basis-Open</option>
-                    <option value="cardinal-open">Cardinal-Open</option>
-                </select>
-            </form>
-            <button style="float:right" id="toggleCrimetimeview" onclick="toggleCrimetimeview()">&uarr;</button>
-        </div>
+            </div>
+            <div>
+                <form id="interpolation" style="position: absolute; margin-left: 800px;">
+                    <span style="font-size: 120%">
+                        Interpolation:
+                    </span>
+                    <select onchange="changeChartInterpolation(this.value)">
+                        <option value="linear">Linear</option>
+                        <option selected="selected" value="basis">Basis</option>
+                        <option value="monotone">Monotone</option>
+                        <option value="step-before">Step-Before</option>
+                        <option value="step-after">Step-After</option>
+                        <option value="bundle">Bundle</option>
+                        <option value="cardinal">Cardinal</option>
+                        <option value="basis-open">Basis-Open</option>
+                        <option value="cardinal-open">Cardinal-Open</option>
+                    </select>
+                </form>
+                <button style="float:right" id="toggleCrimetimeview" onclick="toggleCrimetimeview()">&uarr;</button>
+            </div>
 
-        <div id="timelineView"></div>
+            <div id="timelineView"></div>
 
-        <div id="dateDropdowns" class="clearfix">
-            <form style="float:left" action="" name="timeLeftBorder">
-                <select id="monthdropdownLeft" class="leftDate" onchange="updateDate(this)"></select>
-                <select id="yeardropdownLeft" class="leftDate" onchange="updateDate(this)"></select>
-            </form>
-            <form style="float:right" action="" name="timeRightBorder">
-                <select id="monthdropdownRight" class="rightDate" onchange="updateDate(this)"></select>
-                <select id="yeardropdownRight" class="rightDate" onchange="updateDate(this)"></select>
-            </form>
-        </div>
-        <div id="sliderDate"></div>
+            <div id="dateDropdowns" class="clearfix">
+                <form style="float:left" action="" name="timeLeftBorder">
+                    <select id="monthdropdownLeft" class="leftDate" onchange="updateDate(this)"></select>
+                    <select id="yeardropdownLeft" class="leftDate" onchange="updateDate(this)"></select>
+                </form>
+                <form style="float:right" action="" name="timeRightBorder">
+                    <select id="monthdropdownRight" class="rightDate" onchange="updateDate(this)"></select>
+                    <select id="yeardropdownRight" class="rightDate" onchange="updateDate(this)"></select>
+                </form>
+            </div>
+            <div id="sliderDate"></div>
 
 
-		<div id="content">
-			<div id="content_left">
-                <div id="crimeTimeMatrix">
-                    <button style="float:left; font-size: 11px" id="toggleMatrixNormalization" onclick="toggleMatrixNormalization()">Show Global Normalization</button>
-                </div>
-
-                <div id="map_box" style="visibility:hidden;display:none">
-                    <div id="no_elements">
-                        <h3>No data selected.</h3>
-                        Your current filters remove all data.<br />Make sure to include more crime types, or enlarge the time period.
+            <div id="content">
+                <div id="content_left">
+                    <div id="crimeTimeMatrix">
+                        <button style="float:left; font-size: 11px" id="toggleMatrixNormalization" onclick="toggleMatrixNormalization()">Show Global Normalization</button>
                     </div>
-                    <div id="map_controls">
-                        <form>
-                            <span><label for="cluster_map">Clustered View</label><input onClick="setVisibleLayer('clusters')" type="radio" name="map_typ" id="cluster_map" value="clusters"></span>
-                            <span><label for="heat_map">Heat Map</label><input onClick="setVisibleLayer('heat')" type="radio" name="map_typ" id="heat_map" value="heat"></span>
-                            <span><label for="point_map">Single Crimes</label><input onClick="setVisibleLayer('points')" type="radio" name="map_typ" id="point_map" value="points"></span>
-                            <span><label for="choropleth_map">Choropleth View</label><input onClick="setVisibleLayer('choropleth')" type="radio" name="map_typ" id="choropleth_map" value="choropleth"></span>
-                        </form>
-                    </div>
-                    <div id="map">
-                        <div id="too_many">
-                            <h3>Too much data!</h3>
-                            You have selected more than 1000 data points, that's more than we can plot on one map! Please adjust your filters or load a different visualization.
+
+                    <div id="map_box" style="visibility:hidden;display:none">
+                        <div id="no_elements">
+                            <h3>No data selected.</h3>
+                            Your current filters remove all data.<br />Make sure to include more crime types, or enlarge the time period.
+                        </div>
+                        <div id="map_controls">
+                            <form>
+                                <span><label for="cluster_map">Clustered View</label><input onClick="setVisibleLayer('clusters')" type="radio" name="map_typ" id="cluster_map" value="clusters"></span>
+                                <span><label for="heat_map">Heat Map</label><input onClick="setVisibleLayer('heat')" type="radio" name="map_typ" id="heat_map" value="heat"></span>
+                                <span><label for="point_map">Single Crimes</label><input onClick="setVisibleLayer('points')" type="radio" name="map_typ" id="point_map" value="points"></span>
+                                <span><label for="choropleth_map">Choropleth View</label><input onClick="setVisibleLayer('choropleth')" type="radio" name="map_typ" id="choropleth_map" value="choropleth"></span>
+                            </form>
+                        </div>
+                        <div id="map">
+                            <div id="too_many">
+                                <h3>Too much data!</h3>
+                                You have selected more than 1000 data points, that's more than we can plot on one map! Please adjust your filters or load a different visualization.
+                            </div>
                         </div>
                     </div>
+
+                    <div id="corrplot" style="visibility: hidden;display: none;">
+                        <p>
+                            <label for="order">Order</label>
+                            <select id="order">
+                                <option value="original" selected>Original</option>
+                                <option value="name">by Name</option>
+                                <option value="aoe">AOE</option>
+                                <option value="fpc">FPC</option>
+                            </select>
+
+                            <label for="shape">Shape</label>
+                            <select id="shape">
+                                <option value="square">Square</option>
+                                <option value="scaled-square">Scaled Square</option>
+                                <option value="circle">Circle</option>
+                                <option value="scaled-circle" selected>Scaled Circle</option>
+                                <option value="ellipse">Ellipse</option>
+                            </select>
+                        </p>
+                    </div>
                 </div>
-
-                <div id="corrplot" style="visibility: hidden;display: none;">
-                    <p>
-                        <label for="order">Order</label>
-                        <select id="order">
-                            <option value="original" selected>Original</option>
-                            <option value="name">by Name</option>
-                            <option value="aoe">AOE</option>
-                            <option value="fpc">FPC</option>
-                        </select>
-
-                        <label for="shape">Shape</label>
-                        <select id="shape">
-                            <option value="square">Square</option>
-                            <option value="scaled-square">Scaled Square</option>
-                            <option value="circle">Circle</option>
-                            <option value="scaled-circle" selected>Scaled Circle</option>
-                            <option value="ellipse">Ellipse</option>
-                        </select>
-                    </p>
+                <div id="content_right">
+                    <h2>Outcomes: Overview</h2>
+                    <div id="detailPanel"></div>
                 </div>
             </div>
-			<div id="content_right">
-				<h2>Outcomes: Overview</h2>
-				<div id="detailPanel"></div>
-            </div>
-		</div>
-	</div>
+        </div>
 
-    <script type="text/javascript">
-        var sel = document.getElementById('vis_select');
-        var content = document.getElementById('content').children;
-        sel.onchange = function () {
-            console.log("Selected value is " + sel.value);
-            for (var i = content.length - 1; i >= 0; i--) {
-                content[i].style.display = 'none';
-                content[i].style.visibility = 'hidden';
+        <script type="text/javascript">
+            var sel = document.getElementById('vis_select');
+            var content = document.getElementById('content').children;
+            sel.onchange = function () {
+                console.log("Selected value is " + sel.value);
+                for (var i = content.length - 1; i >= 0; i--) {
+                    content[i].style.display = 'none';
+                    content[i].style.visibility = 'hidden';
+                }
+                content[sel.value].style.display = 'block';
+                content[sel.value].style.visibility = 'visible';
+                map.invalidateSize();
             }
-            content[sel.value].style.display = 'block';
-            content[sel.value].style.visibility = 'visible';
-            map.invalidateSize();
-        }
-    </script>
+        </script>
 
-    <script type="text/javascript" src="scripts/crimeTimeViews.js"></script>
-    <script type="text/javascript" src="scripts/pointCluster.js"></script>
-    <script type="text/javascript" src="scripts/corrplot.js"></script>
-    <script type="text/javascript" src="scripts/detailPanel.js"></script>
-    <script type="text/javascript" src="scripts/geoController.js"></script>
+        <script type="text/javascript" src="scripts/crimeTimeViews.js"></script>
+        <script type="text/javascript" src="scripts/pointCluster.js"></script>
+        <script type="text/javascript" src="scripts/corrplot.js"></script>
+        <script type="text/javascript" src="scripts/detailPanel.js"></script>
+        <script type="text/javascript" src="scripts/geoController.js"></script>
+    </div>
 </body>
