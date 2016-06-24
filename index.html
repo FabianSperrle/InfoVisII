@@ -1,34 +1,33 @@
 <!DOCTYPE html>
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
-	<title>London Crime Data</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <title>London Crime Data</title>
 
-	<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-	<script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js"></script>
-	<script src="libs/leaflet-heat.js"></script>
-	<script src="libs/rotatedMarker.js"></script>
-	<script src="libs/telegraph.min.js"></script>
-	<script src="libs/d3.v3.min.js"></script>
-	<script src="libs/crossfilter.v1.min.js"></script>
-	<script src="libs/d3.slider.js"></script>
-	<script src="http://cdn.rawgit.com/misoproject/d3.chart/master/d3.chart.min.js"></script>
-	<script src="http://cdn.rawgit.com/d3/d3-plugins/master/superformula/superformula.js"></script>
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.3/d3-tip.min.js"></script>
-	<script src="libs/corrplot.min.js"></script>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js"></script>
+    <script src="libs/leaflet-heat.js"></script>
+    <script src="libs/rotatedMarker.js"></script>
+    <script src="libs/telegraph.min.js"></script>
+    <script src="libs/d3.v3.min.js"></script>
+    <script src="libs/crossfilter.v1.min.js"></script>
+    <script src="libs/d3.slider.js"></script>
+    <script src="http://cdn.rawgit.com/misoproject/d3.chart/master/d3.chart.min.js"></script>
+    <script src="http://cdn.rawgit.com/d3/d3-plugins/master/superformula/superformula.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.3/d3-tip.min.js"></script>
+    <script src="libs/corrplot.min.js"></script>
 
-	<script src="scripts/dataController.js"></script>
+    <script src="scripts/dataController.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="css/timelineView.css">
-	<link rel="stylesheet" type="text/css" href="css/pointCluster.css">
-	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css">
-	<link rel="stylesheet" href="css/d3.slider.css" />
-	<link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" type="text/css" href="css/timelineView.css">
+    <link rel="stylesheet" type="text/css" href="css/pointCluster.css">
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css">
+    <link rel="stylesheet" href="css/d3.slider.css"/>
+    <link rel="stylesheet" href="css/app.css"/>
 </head>
 
 <body>
-
 	<div class="sidebar">
 		<h2>Please Select the Crime Types</h2>
 		<div id="crimeCheckboxes"> </div>
@@ -73,28 +72,59 @@
 		</div>
 	</div>
 
-	<div class="main">
-		<div id="crimeTimeVieWrapper" class="filter clearfix">
-			<h2>Please Select the Time Frame</h2>
-			<button style="float:right" id="toggleCrimetimeview" onclick="toggleCrimetimeview()">&uarr;</button>
-			<div id="timelineView"></div>
 
-			<div id="dateDropdowns" class="clearfix">
-				<form style="float:left" action="" name="timeLeftBorder">
-					<select id="monthdropdownLeft" class="leftDate" onchange="updateDate(this)"></select>
-					<select id="yeardropdownLeft" class="leftDate" onchange="updateDate(this)"></select>
-				</form>
-				<form style="float:right" action="" name="timeRightBorder">
-					<select id="monthdropdownRight" class="rightDate" onchange="updateDate(this)"></select>
-					<select id="yeardropdownRight" class="rightDate" onchange="updateDate(this)"></select>
-				</form>
-			</div>
-			<div id="sliderDate"></div>
-		</div>
+<div class="main">
+    <div id="crimeTimeVieWrapper" class="filter clearfix">
+        <h2>Please Select the Time Frame</h2>
+        <div id="solvedCrimeCheckboxes" style="position: absolute; margin-top: 0px; margin-left: 140px">
+            <span style="font-size: 120%">
+                <b>Crime Status:</b>
+                <input name="OnlySolved" id="only_solved" type="checkbox" onclick="updateSolvedTypeLines('only_crime_status')"><text id="only_text"></text>
+                <input name="Solved" id="solved" type="checkbox" onclick="updateSolvedTypeLines('solved')"><text id="solved_text"></text>
+                <input name="In Progress" id="inprogress" type="checkbox" onclick="updateSolvedTypeLines('inprogress')"><text id="inprogress_text"></text>
+                <input name="Unresolved" id="failed" type="checkbox" onclick="updateSolvedTypeLines('failed')"><text id="failed_text"></text>
+            </span>
+        </div>
+        <div>
+            <form id="interpolation" style="position: absolute; margin-left: 800px;">
+                <span style="font-size: 120%">
+                    Interpolation:
+                </span>
+                <select onchange="changeChartInterpolation(this.value)">
+                    <option value="linear">Linear</option>
+                    <option selected="selected" value="basis">Basis</option>
+                    <option value="monotone">Monotone</option>
+                    <option value="step-before">Step-Before</option>
+                    <option value="step-after">Step-After</option>
+                    <option value="bundle">Bundle</option>
+                    <option value="cardinal">Cardinal</option>
+                    <option value="basis-open">Basis-Open</option>
+                    <option value="cardinal-open">Cardinal-Open</option>
+                </select>
+            </form>
+            <button style="float:right" id="toggleCrimetimeview" onclick="toggleCrimetimeview()">&uarr;</button>
+        </div>
+
+        <div id="timelineView"></div>
+
+        <div id="dateDropdowns" class="clearfix">
+            <form style="float:left" action="" name="timeLeftBorder">
+                <select id="monthdropdownLeft" class="leftDate" onchange="updateDate(this)"></select>
+                <select id="yeardropdownLeft" class="leftDate" onchange="updateDate(this)"></select>
+            </form>
+            <form style="float:right" action="" name="timeRightBorder">
+                <select id="monthdropdownRight" class="rightDate" onchange="updateDate(this)"></select>
+                <select id="yeardropdownRight" class="rightDate" onchange="updateDate(this)"></select>
+            </form>
+        </div>
+        <div id="sliderDate"></div>
+
 
 		<div id="content">
 			<div id="content_left">
-                <div id="crimeTimeMatrix"></div>
+                <div id="crimeTimeMatrix">
+                    <button style="float:left; font-size: 11px" id="toggleMatrixNormalization" onclick="toggleMatrixNormalization()">Show Global Normalization</button>
+                </div>
 
                 <div id="map_box" style="visibility:hidden;display:none">
                     <div id="no_elements">
@@ -145,25 +175,24 @@
 		</div>
 	</div>
 
+    <script type="text/javascript">
+        var sel = document.getElementById('vis_select');
+        var content = document.getElementById('content').children;
+        sel.onchange = function () {
+            console.log("Selected value is " + sel.value);
+            for (var i = content.length - 1; i >= 0; i--) {
+                content[i].style.display = 'none';
+                content[i].style.visibility = 'hidden';
+            }
+            content[sel.value].style.display = 'block';
+            content[sel.value].style.visibility = 'visible';
+            map.invalidateSize();
+        }
+    </script>
 
-<script type="text/javascript">
-var sel = document.getElementById('vis_select');
-var content = document.getElementById('content_left').children;
-sel.onchange = function () {
-	console.log("Selected value is " + sel.value);
-	for (var i = content.length - 1; i >= 0; i--) {
-		content[i].style.display = 'none';
-		content[i].style.visibility = 'hidden';
-	}
-	content[sel.value].style.display = 'block';
-	content[sel.value].style.visibility = 'visible';
-	map.invalidateSize();
-}
-</script>
-
-<script type="text/javascript" src="scripts/crimeTimeViews.js"></script>
-<script type="text/javascript" src="scripts/pointCluster.js"></script>
-<script type="text/javascript" src="scripts/corrplot.js"></script>
-<script type="text/javascript" src="scripts/detailPanel.js"></script>
-<script type="text/javascript" src="scripts/geoController.js"></script>
+    <script type="text/javascript" src="scripts/crimeTimeViews.js"></script>
+    <script type="text/javascript" src="scripts/pointCluster.js"></script>
+    <script type="text/javascript" src="scripts/corrplot.js"></script>
+    <script type="text/javascript" src="scripts/detailPanel.js"></script>
+    <script type="text/javascript" src="scripts/geoController.js"></script>
 </body>

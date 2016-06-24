@@ -10,6 +10,7 @@ function DataController() {
     this.groupedByType = {};
     this.geo = {};
     this.crimesAggGeo = {};
+    this.crimesSolvedByCategoryNtype = {};
 
     this.dates = {
         from: new Date(2011, 4, 15),
@@ -132,6 +133,7 @@ function DataController() {
         }
     };
     this.visibleVerboseCrimeTypes = ["Other theft"];
+
     this.outcomeTypes = {
         na_inprogress: {
             visibility: 0,
@@ -139,11 +141,11 @@ function DataController() {
         },
         solved: {
             visibility: 1,
-            list:["Suspect charged as part of another case", "Local resolution", "Offender given a caution", "Offender otherwise dealt with", "Offender fined", "Offender given community sentence", "Offender given conditional discharge", "Offender deprived of property", "Offender given penalty notice", "Offender sent to prison", "Offender given absolute discharge", "Offender given a drugs possession warning", "Defendant found not guilty", "Offender ordered to pay compensation", "Offender given suspended prison sentence"]
+            list: ["Suspect charged as part of another case", "Local resolution", "Offender given a caution", "Offender otherwise dealt with", "Offender fined", "Offender given community sentence", "Offender given conditional discharge", "Offender deprived of property", "Offender given penalty notice", "Offender sent to prison", "Offender given absolute discharge", "Offender given a drugs possession warning", "Defendant found not guilty", "Offender ordered to pay compensation", "Offender given suspended prison sentence", "Formal action is not in the public interest"]
         },
         failed: {
             visibility: 0,
-            list:["Court case unable to proceed", "Formal action is not in the public interest", "Unable to prosecute suspect", "Investigation complete; no suspect identified"]
+            list: ["Court case unable to proceed", "Unable to prosecute suspect", "Investigation complete; no suspect identified"]
         }
     };
 }
@@ -165,7 +167,7 @@ DataController.prototype.initializeFilters = function () {
     });
     this.filterDate();
     this.filtered = this.crimesByType.filterAll().top(Infinity);
-    this.visibleVerboseCrimeTypes = ["Violence and sexual offences", "Other theft", "Burglary", "Violent crime", "Bicycle theft", "Anti-social behaviour", "Other crime", "Shoplifting", "Drugs", "Criminal damage and arson", "Vehicle  crime", "Theft from the person", "Public disorder and weapons", "Public order", "Robbery", "Possession of weapons"];
+    this.visibleVerboseCrimeTypes = ["All Crimes", "Violence and sexual offences", "Other theft", "Burglary", "Violent crime", "Bicycle theft", "Anti-social behaviour", "Other crime", "Shoplifting", "Drugs", "Criminal damage and arson", "Vehicle  crime", "Theft from the person", "Public disorder and weapons", "Public order", "Robbery", "Possession of weapons"];
 
     data.emit('filtered');
 };
@@ -255,7 +257,7 @@ DataController.prototype.toggleFilterAll = function (switchOn) {
 };
 
 DataController.prototype.filterLSOA = function () {
-    let self = this;
+    var self = this;
     this.filtered = this.crimesByLocation.filter(function (d) {
         return self.lsoa_codes[d];
     }).top(Infinity);
@@ -268,15 +270,15 @@ DataController.prototype.toggleLSOA = function (code) {
 };
 
 DataController.prototype.toggleAllLSOA = function () {
-    let status = false;
-    for (let key in this.lsoa_codes) {
+    var status = false;
+    for (var key in this.lsoa_codes) {
         if (this.lsoa_codes.hasOwnProperty(key)) {
             status = status | this.lsoa_codes[key];
         }
     }
     status = !status;
 
-    for (let key in this.lsoa_codes) {
+    for (var key in this.lsoa_codes) {
         if (this.lsoa_codes.hasOwnProperty(key)) {
             this.lsoa_codes[key] = status;
         }
@@ -291,7 +293,7 @@ DataController.prototype.toggleFilter = function (type) {
 
     // Apply all filters
     this.filtered = this.crimesByType.filter(function (d) {
-        if (data.crimeTypes.allCrimes.visibility == true) {
+        if (data.visibleVerboseCrimeTypes.indexOf(d) >= 0 || data.visibleVerboseCrimeTypes.indexOf("All Crimes") >= 0) {
             return true;
         }
         return data.visibleVerboseCrimeTypes.indexOf(d) >= 0;
@@ -320,7 +322,7 @@ DataController.prototype.getVerboseCrimeName = function (crime) {
         return this.crimeTypes[crime].verboseName;
     }
 
-    let names = [];
+    var names = [];
     for (var key in this.crimeTypes) {
         names.push(this.crimeTypes[key].verboseName);
     }
@@ -362,6 +364,51 @@ DataController.prototype.groupByType = function () {
         .entries(this.filtered);
 };
 
+DataController.prototype.prepareSolvedCrimesForTimeline = function (){
+    function getCategoryByOutcomeType(outcomeType, data){
+        var outcomeCategories = Object.keys(data.outcomeTypes);
+        for(var cat in outcomeCategories){
+            if(data.outcomeTypes[outcomeCategories[cat]].list.indexOf(outcomeType) >= 0){
+                return outcomeCategories[cat];
+            }
+        }
+    }
+    this.crimesSolvedByCategoryNtype = [];
+    for (var key_ in this.solvedCrimesAgg){
+        var crimeOutcome = this.solvedCrimesAgg[key_];
+        var aggOutcomes = {};
+        for(var category in Object.keys(this.outcomeTypes)){
+            aggOutcomes[Object.keys(this.outcomeTypes)[category]] = 0;
+        }
+        var outcomeEntity = {
+            "crime_type" : crimeOutcome.crime_type,
+            "month" : crimeOutcome.month,
+            "outcomes": aggOutcomes
+        };
+
+        var outcomeKeys = Object.keys(crimeOutcome.outcomes);
+        for (var key in outcomeKeys){
+            var number = parseFloat(crimeOutcome.outcomes[outcomeKeys[key]]);
+            var category = getCategoryByOutcomeType(outcomeKeys[key], this);
+            outcomeEntity["outcomes"][category] += number;
+        }
+        this.crimesSolvedByCategoryNtype.push(outcomeEntity);
+    }
+    // Prepare Object for line plotting
+    var tempSolvedByCatNType = {};
+    for(var i in this.crimesSolvedByCategoryNtype){
+        var ent = this.crimesSolvedByCategoryNtype[i];
+        var crimeType = ent.crime_type;
+        if(tempSolvedByCatNType[crimeType] === undefined){
+            tempSolvedByCatNType[crimeType] = [];
+        }
+        tempSolvedByCatNType[crimeType].push({
+            "month" : ent.month,
+            "outcomes" : ent.outcomes
+        })
+    }
+    this.crimesSolvedByCategoryNtype = tempSolvedByCatNType;
+};
 
 var data = new DataController();
 
@@ -376,31 +423,38 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/ge
     if(error) throw error;
     data.crimesAggGeo = json;
     data.emit('loadAggregatedCrimesByGeo');
-    //data.emit('loadAggregates');
+});
+
+d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/master/data/outcomes_aggby_month-crimetype.json", function(error, json) {
+    if(error) throw error;
+    data.solvedCrimesAgg = json;
+    data.emit('loadSolvedCrimes');
 });
 
 d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/master/data/crimes_with_correct_geoloc.json", function (error, json) {
     if (error) throw error;
-
     json.forEach(function (d, i) {
         d.month = new Date(d.month.substring(0, 4), d.month.substring(5, 7) - 1, 15);
     });
 
     data.all = json;
     data.filtered = json;
-    console.log(json);
-    data.emit('loadAll');
+    //console.log(json);
+    //data.emit('loadAll');
 });
 
 d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/geo.json", function(error, json) {//"https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/geodata/geo_oa_ex.json"
     if(error) throw error;
     data.geo = json;
-    data.emit('loadGeo');
 });
 
+data.on('loadSolvedCrimes', data.prepareSolvedCrimesForTimeline);
 data.on('loadAll', data.initializeFilters);
 data.on('toggle', data.toggleFilter);
 data.on('activateAllCrimes', data.toggleFilterAll);
 data.on('dateChange', data.dateChange);
 data.on('filtered', data.groupByType);
 
+setTimeout(function(){
+    data.emit('loadAll');
+},2000);
