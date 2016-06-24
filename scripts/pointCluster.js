@@ -44,7 +44,8 @@ function setVisibleLayer(name) {
     map.addLayer(visibleLayer);
 
     if(name == 'choropleth'){
-        d3.select('#wardHoverPanel').style("visibility", "visible").style("display", "block")
+        d3.select('#wardHoverPanel').style("visibility", "visible").style("display", "block");
+        initAllWardsCrimesBarChart();
     } else {
         d3.select('#wardHoverPanel').style("visibility", "hidden").style("display", "none");
     }
@@ -289,6 +290,7 @@ var updateHeatLayer = function () {
 };
 
 var updateChloroplethLayer = function () {
+    initAllWardsCrimesBarChart();
     var activecrimes = [];
     var allcrimetypes = Object.keys(data.crimeTypes);
     for (var i = 0; i < allcrimetypes.length; i++) {
@@ -320,6 +322,7 @@ var updateChloroplethLayer = function () {
                     }
                 }
             }
+            updateSumOfCrimesgWardDetailPanel(d, weight);
             weight = weight / data.filtered.length * 25;
         }
 
@@ -358,6 +361,12 @@ var updateChloroplethLayer = function () {
         layer.on('click', function (e) {
             let id = e.target.feature.id;
             document.getElementById(id).click();
+        });
+        layer.on('mouseover', function (e) {
+            initSingleWardCrimesBarChart(feature);
+        });
+        layer.on('mouseout', function (e) {
+            initAllWardsCrimesBarChart();
         });
     }
 
