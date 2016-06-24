@@ -6,7 +6,7 @@ var marginBar = {top: 40, right: 20, bottom: 70, left: 80},
     heightBar = 300 - marginBar.top - marginBar.bottom;
 
 
-var rb_buttons = ["solved", "running", "failed", "N/A"];
+var rb_buttons = ["Solved", "In Progress", "Unresolved", "N/A"];
 var rb_selection = 0;
 
 
@@ -81,9 +81,9 @@ function initBarChart(width) {
     var legendY = 200;
     d3.select("#barChartG")
         .append("rect")
-        .attr("x", legendX)
+        .attr("x", legendX-20)
         .attr("y", legendY)
-        .attr("width", 40)
+        .attr("width", 60)
         .attr("height", 50)
         .attr("fill", "gray")
         .style("opacity",0.3);
@@ -91,7 +91,7 @@ function initBarChart(width) {
     d3.select("#barChartG")
         .append("text")
         .attr("fill", "black")
-        .attr("x", legendX+5)
+        .attr("x", legendX+5-20)
         .attr("y", legendY+40)
         .attr("dy", ".35em")
         .text(rb_buttons[rb_selection]);
@@ -99,16 +99,16 @@ function initBarChart(width) {
     d3.select("#barChartG")
         .append("text")
         .attr("fill", "black")
-        .attr("x", legendX+2)
+        .attr("x", legendX+2-20)
         .attr("y", legendY+10)
         .attr("dy", ".35em")
         .text("#crimes");
 
     d3.select("#barChartG")
         .append("rect")
-        .attr("x", legendX)
+        .attr("x", legendX-20)
         .attr("y", legendY+30)
-        .attr("width", 40)
+        .attr("width", 60)
         .attr("height", 20)
         .attr("fill", "black")
         .style("opacity",0.3);
@@ -498,7 +498,7 @@ function initSingleOutcomesChart(width) {
         .attr("x", legendX+15)
         .attr("y", legendY+5)
         .attr("dy", ".35em")
-        .text("solved");
+        .text("Solved");
 
     d3.select("#barChart")
         .append("text")
@@ -506,7 +506,7 @@ function initSingleOutcomesChart(width) {
         .attr("x", legendX+15)
         .attr("y", legendY+25)
         .attr("dy", ".35em")
-        .text("running");
+        .text("In Progress");
 
     d3.select("#barChart")
         .append("text")
@@ -514,7 +514,7 @@ function initSingleOutcomesChart(width) {
         .attr("x", legendX+15)
         .attr("y", legendY+45)
         .attr("dy", ".35em")
-        .text("failed");
+        .text("Unresolved");
 }
 
 var test;
