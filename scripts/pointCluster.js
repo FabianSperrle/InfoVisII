@@ -43,6 +43,12 @@ function setVisibleLayer(name) {
     visibleLayerName = name;
     map.addLayer(visibleLayer);
 
+    if(name == 'choropleth'){
+        d3.select('#wardHoverPanel').style("visibility", "visible").style("display", "block")
+    } else {
+        d3.select('#wardHoverPanel').style("visibility", "hidden").style("display", "none");
+    }
+
     if (data.filtered.length > maxPoints && name == "points") {
         tooManyPoints();
     }
