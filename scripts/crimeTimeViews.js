@@ -903,7 +903,7 @@ var matrixView = function () {
                             var val = data.crimeAggregates[years[j]][months[k]][key];
                             // Normalization function:
                             if(matrixNormalization == "global"){ // GLOBAL NORMALIZATION
-                                if(i == 0) return (val - countMin[i]) / (countMax[i] - countMin[i]);
+                                if(i == 0) return (val - countMin[key]) / (countMax[key] - countMin[key]);
                                 return (val - globalMin) / (globalMax - globalMin);
                             } else {  // LOCAL NORMALIZATION
                                 return (val - countMin[key]) / (countMax[key] - countMin[key]);
@@ -998,15 +998,16 @@ function crimeTimeViewRequirements() {
     globalMax = 0;
     globalMin = Number.MAX_VALUE;
     globalCountTotal = 0;
-    for (var i  in countMax) {
+    for (var i = 1; i < Object.keys(countMax).length; i++) {
+        var key = data.getCrimeTypes(i);
         //if (i == 0) continue; // DO NOT USE ALL CRIMES FOR GLOBAL NORMALIZATION!!!
-        if (countMax[i] > globalMax) {
-            globalMax = countMax[i];
+        if (countMax[key] > globalMax) {
+            globalMax = countMax[key];
         }
-        if (countMin[i] < globalMin) {
-            globalMin = countMin[i];
+        if (countMin[key] < globalMin) {
+            globalMin = countMin[key];
         }
-        globalCountTotal += countTotal[i];
+        globalCountTotal += countTotal[key];
     }
 }
 var matrixNormalization = "local";
