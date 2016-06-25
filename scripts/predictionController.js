@@ -1,4 +1,7 @@
 let showPredictions = false;
+
+let isNumber = function(obj) { return !isNaN(parseFloat(obj)) };
+
 let plotPredictions = function () {
     if (!showPredictions) return;
 
@@ -19,14 +22,22 @@ let plotPredictions = function () {
         .interpolate('linear');
 
     var getData = function (i) {
-        let crimes = [data.getVerboseCrimeName(data.getCrimeTypes(i))];
+        var crimes;
+        if (isNumber(i))
+            crimes = [data.getVerboseCrimeName(data.getCrimeTypes(i))];
+        else
+            crimes = [data.getVerboseCrimeName(i)];
         let total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         if (crimes[0] == "All Crimes") crimes = data.getVerboseCrimeName();
         crimes.forEach(function (crime) {
             for (let j = 0; j < 13; j++) {
                 if (j == 0) {
                     if (total[0] == 0) {
-                        let old = getCrimeData(data.getCrimeTypes(i));
+                        var old;
+                        if (isNumber(i))
+                            old = getCrimeData(data.getCrimeTypes(i));
+                        else
+                            old = getCrimeData(i);
                         total[0] = old[old.length - 1].value;
                     }
                     continue;
@@ -47,6 +58,7 @@ let plotPredictions = function () {
         return total;
     };
 
+    removePredictions();
     for (var i = 0; i < data.getCrimeTypes().length; i++) {
         if (data.crimeTypes[data.getCrimeTypes(i)].visibility !== 1) continue;
         d3.select('#predictions_')
