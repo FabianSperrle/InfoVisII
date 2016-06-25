@@ -458,8 +458,10 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/geoBasedForec
     if (err) throw err;
     data.predictions = json;
     
-    data.emit('predictions');
-})
+    setTimeout(function() {
+        data.emit('predictions');
+    }, 5000);
+});
 
 data.on('loadSolvedCrimes', data.prepareSolvedCrimesForTimeline);
 data.on('loadAll', data.initializeFilters);

@@ -29,67 +29,98 @@
 
 <body>
 
-	<div class="sidebar">
-		<h2>Please Select the Crime Types</h2>
-		<div id="crimeCheckboxes"> </div>
-		<h2>Please Select the Region</h2>
-		<div id="lsoa_boxes">
-			<form>
-				<div><input type="checkbox" id="E05009288" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009288">Aldersgate</label></div>
-				<div><input type="checkbox" id="E05009289" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009289">Aldgate</label></div>
-				<div><input type="checkbox" id="E05009290" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009290">Bassishaw</label></div>
-				<div><input type="checkbox" id="E05009291" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009291">Billingsgate</label></div>
-				<div><input type="checkbox" id="E05009292" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009292">Bishopsgate</label></div>
-				<div><input type="checkbox" id="E05009293" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009293">Bread Street</label></div>
-				<div><input type="checkbox" id="E05009294" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009294">Bridge</label></div>
-				<div><input type="checkbox" id="E05009295" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009295">Broad Street</label></div>
-				<div><input type="checkbox" id="E05009296" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009296">Candlewick</label></div>
-				<div><input type="checkbox" id="E05009297" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009297">Castle Baynard</label></div>
-				<div><input type="checkbox" id="E05009298" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009298">Cheap</label></div>
-				<div><input type="checkbox" id="E05009299" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009299">Coleman Street</label></div>
-				<div><input type="checkbox" id="E05009300" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009300">Cordwainer</label></div>
-				<div><input type="checkbox" id="E05009301" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009301">Cornhill</label></div>
-				<div><input type="checkbox" id="E05009302" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009302">Cripplegate</label></div>
-				<div><input type="checkbox" id="E05009303" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009303">Dowgate</label></div>
-				<div><input type="checkbox" id="E05009304" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009304">Farringdon Within</label></div>
-				<div><input type="checkbox" id="E05009305" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009305">Farringdon Without</label></div>
-				<div><input type="checkbox" id="E05009306" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009306">Langbourn</label></div>
-				<div><input type="checkbox" id="E05009307" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009307">Lime Street</label></div>
-				<div><input type="checkbox" id="E05009308" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009308">Portsoken</label></div>
-				<div><input type="checkbox" id="E05009309" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009309">Queenhithe</label></div>
-				<div><input type="checkbox" id="E05009310" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009310">Tower</label></div>
-				<div><input type="checkbox" id="E05009311" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009311">Vintry</label></div>
-				<div><input type="checkbox" id="E05009312" checked="checked" onClick="data.toggleLSOA(this.id)" /><label for="E05009312">Walbrook</label></div>
-			</form>
+<div class="sidebar">
+    <h2>Please Select the Crime Types</h2>
+    <div id="crimeCheckboxes"></div>
+    <h2>Please Select the Region</h2>
+    <div id="lsoa_boxes">
+        <form>
+            <div><input type="checkbox" id="E05009288" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009288">Aldersgate</label></div>
+            <div><input type="checkbox" id="E05009289" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009289">Aldgate</label></div>
+            <div><input type="checkbox" id="E05009290" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009290">Bassishaw</label></div>
+            <div><input type="checkbox" id="E05009291" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009291">Billingsgate</label></div>
+            <div><input type="checkbox" id="E05009292" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009292">Bishopsgate</label></div>
+            <div><input type="checkbox" id="E05009293" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009293">Bread Street</label></div>
+            <div><input type="checkbox" id="E05009294" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009294">Bridge</label></div>
+            <div><input type="checkbox" id="E05009295" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009295">Broad Street</label></div>
+            <div><input type="checkbox" id="E05009296" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009296">Candlewick</label></div>
+            <div><input type="checkbox" id="E05009297" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009297">Castle Baynard</label></div>
+            <div><input type="checkbox" id="E05009298" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009298">Cheap</label></div>
+            <div><input type="checkbox" id="E05009299" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009299">Coleman Street</label></div>
+            <div><input type="checkbox" id="E05009300" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009300">Cordwainer</label></div>
+            <div><input type="checkbox" id="E05009301" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009301">Cornhill</label></div>
+            <div><input type="checkbox" id="E05009302" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009302">Cripplegate</label></div>
+            <div><input type="checkbox" id="E05009303" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009303">Dowgate</label></div>
+            <div><input type="checkbox" id="E05009304" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009304">Farringdon Within</label></div>
+            <div><input type="checkbox" id="E05009305" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009305">Farringdon Without</label></div>
+            <div><input type="checkbox" id="E05009306" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009306">Langbourn</label></div>
+            <div><input type="checkbox" id="E05009307" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009307">Lime Street</label></div>
+            <div><input type="checkbox" id="E05009308" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009308">Portsoken</label></div>
+            <div><input type="checkbox" id="E05009309" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009309">Queenhithe</label></div>
+            <div><input type="checkbox" id="E05009310" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009310">Tower</label></div>
+            <div><input type="checkbox" id="E05009311" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009311">Vintry</label></div>
+            <div><input type="checkbox" id="E05009312" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                    for="E05009312">Walbrook</label></div>
+        </form>
 
-		</div>
-		<div>
-			<h2>Please Select the Visualization</h2>
-			<select multiple="multiple" height="2" id="vis_select">
-				<option value="crimeTimeMatrix" selected="true">Matrix View</option>
-				<option value="map_box">Map View</option>
-				<option value="corrplot">Correlation Matrix</option>
-			</select>
-		</div>
-	</div>
+    </div>
+    <div>
+        <h2>Please Select the Visualization</h2>
+        <select multiple="multiple" height="2" id="vis_select">
+            <option value="crimeTimeMatrix" selected="true">Matrix View</option>
+            <option value="map_box">Map View</option>
+            <option value="corrplot">Correlation Matrix</option>
+        </select>
+    </div>
+</div>
 
-    <div class="main">
+<div class="main">
+    <div id="line_wrapper">
         <div id="crimeTimeVieWrapper" class="filter clearfix">
             <h2>Please Select the Time Frame</h2>
             <div id="solvedCrimeCheckboxes" style="position: absolute; margin-top: 0px; margin-left: 140px">
-                <span style="font-size: 120%">
-                    <b>Crime Status:</b>
-                    <input name="OnlySolved" id="only_solved" type="checkbox" onclick="updateSolvedTypeLines('only_crime_status')"><text id="only_text"></text>
-                    <input name="Solved" id="solved" type="checkbox" onclick="updateSolvedTypeLines('solved')"><text id="solved_text"></text>
-                    <input name="In Progress" id="inprogress" type="checkbox" onclick="updateSolvedTypeLines('inprogress')"><text id="inprogress_text"></text>
-                    <input name="Unresolved" id="failed" type="checkbox" onclick="updateSolvedTypeLines('failed')"><text id="failed_text"></text>
-                </span>
+                        <span style="font-size: 120%">
+                            <b>Crime Status:</b>
+                            <input name="OnlySolved" id="only_solved" type="checkbox"
+                                   onclick="updateSolvedTypeLines('only_crime_status')"><text id="only_text"></text>
+                            <input name="Solved" id="solved" type="checkbox" onclick="updateSolvedTypeLines('solved')"><text
+                                id="solved_text"></text>
+                            <input name="In Progress" id="inprogress" type="checkbox"
+                                   onclick="updateSolvedTypeLines('inprogress')"><text id="inprogress_text"></text>
+                            <input name="Unresolved" id="failed" type="checkbox"
+                                   onclick="updateSolvedTypeLines('failed')"><text
+                                id="failed_text"></text>
+                        </span>
             </div>
             <div>
                 <form id="interpolation" style="position: absolute; margin-left: 800px;">
-                    <span style="font-size: 120%">
-                        Interpolation:
-                    </span>
+                            <span style="font-size: 120%">
+                                Interpolation:
+                            </span>
                     <select onchange="changeChartInterpolation(this.value)">
                         <option value="linear">Linear</option>
                         <option selected="selected" value="basis">Basis</option>
@@ -119,67 +150,85 @@
             </div>
             <div id="sliderDate"></div>
         </div>
-
-            <div id="content">
-                <div id="content_left">
-                    <div id="crimeTimeMatrix">
-                        <button style="float:left; font-size: 11px" id="toggleMatrixNormalization" onclick="toggleMatrixNormalization()">Show Global Normalization</button>
-                    </div>
-
-                    <div id="map_box" style="visibility:hidden;display:none">
-                        <div id="no_elements">
-                            <h3>No data selected.</h3>
-                            Your current filters remove all data.<br />Make sure to include more crime types, or enlarge the time period.
-                        </div>
-                        <div id="map_controls">
-                            <form>
-                                <span><label for="cluster_map">Clustered View</label><input onClick="setVisibleLayer('clusters')" type="radio" name="map_typ" id="cluster_map" value="clusters"></span>
-                                <span><label for="heat_map">&nbsp;&nbsp;&nbsp;Heat Map</label><input onClick="setVisibleLayer('heat')" type="radio" name="map_typ" id="heat_map" value="heat"></span>
-                                <span><label for="point_map">&nbsp;&nbsp;&nbsp;Single Crimes</label><input onClick="setVisibleLayer('points')" type="radio" name="map_typ" id="point_map" value="points"></span>
-                                <span><label for="choropleth_map">&nbsp;&nbsp;&nbsp;Choropleth View</label><input onClick="setVisibleLayer('choropleth')" type="radio" name="map_typ" id="choropleth_map" value="choropleth"></span>
-                            </form>
-                        </div>
-                        <div id="map">
-                            <div id="too_many">
-                                <h3>Too much data!</h3>
-                                You have selected more than 1000 data points, that's more than we can plot on one map! Please adjust your filters or load a different visualization.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="corrplot" style="visibility: hidden;display: none;">
-                        <p>
-                            <label for="order">Order</label>
-                            <select id="order">
-                                <option value="original" selected>Original</option>
-                                <option value="name">by Name</option>
-                                <option value="aoe">AOE</option>
-                                <option value="fpc">FPC</option>
-                            </select>
-
-                            <label for="shape">Shape</label>
-                            <select id="shape">
-                                <option value="square">Square</option>
-                                <option value="scaled-square">Scaled Square</option>
-                                <option value="circle">Circle</option>
-                                <option value="scaled-circle" selected>Scaled Circle</option>
-                                <option value="ellipse">Ellipse</option>
-                            </select>
-                        </p>
-                    </div>
-                </div>
-                <div id="content_right">
-                    <h2>Outcomes: Overview</h2>
-                    <div id="detailPanel"></div>
-                    <div id="wardHoverPanel" style="visibility:hidden;display:none">
-                        <h2>District Information</h2>
-                        <div id="wardHover"></div>
-                    </div>
-                </div>
-
-            </div>
+        <div id="predictions">
+            <h2>Predictions</h2>
+            <input type="checkbox" id="show_predictions" onclick="togglePredictions()"><label for="show_predictions">Show predictions for the selected crime types for the next 12 months.</label>
         </div>
     </div>
+
+    <div id="content">
+        <div id="content_left">
+            <div id="crimeTimeMatrix">
+                <button style="float:left; font-size: 11px" id="toggleMatrixNormalization"
+                        onclick="toggleMatrixNormalization()">Show Global Normalization
+                </button>
+            </div>
+
+            <div id="map_box" style="visibility:hidden;display:none">
+                <div id="no_elements">
+                    <h3>No data selected.</h3>
+                    Your current filters remove all data.<br/>Make sure to include more crime types, or enlarge the time
+                    period.
+                </div>
+                <div id="map_controls">
+                    <form>
+                    <span><label for="cluster_map">Clustered View</label><input onClick="setVisibleLayer('clusters')"
+                                                                                type="radio" name="map_typ"
+                                                                                id="cluster_map"
+                                                                                value="clusters"></span>
+                    <span><label for="heat_map">&nbsp;&nbsp;&nbsp;Heat Map</label><input
+                            onClick="setVisibleLayer('heat')" type="radio" name="map_typ" id="heat_map"
+                            value="heat"></span>
+                    <span><label for="point_map">&nbsp;&nbsp;&nbsp;Single Crimes</label><input
+                            onClick="setVisibleLayer('points')" type="radio" name="map_typ" id="point_map"
+                            value="points"></span>
+                    <span><label for="choropleth_map">&nbsp;&nbsp;&nbsp;Choropleth View</label><input
+                            onClick="setVisibleLayer('choropleth')" type="radio" name="map_typ" id="choropleth_map"
+                            value="choropleth"></span>
+                    </form>
+                </div>
+                <div id="map">
+                    <div id="too_many">
+                        <h3>Too much data!</h3>
+                        You have selected more than 1000 data points, that's more than we can plot on one map! Please
+                        adjust
+                        your filters or load a different visualization.
+                    </div>
+                </div>
+            </div>
+
+            <div id="corrplot" style="visibility: hidden;display: none;">
+                <p>
+                    <label for="order">Order</label>
+                    <select id="order">
+                        <option value="original" selected>Original</option>
+                        <option value="name">by Name</option>
+                        <option value="aoe">AOE</option>
+                        <option value="fpc">FPC</option>
+                    </select>
+
+                    <label for="shape">Shape</label>
+                    <select id="shape">
+                        <option value="square">Square</option>
+                        <option value="scaled-square">Scaled Square</option>
+                        <option value="circle">Circle</option>
+                        <option value="scaled-circle" selected>Scaled Circle</option>
+                        <option value="ellipse">Ellipse</option>
+                    </select>
+                </p>
+            </div>
+        </div>
+        <div id="content_right">
+            <h2>Outcomes: Overview</h2>
+            <div id="detailPanel"></div>
+            <div id="wardHoverPanel" style="visibility:hidden;display:none">
+                <h2>District Information</h2>
+                <div id="wardHover"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 <script type="text/javascript">
     var sel = document.getElementById('vis_select');

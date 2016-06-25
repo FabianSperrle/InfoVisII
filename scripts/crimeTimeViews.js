@@ -5,7 +5,7 @@ function CrimeTime() {
         bottom: 30,
         left: 50
     };
-    this.width = 819;//960 - this.margin.left - this.margin.right;
+    this.width = 1000//819;//960 - this.margin.left - this.margin.right;
     this.height = 200 - this.margin.top - this.margin.bottom;
 }
 
@@ -30,7 +30,7 @@ var currentInterpolationType = "basis";
 
 var dateFormat = d3.time.format("%Y-%m");
 var formatDate = d3.time.format("%B %Y");
-var timeRange = [new Date(2010, 11, 1), new Date(2016, 2, 1)];
+var timeRange = [new Date(2010, 11, 1), new Date(2017, 2, 1)];
 var timeScale = d3.time.scale()
     .range([0, crimeTime.width])
     .domain(timeRange);
@@ -618,7 +618,8 @@ var timelineView = function () {
     
     svg1 = d3.select("#timelineView").append("svg:svg")
         .attr("width", crimeTime.width + crimeTime.margin.left + crimeTime.margin.right) //
-        .attr("height", crimeTime.height + crimeTime.margin.top + crimeTime.margin.bottom);
+        .attr("height", crimeTime.height + crimeTime.margin.top + crimeTime.margin.bottom)
+        .attr('id', 'timeline');
     svg = svg1.append("g")
         .attr("transform", "translate(" + crimeTime.margin.left + "," + crimeTime.margin.top + ")");
     var overlayRect = svg1.append("g")
@@ -738,7 +739,8 @@ var timelineView = function () {
             }
         } else if (dragSliderLine2 !== null) {
             var coordinateX = d3.mouse(this)[0];
-            if (coordinateX >= 50) {
+            console.log(coordinateX);
+            if (coordinateX >= 50 && coordinateX < 890) {
                 if (sliderLine2.attr("class") == "right") {
                     if (coordinateX < sliderLine1.attr("x1")) {
                         xSliderRight = xSliderLeft + 1;
