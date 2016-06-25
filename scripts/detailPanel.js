@@ -439,13 +439,14 @@ function initSingleOutcomesChart(width) {
         .attr("type","button")
         .attr("class","btn-btn")
         .attr("id","back_button")
-        .append("div")
-        .attr("class","label")
-        .text("BACK")
         .on("click", function(d){
             d3.selectAll("#singleOutcomesChartMenu").remove();
             reloadDetailPanel();
-        });
+        })
+        .append("div")
+        .attr("class","label")
+        .text("BACK");
+
     d3.select("#singleOutcomesChartMenu2")
         .append("text")
         .style("margin-left", "10px")
@@ -589,6 +590,7 @@ function loadSingleOutcomesChart(crimeType){
         });
 
     svg.call(tip3)
+
 
     var xAx = barChart.append("g")
         .attr("class", "x axis")
