@@ -290,6 +290,25 @@ var updateHeatLayer = function () {
     });
 };
 
+function highlightFeature(e) {
+    ttt = e;
+    var layer = e.target;
+    layer.setStyle({
+      weight: 5,
+      //color: '#666',
+      //dashArray: '',
+      fillOpacity: 0.5
+    });
+    if (!L.Browser.ie && !L.Browser.opera) {
+      layer.bringToFront();
+    }
+}
+
+function resetHighlight(e) {
+    layers.choropleth.resetStyle(e.target);
+}
+
+
 var updateChloroplethLayer = function () {
     initAllWardsCrimesBarChart();
     var activecrimes = [];
@@ -354,28 +373,12 @@ var updateChloroplethLayer = function () {
             opacity: 1,
             color: 'white',
             dashArray: '3',
-            fillOpacity: 0.7
+            fillOpacity: 0.7,
+            className: "choropleth_ward_"+feature.id
         };
     }
 
-    function highlightFeature(e) {
-        var layer = e.target;
-        layer.setStyle({
-          weight: 10,
-          color: '#666',
-          dashArray: '',
-          fillOpacity: 0.5
-        });
-        if (!L.Browser.ie && !L.Browser.opera) {
-          layer.bringToFront();
-        }
-        //info.update(layer.feature.properties);
-    }
 
-    function resetHighlight(e) {
-        layers.choropleth.resetStyle(e.target);
-        //info.update();
-    }
 
     function onEachFeature(feature, layer) {
         layer.on('click', function (e) {

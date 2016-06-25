@@ -153,15 +153,27 @@ function initAllWardsCrimesBarChart() {
         .on('mouseover', function(d){
             tip4.show(d);
             d3.select(this).style('opacity',1);
+            highlightWardOnMap(d);
         })
         .on('mouseout', function(d){
             tip4.hide(d);
             d3.select(this).style('opacity',0.6);
+            resetWardHighlightOnMap(d);
         })
         .on('click', function(d){
            // tip3.hide(d);
         });
 }
+
+function highlightWardOnMap(d){
+    d3.select(".choropleth_ward_"+d.ward).attr("stroke-width",5);
+    d3.select(".choropleth_ward_"+d.ward).attr("fill-opacity",0.5);
+}
+function resetWardHighlightOnMap(d){
+    d3.select(".choropleth_ward_"+d.ward).attr("stroke-width",2);
+    d3.select(".choropleth_ward_"+d.ward).attr("fill-opacity",0.7);
+}
+
 var ttt;
 function initSingleWardCrimesBarChart (district) {
 
@@ -255,7 +267,7 @@ function initSingleWardCrimesBarChart (district) {
         .entries(groupedByCrimeType)
         .sort(function(a, b){ return d3.ascending(a.values, b.values); });
 
-    ttt = groupedByCrimeType;
+   
     var xDomainSorted =[];
     for (var i = groupedByCrimeType.length - 1; i >= 0; i--) {
         if(actualXDomain.indexOf(groupedByCrimeType[i].key)>-1)
