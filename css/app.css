@@ -16,14 +16,26 @@ html, body {
 	margin-left: 5px;
 	margin-right: 10px;
 	margin-bottom: 10px;
-	height: calc(100% - 315px);
+	height: 100%;
+}
+
+
+#crimeTimeVieWrapper {
+	width: 1250px;
+	float: left;
+	margin-bottom: 30px;
+}
+
+#predictions {
+	float: right;
+	width: 300px;
 }
 
 #content {
 	width: 100%;
 	overflow: none;
 	margin-top: 30px;
-	height: 100%;
+	height: calc(100% - 315px);
 }
 
 
