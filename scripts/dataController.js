@@ -12,6 +12,7 @@ function DataController() {
     this.geo = {};
     this.crimesAggGeo = {};
     this.crimesSolvedByCategoryNtype = {};
+    this.predictions = {};
 
     this.dates = {
         from: new Date(2011, 4, 15),
@@ -452,6 +453,13 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/choropleth/ge
     if(error) throw error;
     data.geo = json;
 });
+
+d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/geoBasedForecast/data/predictions.json", function(err, json) {
+    if (err) throw err;
+    data.predictions = json;
+    
+    data.emit('predictions');
+})
 
 data.on('loadSolvedCrimes', data.prepareSolvedCrimesForTimeline);
 data.on('loadAll', data.initializeFilters);
