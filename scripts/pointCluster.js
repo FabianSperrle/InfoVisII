@@ -358,6 +358,25 @@ var updateChloroplethLayer = function () {
         };
     }
 
+    function highlightFeature(e) {
+        var layer = e.target;
+        layer.setStyle({
+          weight: 10,
+          color: '#666',
+          dashArray: '',
+          fillOpacity: 0.5
+        });
+        if (!L.Browser.ie && !L.Browser.opera) {
+          layer.bringToFront();
+        }
+        //info.update(layer.feature.properties);
+    }
+
+    function resetHighlight(e) {
+        layers.choropleth.resetStyle(e.target);
+        //info.update();
+    }
+
     function onEachFeature(feature, layer) {
         layer.on('click', function (e) {
             let id = e.target.feature.id;
@@ -365,9 +384,11 @@ var updateChloroplethLayer = function () {
         });
         layer.on('mouseover', function (e) {
             initSingleWardCrimesBarChart(feature);
+            highlightFeature(e);
         });
         layer.on('mouseout', function (e) {
             initAllWardsCrimesBarChart();
+            resetHighlight(e);
         });
     }
 

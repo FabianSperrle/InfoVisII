@@ -119,17 +119,11 @@ function initAllWardsCrimesBarChart() {
         .attr('class', 'd3-tip')
         .offset([-10, 0])
         .html(function(d) {
-            console.log(d);
-            ttt=d;
-
-            
-
             var htmlToolTip  = "<div style='border: 1px solid gray; background-color:#fff; background-color: rgba(255,255,255,0.8);'><table>";
             htmlToolTip += " <tr><td><strong><span style='color:red'>"+lsoaNames[lsoaCodes.indexOf(d.ward)]+"</span></strong></td></tr>";
             htmlToolTip += " <tr><td><span style='color:red'># of crimes in "+lsoaNames[lsoaCodes.indexOf(d.ward)]+"</span></td></tr>";
             htmlToolTip += " </table>"
             htmlToolTip += " <p style='color:red; text-align: center; width: 100%; height: 10px;'>"+d.values+"</p></div>";
-
             return htmlToolTip;
         });
 
