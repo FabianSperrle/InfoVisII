@@ -27,8 +27,9 @@ html, body {
 }
 
 #predictions {
-	float: right;
+	float: left;
 	width: 300px;
+	padding-left: 20px;
 }
 
 #content {
