@@ -7,6 +7,7 @@ function DataController() {
     this.crimesByLocation = {};
     this.filtered = {};
     this.crimeAggregates = {};
+    this.crimeAggregatesNew = {};
     this.groupedByType = {};
     this.geo = {};
     this.crimesAggGeo = {};

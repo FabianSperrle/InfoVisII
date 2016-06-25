@@ -284,6 +284,7 @@ function getCrimeData(crimeType) {
         })
     }
     countMax[crimeType] = max;
+    data.crimeAggregatesNew[crimeType] = returndata; 
     return r;
 }
 

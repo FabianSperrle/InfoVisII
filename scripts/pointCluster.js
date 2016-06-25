@@ -133,7 +133,10 @@ var updateClusterLayer = function () {
         // Take First of month for Correct Highlighting! TODO change to middle if possible!
         var newDate = new Date(year, mon - 1, 1);
         if (mon < 10) mon = "0" + mon;
-        var y_value = data.crimeAggregates["y" + year]["m" + mon][crimeType];
+        //var y_value = data.crimeAggregates["y" + year]["m" + mon][crimeType];
+        var y_value = data.crimeAggregatesNew[crimeType][year + "-" + mon + "-01"];
+        console.log("[" + crimeType + "][" + year + "-" + mon + "]");
+        console.log(y_value);
         //log(crimeType + "_" + y_value);
         svg.append("circle")
             .attr("class", "highlightDots")
