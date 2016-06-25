@@ -3,7 +3,7 @@ let showPredictions = false;
 let isNumber = function(obj) { return !isNaN(parseFloat(obj)) };
 
 let plotPredictions = function () {
-    if (!showPredictions) return;
+    if (showPredictions === false) return;
 
     var monthScale = d3.time.months(new Date(2016, 1, 1), new Date(2017, 2, 1));
     monthScale = monthScale.map(function (d) {
