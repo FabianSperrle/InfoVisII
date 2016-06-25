@@ -739,7 +739,6 @@ var timelineView = function () {
             }
         } else if (dragSliderLine2 !== null) {
             var coordinateX = d3.mouse(this)[0];
-            console.log(coordinateX);
             if (coordinateX >= 50 && coordinateX < 890) {
                 if (sliderLine2.attr("class") == "right") {
                     if (coordinateX < sliderLine1.attr("x1")) {
