@@ -3,7 +3,7 @@ var xBar, yBar, xAxisBarChart, yAxisBarChart;
 
 var marginBar = {top: 40, right: 20, bottom: 70, left: 80},
     widthBar = 1000 - marginBar.left - marginBar.right,
-    heightBar = 300 - marginBar.top - marginBar.bottom;
+    heightBar = 260 - marginBar.top - marginBar.bottom;
 
 
 var rb_buttons = ["Solved", "In Progress", "Unresolved", "N/A"];
@@ -65,6 +65,7 @@ function initBarChart(width) {
 
 
 
+
     d3.select("#barChart").remove();
     d3.select("#barChartG").remove();
     
@@ -75,10 +76,10 @@ function initBarChart(width) {
         .attr("height", heightBar + 189 + marginBar.top + marginBar.bottom)
         .append("g")
         .attr("id", "barChartG")
-        .attr("transform", "translate(" + marginBar.left + "," + marginBar.top + ")");
+        .attr("transform", "translate(" + marginBar.left + "," + (marginBar.top-30) + ")");
 
     var legendX = -40;
-    var legendY = 200;
+    var legendY = 170;
     d3.select("#barChartG")
         .append("rect")
         .attr("x", legendX-20)
@@ -141,7 +142,7 @@ function reloadDetailPanel(){
                 }
             }
 
-            var htmlToolTip  = "<div style='border: 1px solid gray; background-color:#fff; background-color: rgba(255,255,255,0.8);'><table>";
+            var htmlToolTip  = "<div style='border: 1px solid gray; background-color:#fff; background-color: rgba(255,255,255,0.8);min-width:150px;'><table>";
             htmlToolTip += " <tr><td><strong><span style='color:red'>"+d.key+"</span></strong></td></tr>";
             htmlToolTip += " <tr><td><span style='color:red'>total # of crimes</span></td></tr>";
             htmlToolTip += " <tr><td><strong>total crimes:</strong></td><td><span style='color:red'>"+d.values+"</span></td></tr>";
@@ -170,7 +171,7 @@ function reloadDetailPanel(){
                 }
             }
 
-            var htmlToolTip  = "<div style='border: 1px solid gray; background-color:#fff; background-color: rgba(255,255,255,0.8);'><table>";
+            var htmlToolTip  = "<div style='border: 1px solid gray; background-color:#fff; background-color: rgba(255,255,255,0.8); min-width:150px;'><table>";
             htmlToolTip += " <tr><td><strong><span style='color:red'>"+d.key+"</span></strong></td></tr>";
             htmlToolTip += " <tr><td><span style='color:red'># of "+rb_buttons[rb_selection]+" investigations</span></td></tr>";
             htmlToolTip += " <tr><td><strong>total crimes:</strong></td><td><span style='color:red'>"+d3.select("#bar_"+data.getCrimeVarName(d.key)).data()[0].values+"</span></td></tr>";
@@ -461,11 +462,11 @@ function initSingleOutcomesChart(width) {
         .attr("height", heightBar + 200 + marginBar.top + marginBar.bottom)
         .append("g")
         .attr("id", "barChartG")
-        .attr("transform", "translate(" + marginBar.left + "," + marginBar.top + ")");
+        .attr("transform", "translate(" + marginBar.left + "," + (marginBar.top-30) + ")");
 
 
     var legendX = 10;
-    var legendY = 250;
+    var legendY = 200;
     d3.select("#barChart")
         .append("rect")
         .attr("x", legendX)
@@ -580,7 +581,7 @@ function loadSingleOutcomesChart(crimeType){
                 }
             }
 
-            var htmlToolTip  = "<div style='border: 1px solid gray; background-color:#fff; background-color: rgba(255,255,255,0.8);'><table>";
+            var htmlToolTip  = "<div style='border: 1px solid gray; background-color:#fff; background-color: rgba(255,255,255,0.8); min-width:150px;'><table>";
             htmlToolTip += " <tr><td><strong><span style='color:red'>"+d.key+"</span></strong></td></tr>";
             htmlToolTip += " <tr><td><span style='color:red'># of crimes with that outcome</span></td></tr>";
             htmlToolTip += " </table>"
@@ -755,7 +756,7 @@ function loadSingleOutcomesChart(crimeType){
     var svg2 = d3.select("#barChart")
         .append("g")
         .attr("id", "piechart")
-        .attr("transform", "translate(500,80)");
+        .attr("transform", "translate(500,40)");
 
     var g = svg2.selectAll(".arc")
         .data(pie(aggregatedOutcomeTypes))

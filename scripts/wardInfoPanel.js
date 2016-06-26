@@ -3,7 +3,7 @@ var xWard, yWard, xAWard, yAWard;
 
 var marginWard = {top: 40, right: 20, bottom: 70, left: 80},
     widthWard = 1000 - marginWard.left - marginWard.right,
-    heightWard = 300 - marginWard.top - marginWard.bottom;
+    heightWard = 260 - marginWard.top - marginWard.bottom;
 
 var lsoaCodes;
 var lsoaNames;
@@ -59,7 +59,7 @@ function initAllWardsCrimesBarChart() {
         .attr("height", heightWard + 100 + marginWard.top + marginWard.bottom)
         .append("g")
         .attr("id", "wardCrimesBarChartSub")
-        .attr("transform", "translate(" + marginWard.left + "," + marginWard.top + ")");
+        .attr("transform", "translate(" + marginWard.left + "," + (marginWard.top-30) + ")");
     
 
     var xDomain = [];
@@ -119,7 +119,7 @@ function initAllWardsCrimesBarChart() {
         .attr('class', 'd3-tip')
         .offset([-10, 0])
         .html(function(d) {
-            var htmlToolTip  = "<div style='border: 1px solid gray; background-color:#fff; background-color: rgba(255,255,255,0.8);'><table>";
+            var htmlToolTip  = "<div style='border: 1px solid gray; background-color:#fff; background-color: rgba(255,255,255,0.8);min-width:150px;'><table>";
             htmlToolTip += " <tr><td><strong><span style='color:red'>"+lsoaNames[lsoaCodes.indexOf(d.ward)]+"</span></strong></td></tr>";
             htmlToolTip += " <tr><td><span style='color:red'># of crimes in "+lsoaNames[lsoaCodes.indexOf(d.ward)]+"</span></td></tr>";
             htmlToolTip += " </table>"
@@ -146,7 +146,7 @@ function initAllWardsCrimesBarChart() {
             return yWard(d.values);
         })
         .attr("height", function (d) {
-            return heightBar - yWard(d.values);
+            return heightWard - yWard(d.values);
         })
         .attr("fill", "orange")
         .style('opacity',0.6)
@@ -207,7 +207,7 @@ function initSingleWardCrimesBarChart (district) {
         .attr("height", heightWard + 100 + marginWard.top + marginWard.bottom)
         .append("g")
         .attr("id", "wardCrimesBarChartSub")
-        .attr("transform", "translate(" + marginWard.left + "," + marginWard.top + ")");
+        .attr("transform", "translate(" + marginWard.left + "," + (marginWard.top-30) + ")");
     
 
 
