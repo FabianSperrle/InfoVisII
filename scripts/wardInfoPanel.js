@@ -15,6 +15,12 @@ function updateSumOfCrimesgWardDetailPanel(ward, values){
 }
 
 function initAllWardsCrimesBarChart() {
+    d3.select("#wardHoverPanel").style("visibility","visible").style("display","block");
+
+    if(data.filtered.length==0){
+        d3.select("#wardHoverPanel").style("visibility","hidden").style("display","none");
+        return;
+    }
 
     if(lsoaCodes == undefined){
         lsoaCodes = [];
@@ -299,6 +305,18 @@ function initSingleWardCrimesBarChart (district) {
         .attr("transform", "rotate(90)")
         .style("text-anchor", "start");
 
+    abcdef = groupedByCrimeType;
+    var sumValues = 0;
+    for(var i = 0; i< groupedByCrimeType.length; i++){
+        sumValues += groupedByCrimeType[i].values;
+    }
+
+    if(sumValues==0){
+        d3.select("#nodataselected").remove();
+        wardCrimesBarChart.append("text").attr("transform", "translate(100,50)").text("None of the selected crimes was registed in this ward!");
+        return;
+    }
+
     wardCrimesBarChart.selectAll(".bar")
         .data(groupedByCrimeType)
         .enter().append("rect")
@@ -321,3 +339,4 @@ function initSingleWardCrimesBarChart (district) {
         })
         .style('opacity',0.6);
 }
+

@@ -116,14 +116,18 @@ function initBarChart(width) {
 
     
 }
-
+var abcde;
 var groupedByOutcomePerCrimeType;
 function reloadDetailPanel(){
-
-    initBarChart();
-
-    if(data.filtered == []){
+    d3.select("#barChart").remove();
+    d3.select("#rb_div").remove();
+    if(data.filtered.length==0){
+        d3.select("#nodataselected").remove();
+        barChart = d3.select("#detailPanel").append("div").attr("id", "nodataselected").style("text-align","center").style("height","450").append("h1").text("No data selected!");
         return;
+    } else {
+        d3.select("#nodataselected").remove();
+        initBarChart();
     }
 
     var tip = d3.tip()
@@ -530,12 +534,12 @@ function loadSingleOutcomesChart(crimeType){
     }
     if(crimeType == undefined) return;
 
-    initSingleOutcomesChart();
-  
+
     var filterForCrimeType = data.filtered.filter(function(d) {
        if(crimeType=="All Crimes" || d.crime_type == crimeType)
        return d; 
     });
+
 
     var singleOutcomesOfOneCrimeType = d3.nest()
         .key(function (d) {
@@ -550,6 +554,19 @@ function loadSingleOutcomesChart(crimeType){
     
     var keys = singleOutcomesOfOneCrimeType.map(function(a) { if(a.key != "null") return a.key; });
     keys = keys.filter(function(d) { if(d!=undefined) return true; });
+
+
+
+    d3.select("#barChart").remove();
+    if(data.filtered.length==0){
+        d3.select("#nodataselected").remove();
+        barChart = d3.select("#detailPanel").append("div").attr("id", "nodataselected").style("text-align","center").style("height","450").append("h1").text("No data selected!");
+        return;
+    } else {
+        d3.select("#nodataselected").remove();
+        initSingleOutcomesChart();
+    }
+
 
     singleOutcomesOfOneCrimeType = singleOutcomesOfOneCrimeType.filter(function(d) {
        if(d.key != 'null')
@@ -658,7 +675,11 @@ function loadSingleOutcomesChart(crimeType){
         });
 
 
-    
+    if(keys.length==0){
+        d3.select("#nodataselected").remove();
+        barChart.append("text").attr("transform", "translate(-40,120)").text("No outcomes for this selection registered!");
+        return;
+    }
 
     barChart.selectAll(".bar")
         .data(singleOutcomesOfOneCrimeType)
@@ -827,13 +848,14 @@ function loadSingleOutcomesChart(crimeType){
 
 function refresh(){
     if(d3.select("#singleOutcomesChartMenu")[0][0] == null){
-        reloadDetailPanel();
+        setTimeout(function(){ reloadDetailPanel(); }, 100);
+        
     } else {
         loadSingleOutcomesChart();
     }
 }
 
 
-data.on('loadAggregates', initBarChart);
+data.on('loadAggregates', refresh);
 data.on('filtered', refresh);
-data.on('resetDetailPanel', initBarChart);
+data.on('resetDetailPanel', refresh);
