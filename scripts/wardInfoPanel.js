@@ -314,7 +314,7 @@ function initSingleWardCrimesBarChart (district) {
             return yWard(d.values);
         })
         .attr("height", function (d) {
-            return heightBar - yWard(d.values);
+            return heightWard - yWard(d.values);
         })
         .attr("fill", function (d) {
             return data.crimeTypes[data.getCrimeVarName(d.key)].color;

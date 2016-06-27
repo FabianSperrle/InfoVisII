@@ -3,7 +3,7 @@ var xBar, yBar, xAxisBarChart, yAxisBarChart;
 
 var marginBar = {top: 40, right: 20, bottom: 70, left: 80},
     widthBar = 1000 - marginBar.left - marginBar.right,
-    heightBar = 260 - marginBar.top - marginBar.bottom;
+    heightBar = 320 - marginBar.top - marginBar.bottom;
 
 
 var rb_buttons = ["Solved", "In Progress", "Unresolved", "N/A"];
@@ -18,7 +18,7 @@ function initBarChart(width) {
         .rangeRoundBands([0, width], .1);
 
     yBar = d3.scale.linear()
-        .range([heightBar, 0]);
+        .range([heightBar-60, 0]);
 
     xAxisBarChart = d3.svg.axis()
         .scale(xBar)
@@ -73,7 +73,7 @@ function initBarChart(width) {
         .append("svg")
         .attr("id", "barChart")
         .attr("width", width + marginBar.left + marginBar.right)
-        .attr("height", heightBar + 189 + marginBar.top + marginBar.bottom)
+        .attr("height", heightBar-60 + 189 + marginBar.top + marginBar.bottom)
         .append("g")
         .attr("id", "barChartG")
         .attr("transform", "translate(" + marginBar.left + "," + (marginBar.top-30) + ")");
@@ -219,7 +219,7 @@ function reloadDetailPanel(){
 
     var xAx = barChart.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(0," + heightBar + ")")
+        .attr("transform", "translate(0," + (heightBar-60) + ")")
         .call(xAxisBarChart);
 
     xAx.selectAll("text")
@@ -255,7 +255,7 @@ function reloadDetailPanel(){
             return yBar(d.values);
         })
         .attr("height", function (d) {
-            return heightBar - yBar(d.values);
+            return heightBar-60 - yBar(d.values);
         })
         .attr("fill", function (d) {
             return data.crimeTypes[data.getCrimeVarName(d.key)].color;
@@ -369,13 +369,13 @@ function reloadDetailPanel(){
                 }
             }
             if(rb_selection==0){
-                return heightBar - yBar(solved);
+                return heightBar-60 - yBar(solved);
             } else if (rb_selection == 1){
-                return heightBar - yBar(inprogress);
+                return heightBar-60 - yBar(inprogress);
             } else if(rb_selection == 2){
-                return heightBar - yBar(failed);
+                return heightBar-60 - yBar(failed);
             } else {
-                return heightBar - yBar(na);
+                return heightBar-60 - yBar(na);
             }
             
         })
@@ -407,21 +407,21 @@ function reloadDetailPanel(){
 
 function initSingleOutcomesChart(width) {
 
-    if(width==undefined) width = 480;
+    if(width==undefined) width = 450;
 
-    xBar = d3.scale.ordinal()
-        .rangeRoundBands([0, width], .1);
+    yBar = d3.scale.ordinal()
+        .rangeRoundBands([0, 300], .1);
 
-    yBar = d3.scale.linear()
-        .range([heightBar, 0]);
+    xBar = d3.scale.linear()
+        .range([0,width]);
 
     xAxisBarChart = d3.svg.axis()
         .scale(xBar)
-        .ticks(0)
         .orient("bottom");
 
     yAxisBarChart = d3.svg.axis()
         .scale(yBar)
+        .ticks(0)
         .orient("left");
 
     d3.select("#barChart").remove();
@@ -459,14 +459,14 @@ function initSingleOutcomesChart(width) {
         .append("svg")
         .attr("id", "barChart")
         .attr("width", width + marginBar.left + marginBar.right)
-        .attr("height", heightBar + 200 + marginBar.top + marginBar.bottom)
+        .attr("height", heightBar + 140 + marginBar.top + marginBar.bottom)
         .append("g")
         .attr("id", "barChartG")
-        .attr("transform", "translate(" + marginBar.left + "," + (marginBar.top-30) + ")");
+        .attr("transform", "translate(" + (marginBar.left+200) + "," + (marginBar.top-30) + ")");
 
 
-    var legendX = 10;
-    var legendY = 200;
+    var legendX = 470;
+    var legendY = 250;
     d3.select("#barChart")
         .append("rect")
         .attr("x", legendX)
@@ -531,7 +531,7 @@ function loadSingleOutcomesChart(crimeType){
     if(crimeType == undefined) return;
 
     initSingleOutcomesChart();
-
+  
     var filterForCrimeType = data.filtered.filter(function(d) {
        if(crimeType=="All Crimes" || d.crime_type == crimeType)
        return d; 
@@ -556,11 +556,11 @@ function loadSingleOutcomesChart(crimeType){
             return d; 
         });
 
-    xBar.domain(keys);
+    yBar.domain(keys);
     var ymax = d3.max(Object.keys(singleOutcomesOfOneCrimeType).map(function(v){return singleOutcomesOfOneCrimeType[v].values;})); //if(groupedByCrimeType[v].key != "All Crimes") 
-    yBar.domain([0,ymax]);
+    xBar.domain([0,ymax]);
 
-    barChart.append("g")
+    var yAx = barChart.append("g")
         .attr("class", "y axis")
         .call(yAxisBarChart)
         .attr("x", widthBar / 1.75)
@@ -593,12 +593,21 @@ function loadSingleOutcomesChart(crimeType){
     svg.call(tip3)
 
 
-    var xAx = barChart.append("g")
+    barChart.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(0," + heightBar + ")")
+        .attr("transform", "translate(0,300)")
+        .attr("y", -20)
+        .attr("x", 0)
         .call(xAxisBarChart);
 
-    xAx.selectAll("text")
+    barChart.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0,-10)")
+        .attr("y", -10)
+        .attr("x", 0)
+        .call(xAxisBarChart);
+
+    yAx.selectAll("text")
         .attr("class", function(d){
             if(data.outcomeTypes.solved.list.includes(d)){
                 return "label_solved";
@@ -611,7 +620,7 @@ function loadSingleOutcomesChart(crimeType){
             };
         })
         .attr("y", 0)
-        .attr("x", 10)
+        .attr("x", -10)
         .attr("dy", ".35em")
         .attr("fill", function(d){
             if(data.outcomeTypes.solved.list.includes(d)){
@@ -623,9 +632,7 @@ function loadSingleOutcomesChart(crimeType){
             } else {
                 return "purple";
             }
-        })
-        .attr("transform", "rotate(90)")
-        .style("text-anchor", "start");
+        });
 
 
     
@@ -638,15 +645,15 @@ function loadSingleOutcomesChart(crimeType){
         })
         .attr("class", "bar")
         .attr("x", function (d) {
-            return xBar(d.key);
+            0;
         })
-        .attr("width", xBar.rangeBand())
+        .attr("width", function (d) {
+            return xBar(d.values);
+        })
         .attr("y", function (d) {
-            return yBar(d.values);
+            return yBar(d.key);
         })
-        .attr("height", function (d) {
-            return heightBar - yBar(d.values);
-        })
+        .attr("height", yBar.rangeBand())
         .attr("fill", function (d) {
             return "blue";//data.crimeTypes[data.getCrimeVarName(d.key)].color;
         })
@@ -756,7 +763,7 @@ function loadSingleOutcomesChart(crimeType){
     var svg2 = d3.select("#barChart")
         .append("g")
         .attr("id", "piechart")
-        .attr("transform", "translate(500,40)");
+        .attr("transform", "translate(500,200)");
 
     var g = svg2.selectAll(".arc")
         .data(pie(aggregatedOutcomeTypes))
