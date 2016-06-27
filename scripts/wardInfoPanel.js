@@ -137,7 +137,8 @@ function initAllWardsCrimesBarChart() {
         .attr("id", function (d) {
             return "bar_"+d.ward;
         })
-        .attr("class", "bar")
+        .attr("class", "barf" +
+        "")
         .attr("x", function (d) {
             return xWard(xDomain[xDomain.indexOf(lsoaNames[lsoaCodes.indexOf(d.ward)])]);
         })

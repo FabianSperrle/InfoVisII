@@ -26,7 +26,7 @@ var tooltip = d3.select("body")
 var crimeTime = new CrimeTime();
 var xSliderLeft = 100;
 var xSliderRight = 300;
-var currentInterpolationType = "basis";
+var currentInterpolationType = "monotone";
 
 var dateFormat = d3.time.format("%Y-%m");
 var formatDate = d3.time.format("%B %Y");
@@ -188,6 +188,7 @@ var createCrimeCategoryButtons = function () {
             }
         }
         resizeTimeLine();
+        plotPredictions();
     }
 
 function toggleAllCrimes(){
