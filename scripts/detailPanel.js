@@ -600,12 +600,34 @@ function loadSingleOutcomesChart(crimeType){
         .attr("x", 0)
         .call(xAxisBarChart);
 
-    barChart.append("g")
+    var topAxis = barChart.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(0,-10)")
-        .attr("y", -10)
+        .attr("transform", "translate(0,0)")
+        .attr("y", 0)
         .attr("x", 0)
         .call(xAxisBarChart);
+
+
+
+
+        topAxis.selectAll("text")
+        .attr("y", -5)
+        .attr("x", 0)
+        .attr("dy", ".35em");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     yAx.selectAll("text")
         .attr("class", function(d){
