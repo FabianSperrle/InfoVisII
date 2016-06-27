@@ -119,6 +119,7 @@ function initBarChart(width) {
 var abcde;
 var groupedByOutcomePerCrimeType;
 function reloadDetailPanel(){
+    d3.selectAll(".d3-tip").remove();
     d3.select("#barChart").remove();
     d3.select("#rb_div").remove();
     if(data.filtered.length==0){
