@@ -459,7 +459,7 @@ function initSingleOutcomesChart(width) {
         .append("svg")
         .attr("id", "barChart")
         .attr("width", width + marginBar.left + marginBar.right)
-        .attr("height", heightBar + 140 + marginBar.top + marginBar.bottom)
+        .attr("height", heightBar + 139 + marginBar.top + marginBar.bottom)
         .append("g")
         .attr("id", "barChartG")
         .attr("transform", "translate(" + (marginBar.left+200) + "," + (marginBar.top-30) + ")");
@@ -614,6 +614,7 @@ function loadSingleOutcomesChart(crimeType){
         .attr("y", -5)
         .attr("x", 0)
         .attr("dy", ".35em");
+
 
 
 
