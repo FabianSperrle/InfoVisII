@@ -1,6 +1,10 @@
 var wardCrimesBarChart;
 var xWard, yWard, xAWard, yAWard;
 
+var ch_norm_labels = ["global","selection"];
+var choropleth_normalization_status = 0;
+
+
 var marginWard = {top: 40, right: 20, bottom: 70, left: 80},
     widthWard = 1000 - marginWard.left - marginWard.right,
     heightWard = 260 - marginWard.top - marginWard.bottom;
@@ -15,6 +19,58 @@ function updateSumOfCrimesgWardDetailPanel(ward, values){
 }
 
 function initAllWardsCrimesBarChart() {
+
+    d3.select("#choropleth_normalization").remove();
+    var choropleth_normalization = d3.select("#map_controls")
+        .append("div")
+        .attr("id","choropleth_normalization")
+        .style("float","right")
+        .style("width","250px")
+        .style("height","20px")
+        .style("margin-top", "-20px");
+    
+
+    var form = d3.select("#choropleth_normalization")
+        .append("form")
+        .attr("id","ch_norm_form");
+
+    var labels = form.selectAll("label")
+        .data(ch_norm_labels)
+        .enter()
+        .append("label")
+        .style("float", "right")
+        .style("font-size","10px")
+        .style("margin-left","5px")
+        .text(function(d) {return d;})
+        .insert("input")
+        .attr("id","ch_norm_input")
+        .attr({
+            type: "radio",
+            class: "shape",
+            name: "mode",
+            value: function(d, i) {return i;}
+        })
+        .property("checked", function(d, i) {
+            return i===choropleth_normalization_status;
+        });
+
+    choropleth_normalization.append("text")
+        .style("font-size","10px")
+        .text("choropleth normalization:");
+
+    d3.selectAll("#ch_norm_input").on('change', function(d){
+        choropleth_normalization_status = ch_norm_labels.indexOf(d);
+        updateChloroplethLayer();
+        redrawCurrentLayer();
+    });
+
+
+
+
+
+
+
+
     d3.select("#wardHoverPanel").style("visibility","visible").style("display","block");
 
     if(data.filtered.length==0){

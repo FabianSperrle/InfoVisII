@@ -31,6 +31,10 @@ var visibleLayer = layers.clusters;
 var visibleLayerName = 'clusters';
 
 function setVisibleLayer(name) {
+     try{
+       legend.removeFrom(map);
+    } catch (e) {}
+
     if (visibleLayer !== undefined)
         map.removeLayer(visibleLayer);
     removeTooManyPointsWarning();
@@ -46,8 +50,10 @@ function setVisibleLayer(name) {
     if(name == 'choropleth'){
         d3.select('#wardHoverPanel').style("visibility", "visible").style("display", "block");
         initAllWardsCrimesBarChart();
+        map.addControl(legend);
     } else {
         d3.select('#wardHoverPanel').style("visibility", "hidden").style("display", "none");
+        d3.select("#choropleth_normalization").remove();
     }
 
     if (data.filtered.length > maxPoints && name == "points") {
@@ -57,6 +63,7 @@ function setVisibleLayer(name) {
 
 function updateCurrentLayer() {
     updateLayer(visibleLayerName);
+
 }
 
 function updateLayer(name) {
@@ -308,9 +315,15 @@ function resetHighlight(e) {
     layers.choropleth.resetStyle(e.target);
 }
 
+var colorscale = d3.scale.linear()
+            .domain([0, 0.5, 1])
+            .range(['white', 'orange', 'red']);
 
+
+var legend;
 var updateChloroplethLayer = function () {
     initAllWardsCrimesBarChart();
+
     var activecrimes = [];
     var allcrimetypes = Object.keys(data.crimeTypes);
     for (var i = 0; i < allcrimetypes.length; i++) {
@@ -320,11 +333,15 @@ var updateChloroplethLayer = function () {
         }
     }
 
-    function getColor(d) {
-        var weight = 0;
 
-        if (data.lsoa_codes[d]) {
-            var districtContainer = data.crimesAggGeo[d];
+    var minValue = 8999999999;
+    var maxValue = 0;
+    //totalCrimesPerWard
+    //lsoaCodes 
+
+    for(var k = 0; k < totalCrimesPerWard.length; k++){
+        var weight = 0;
+        var districtContainer = data.crimesAggGeo[lsoaCodes[k]];
             var months = d3.time.months(data.dates.from, data.dates.to);
             months = months.map(function (d) {
                 return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-01";
@@ -342,28 +359,50 @@ var updateChloroplethLayer = function () {
                     }
                 }
             }
-            updateSumOfCrimesgWardDetailPanel(d, weight);
-            weight = weight / data.filtered.length * 25;
+
+        if(choropleth_normalization_status == 0) { //global
+            minValue = Math.min(minValue, weight);
+            maxValue = Math.max(maxValue, weight);
+        } else { //selection
+            if(data.lsoa_codes[lsoaCodes[k]]){
+               minValue = Math.min(minValue, weight);
+               maxValue = Math.max(maxValue, weight); 
+            }
         }
 
-        return weight > 2 ? '#800026' :
-            weight > 1 ? '#BD0026' :
-                weight > 0.75 ? '#E31A1C' :
-                    weight > 0.5 ? '#FC4E2A' :
-                        weight > 0.3 ? '#FD8D3C' :
-                            weight > 0.2 ? '#FEB24C' :
-                                weight > 0.1 ? '#FED976' :
-                                    weight == 0 ? '#DDD' :
-                                        '#FFEDA0';
+        updateSumOfCrimesgWardDetailPanel(lsoaCodes[k], weight);
+    }
+
+    try{
+       legend.removeFrom(map);
+    } catch (e) {}
+
+    legend = L.control({position: 'bottomright'});
+
+    legend.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'info legend');
+
+        div.innerHTML +=
+                maxValue+'<i style="background: linear-gradient( red, orange, white )"></i> </br> </br> </br> </br></br> </br> </br> </br> '+minValue;
+
+        return div;
+    };
+
+ 
 
 
-        function monthDiff(d1, d2) {
-            var months;
-            months = (d2.getFullYear() - d1.getFullYear()) * 12;
-            months -= d1.getMonth() + 1;
-            months += d2.getMonth();
-            return months <= 0 ? 1 : months + 1;
+
+    
+
+    function getColor(d) { 
+
+        var weight = 0;
+
+        if (data.lsoa_codes[d]) { // set color 
+            weight = (totalCrimesPerWard[lsoaCodes.indexOf(d)].values - minValue)/(maxValue-minValue);
         }
+
+         return colorscale(weight);  
     }
 
     function style(feature) {
