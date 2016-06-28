@@ -51,87 +51,87 @@ function DataController() {
         allCrimes: {
             visibility: 1,
             verboseName: 'All Crimes',
-            color: 'red'
+            color: 'red' // 'rgb(255,0,0)'
         },
         burglary: {
             visibility: 0,
             verboseName: 'Burglary',
-            color: 'fuchsia'
+            color: 'rgb(76,76,130)'//'fuchsia'
         },
         anti_social_behaviour: {
             visibility: 0,
             verboseName: 'Anti-social behaviour',
-            color: 'lime'
+            color: 'rgb(0,128,0)'//'lime'
         },
         vehicle_crime: {
             visibility: 0,
             verboseName: 'Vehicle crime',
-            color: 'darkolivegreen'
+            color: 'rgb(146,146,16)'//'darkolivegreen'
         },
         robbery: {
             visibility: 0,
             verboseName: 'Robbery',
-            color: 'chocolate'
+            color: 'rgb(48,114,243)'//'chocolate'
         },
         other_crime: {
             visibility: 0,
             verboseName: 'Other crime',
-            color: 'maroon'
+            color: 'rgb(180,100,50)'//'maroon'
         },
         shoplifting: {
             visibility: 0,
             verboseName: 'Shoplifting',
-            color: 'darkorange'
+            color: 'rgb(0,0,0)'//'darkorange'
         },
         drugs: {
             visibility: 0,
             verboseName: 'Drugs',
-            color: 'olive'
+            color: 'rgb(23,54,115)'//'olive'
         },
         criminal_damage_and_arson: {
             visibility: 0,
             verboseName: 'Criminal damage and arson',
-            color: 'silver'
+            color: 'rgb(146,16,16)'//'silver'
         },
         other_theft: {
             visibility: 1,
             verboseName: 'Other theft',
-            color: 'blue'
+            color: 'blue'//'blue'
         },
         bicycle_theft: {
             visibility: 0,
             verboseName: 'Bicycle theft',
-            color: 'green'
+            color: 'rgb(0,85,85)'//'green'
         },
         theft_from_the_person: {
             visibility: 0,
             verboseName: 'Theft from the person',
-            color: 'blueviolet'
+            color: 'rgb(85,0,85)'//'blueviolet'
         },
         public_disorder_weapons: {
             visibility: 0,
             verboseName: 'Public disorder and weapons',
-            color: 'burlywood'
-        },
-        possesion_of_weapons: {
-            visibility: 0,
-            verboseName: 'Possession of weapons',
-            color: 'darkgoldenrod'
+            color: 'rgb(222,125,85)'//'burlywood'
         },
         public_order: {
             visibility: 0,
             verboseName: 'Public order',
-            color: 'darkcyan'
+            color: 'rgb(85,85,0)'//'darkcyan'
+        },
+        possesion_of_weapons: {
+            visibility: 0,
+            verboseName: 'Possession of weapons',
+            color: 'rgb(51,0,170)'//'darkgoldenrod'
         },
         violent_crime: {
             visibility: 0,
             verboseName: 'Violent crime',
-            color: 'gray'
+            color: 'rgb(255,153,0)'//'gray'
         },
         violence_and_sex: {
             visibility: 0,
             verboseName: 'Violence and sexual offences',
-            color: 'aqua'
+            color: 'rgb(0,127,180)' // no color on web page
         }
     };
     this.visibleVerboseCrimeTypes = ["Other theft"];
