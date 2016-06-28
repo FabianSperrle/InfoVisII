@@ -647,7 +647,7 @@ var timelineView = function () {
         .attr("fill", "white");
 
     //add small ticks for months
-    svg.append("g")
+    overlayRect.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + crimeTime.height + ")")
         .call(d3.svg.axis()
@@ -657,7 +657,7 @@ var timelineView = function () {
             .tickSize(10, 0)
             .tickFormat(d3.time.format("")));
 
-    svg.append("g")
+    overlayRect.append("g")
         .attr("class", "y axis")
         .call(yAxis)
         .append("text")
