@@ -11,7 +11,7 @@ var map = L.map('map', {center: this.latlng, zoom: 15, layers: [this.tiles]});
 var choropleth_maxColor = "red";
 var choropleth_pivotColor = "orange";
 var choropleth_minColor = "green"; // white
-var choropleth_deselected = "#D3D3D3"
+var choropleth_deselected = "#E3E3E3";
 
 
 
