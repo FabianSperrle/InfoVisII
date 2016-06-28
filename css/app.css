@@ -1,57 +1,55 @@
 html, body {
 
-	min-width: 1940px;
+    min-width: 1940px;
 }
 
 .sidebar {
-	float: left;
-	width: 250px;
-	margin: 8px;
+    float: left;
+    width: 250px;
+    margin: 8px;
 }
 
 .main {
-	float: left;
-	width: calc(100% - 300px);
-	margin-top: 10px;
-	margin-left: 5px;
-	margin-right: 10px;
-	margin-bottom: 10px;
-	height: 100%;
+    float: left;
+    width: calc(100% - 300px);
+    margin-top: 10px;
+    margin-left: 5px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    height: 100%;
 }
 
-
 #crimeTimeVieWrapper {
-	width: 1250px;
-	float: left;
-	margin-bottom: 30px;
+    width: 1120px;
+    float: left;
+    margin-bottom: 30px;
 }
 
 #predictions {
-	float: left;
-	width: 300px;
-	padding-left: 20px;
+    float: left;
+    width: 300px;
+    padding-left: 20px;
 }
 
 #content {
-	width: 100%;
-	overflow: none;
-	margin-top: 30px;
-	height: calc(100% - 315px);
+    width: 100%;
+    overflow: none;
+    margin-top: 30px;
+    height: calc(100% - 315px);
 }
 
-
 #content_left {
-	width: 1005px;
-	float: left;
-	height: 100%;
+    width: 1005px;
+    float: left;
+    height: 100%;
 }
 
 #content_right {
-	float: left;
-	width: 580px;
-	height: 100%;
-	padding-left: 20px;
-	margin-top:-50px;
+    float: left;
+    width: 580px;
+    height: 100%;
+    padding-left: 20px;
+    margin-top: -50px;
 }
 
 .clearfix:after {
@@ -63,26 +61,25 @@ html, body {
 }
 
 #vis_select {
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	overflow:hidden;
-	border: none;
-	width: 50%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    overflow: hidden;
+    border: none;
+    width: 50%;
 }
 
 #corrplot svg {
-	margin-left:  50px!important;
+    margin-left: 50px !important;
 }
 
-#detail-Panel{
-	margin-left:-10px;
-}
-#wardHoverPanel{
-	margin-top: -80px;
+#detail-Panel {
+    margin-left: -10px;
 }
 
-
+#wardHoverPanel {
+    margin-top: -80px;
+}
 
 .legend {
     color: #555;
@@ -92,6 +89,7 @@ html, body {
     width: 60px;
     height: 160px;
 }
+
 .legend i {
     width: 18px;
     height: 150px;

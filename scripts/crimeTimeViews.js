@@ -5,7 +5,7 @@ function CrimeTime() {
         bottom: 30,
         left: 50
     };
-    this.width = 1000//819;//960 - this.margin.left - this.margin.right;
+    this.width = 975;//819;//960 - this.margin.left - this.margin.right;
     this.height = 200 - this.margin.top - this.margin.bottom;
 }
 
@@ -147,12 +147,12 @@ function updateSolvedTypeLines(solvedType, toggle) {
     if (solvedType == "only_crime_status" || solvedType == "undefined") {
         if(toggle) ONLY_CRIME_STATUS = (ONLY_CRIME_STATUS + 1) % 2;
         if (ONLY_CRIME_STATUS) {
-            for (var i in crimeList) {
+            for (let i in crimeList) {
                 d3.select("#" + crimeList[i]).attr("display", "none");
             }
         } else {
-            for (var i in crimeList) {
-                var id = "#" + crimeList[i];
+            for (let i in crimeList) {
+                let id = "#" + crimeList[i];
                 if (data.crimeTypes[crimeList[i]].visibility) {
                     d3.select(id).attr("display", "block");
                 } else {
@@ -172,8 +172,8 @@ function updateSolvedTypeLines(solvedType, toggle) {
         var currentSolvedType = solvedType[j];
         if(toggle) SOLVED_TYPES_VISIBILITY[SOLVED_TYPES.indexOf(currentSolvedType)] = (SOLVED_TYPES_VISIBILITY[SOLVED_TYPES.indexOf(currentSolvedType)] + 1) % 2;
         if (SOLVED_TYPES_VISIBILITY[SOLVED_TYPES.indexOf(currentSolvedType)]) {
-            for (var i in crimeList) {
-                var id = "#" + crimeList[i] + "_" + currentSolvedType;
+            for (let i in crimeList) {
+                let id = "#" + crimeList[i] + "_" + currentSolvedType;
                 if (data.crimeTypes[crimeList[i]].visibility) {
                     d3.select(id).attr("display", "block");
                 } else {
@@ -181,8 +181,8 @@ function updateSolvedTypeLines(solvedType, toggle) {
                 }
             }
         } else {
-            for (var i in crimeList) {
-                var id = "#" + crimeList[i] + "_" + currentSolvedType;
+            for (let i in crimeList) {
+                let id = "#" + crimeList[i] + "_" + currentSolvedType;
                 if (data.crimeTypes[crimeList[i]].visibility) {
                     d3.select(id).attr("display", "none");
                 }
@@ -194,7 +194,7 @@ function updateSolvedTypeLines(solvedType, toggle) {
 
 function toggleAllCrimes(){
     var s = 0;
-    for(var i=0; i < data.getCrimeTypes().length; i++){
+    for(let i=0; i < data.getCrimeTypes().length; i++){
         s+=data.crimeTypes[data.getCrimeTypes()[i]].visibility;
     }
     var bo = 1;
@@ -203,8 +203,8 @@ function toggleAllCrimes(){
     }
     if(bo==0){
         data.emit('resetDetailPanel');
-    };
-    for(var i=0; i < data.getCrimeTypes().length; i++){
+    }
+    for(let i=0; i < data.getCrimeTypes().length; i++){
             d3.select("#category_" + i).property("checked", 0+!!bo);
             data.crimeTypes[data.getCrimeTypes()[i]].visibility = bo;
             var line = d3.select('#' + data.getCrimeTypes()[i]);
@@ -249,7 +249,7 @@ function getCrimeData(crimeType) {
 
     // Get the currently active LSOA codes
     var activeCodes = [];
-    for (var key in data.lsoa_codes) {
+    for (let key in data.lsoa_codes) {
         if (!data.lsoa_codes.hasOwnProperty(key)) continue;
         if (data.lsoa_codes[key] === true)
             activeCodes.push(key);
@@ -276,7 +276,7 @@ function getCrimeData(crimeType) {
     });
     var max = 0;
     var r = [];
-    for (key in returndata) {
+    for (let key in returndata) {
         if (returndata[key] > max) {
             max = returndata[key];
         }
@@ -409,7 +409,7 @@ function plotSolvedRatesOnTimeLine() {
                 var date = x.invert(xcoo);
                 var mo = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2);
                 var dateStr = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear();
-                var numberOfCrimes = "TODOOO";
+                var numberOfCrimes = "";
                 var solvedType = "";
                 for (var i in category_values) {
                     if (category_values[i].month == mo) {
@@ -611,13 +611,12 @@ function resizeTimeLine(transition) {
         d3.select("#" + data.getCrimeTypes()[i]).transition().duration(duration).attr("d", plotCrimePath(getCrimeData(data.getCrimeTypes()[i], data.crimeAggregates)));
 
     }
-    svg.select(".y.axis") // change the y axis
+    d3.select("#overlay_rect").select(".y.axis") // change the y axis
         .transition().duration(transition ? 750 : 0)
         .call(yAxis);
 }
 
 var timelineView = function () {
-    
     svg1 = d3.select("#timelineView").append("svg:svg")
         .attr("width", crimeTime.width + crimeTime.margin.left + crimeTime.margin.right) //
         .attr("height", crimeTime.height + crimeTime.margin.top + crimeTime.margin.bottom)
@@ -625,6 +624,7 @@ var timelineView = function () {
     svg = svg1.append("g")
         .attr("transform", "translate(" + crimeTime.margin.left + "," + crimeTime.margin.top + ")");
     var overlayRect = svg1.append("g")
+        .attr("id","overlay_rect")
         .attr("transform", "translate(" + crimeTime.margin.left + "," + crimeTime.margin.top + ")");
 
     x.domain(timeRange);
@@ -633,9 +633,9 @@ var timelineView = function () {
     // Set Prediction Background
     overlayRect.append("rect")
         .attr("id", "prediction_background")
-        .attr("width", 174)
+        .attr("width", 169)
         .attr("height", 151)
-        .attr("x",827)
+        .attr("x",807)
         .style("fill", "rgb(240,240,240)")
         .attr("fill-opacity",1);
 
@@ -734,36 +734,38 @@ var timelineView = function () {
         d3.event.preventDefault();
         if (dragSliderLine1 !== null) {
             var coordinateX = d3.mouse(this)[0];
-            if (coordinateX >= 50 && coordinateX <= 877) {
-                if (sliderLine1.attr("class") == "left") {
-                    if (coordinateX > sliderLine2.attr("x1")) {
-                        xSliderLeft = xSliderRight - 1;
-                        coordinateX = xSliderLeft;
-                        dragSliderLine1 = null;
-                    } else {
-                        xSliderLeft = coordinateX;
-                    }
+            if (coordinateX < 50) coordinateX = 50;
+            if (coordinateX > 857) coordinateX = 857;
+            if (sliderLine1.attr("class") == "left") {
+                if (coordinateX > sliderLine2.attr("x1")) {
+                    xSliderLeft = xSliderRight - 1;
+                    coordinateX = xSliderLeft;
+                    dragSliderLine1 = null;
+                } else {
+                    xSliderLeft = coordinateX;
                 }
-                sliderLine1.attr("x1", coordinateX).attr("x2", coordinateX);
-                updateDateDropdowns();
-                updateDateLimits();
             }
+            sliderLine1.attr("x1", coordinateX).attr("x2", coordinateX);
+            updateDateDropdowns();
+            updateDateLimits();
         } else if (dragSliderLine2 !== null) {
             var coordinateX = d3.mouse(this)[0];
-            if (coordinateX >= 50 && coordinateX <= 877) {
-                if (sliderLine2.attr("class") == "right") {
-                    if (coordinateX < sliderLine1.attr("x1")) {
-                        xSliderRight = xSliderLeft + 1;
-                        coordinateX = xSliderRight;
-                        dragSliderLine2 = null;
-                    } else {
-                        xSliderRight = coordinateX;
-                    }
-                }
-                sliderLine2.attr("x1", coordinateX).attr("x2", coordinateX);
-                updateDateDropdowns();
-                updateDateLimits();
+            if (coordinateX < 50) coordinateX = 50;
+            if (coordinateX > 857){
+                coordinateX = 857;
             }
+            if (sliderLine2.attr("class") == "right") {
+                if (coordinateX < sliderLine1.attr("x1")) {
+                    xSliderRight = xSliderLeft + 1;
+                    coordinateX = xSliderRight;
+                    dragSliderLine2 = null;
+                } else {
+                    xSliderRight = coordinateX;
+                }
+            }
+            sliderLine2.attr("x1", coordinateX).attr("x2", coordinateX);
+            updateDateDropdowns();
+            updateDateLimits();
         }
     });
 
@@ -776,21 +778,21 @@ var timelineView = function () {
     svg1.on("mousedown", function () {
         d3.event.preventDefault();
         var coordinateX = d3.mouse(this)[0];
-        if (coordinateX >= 50 && coordinateX <= 877) {
-            if (Math.abs(coordinateX - xSliderLeft) < Math.abs(coordinateX - xSliderRight)) {
-                xSliderLeft = coordinateX;
-                d3.select(".left").attr("x1", coordinateX).attr("x2", coordinateX);
-                if (dragSliderLine1 == null) {
-                    dragSliderLine1 = d3.select(".left");
-                    sliderLine1.attr("x1", coordinateX).attr("x2", coordinateX);
-                }
-            } else {
-                xSliderRight = coordinateX;
-                d3.select(".right").attr("x1", coordinateX).attr("x2", coordinateX);
-                if (dragSliderLine2 == null) {
-                    dragSliderLine2 = d3.select(".right");
-                    sliderLine2.attr("x1", coordinateX).attr("x2", coordinateX);
-                }
+        if (coordinateX < 50) coordinateX = 50;
+        if (coordinateX > 857) coordinateX = 857;
+        if (Math.abs(coordinateX - xSliderLeft) < Math.abs(coordinateX - xSliderRight)) {
+            xSliderLeft = coordinateX;
+            d3.select(".left").attr("x1", coordinateX).attr("x2", coordinateX);
+            if (dragSliderLine1 == null) {
+                dragSliderLine1 = d3.select(".left");
+                sliderLine1.attr("x1", coordinateX).attr("x2", coordinateX);
+            }
+        } else {
+            xSliderRight = coordinateX;
+            d3.select(".right").attr("x1", coordinateX).attr("x2", coordinateX);
+            if (dragSliderLine2 == null) {
+                dragSliderLine2 = d3.select(".right");
+                sliderLine2.attr("x1", coordinateX).attr("x2", coordinateX);
             }
         }
         updateDateLimits();
@@ -812,13 +814,96 @@ var timelineView = function () {
         d.close = +d.close;
         return d;
     }
+
+    function createStatusLegend() {
+        let w = 90;
+        let legend = d3.select("#solved_legend").append("svg")
+            .attr("id", "solved_leg")
+            .attr("width", w)
+            .attr("height", 10)
+            .append("g")
+            .attr("transform", "translate(0,0)");
+
+        legend.append("line")
+            .attr("id", "solved_leg_line") // TODO NEEDS ID
+            .attr("x1", function () {
+                return 5;
+            })
+            .attr("y1", function () {
+                return 5;
+            })
+            .attr("x2", function () {
+                return w;
+            })
+            .attr("y2", function () {
+                return 5;
+            })
+            .attr("stroke", "black")
+            .attr("stroke-width", 1)
+            .attr("stroke-linecap", "round")
+            .attr("stroke-dasharray", "2, 2");
+
+        legend = d3.select("#inprogress_legend").append("svg")
+            .attr("id", "inprogress_leg")
+            .attr("width", w)
+            .attr("height", 10)
+            .append("g")
+            .attr("transform", "translate(0,0)");
+
+        legend.append("line")
+            .attr("id", "inprogress_leg_line") // TODO NEEDS ID
+            .attr("x1", function () {
+                return 5;
+            })
+            .attr("y1", function () {
+                return 5;
+            })
+            .attr("x2", function () {
+                return w;
+            })
+            .attr("y2", function () {
+                return 5;
+            })
+            .attr("stroke", "black")
+            .attr("stroke-width", 1)
+            .attr("stroke-linecap", "round")
+            .attr("stroke-dasharray", "5, 5");
+
+        legend = d3.select("#failed_legend").append("svg")
+            .attr("id", "failed_leg")
+            .attr("width", w)
+            .attr("height", 10)
+            .append("g")
+            .attr("transform", "translate(0,0)");
+
+        legend.append("line")
+            .attr("id", "failed_leg_line") // TODO NEEDS ID
+            .attr("x1", function () {
+                return 5;
+            })
+            .attr("y1", function () {
+                return 5;
+            })
+            .attr("x2", function () {
+                return w;
+            })
+            .attr("y2", function () {
+                return 5;
+            })
+            .attr("stroke", "black")
+            .attr("stroke-width", 1)
+            .attr("stroke-linecap", "round")
+            .attr("stroke-dasharray", "10, 3");
+    }
+    createStatusLegend();
 };
 
 function toggleCrimetimeview() {
     if (d3.select("#timelineView").node().style.display == 'none') {
-        d3.select("#toggleCrimetimeview").node().innerHTML = "&uarr;";
+        d3.select("#toggleCrimetimeview").node().innerHTML = '&uarr;';
         d3.select("#timelineView").node().style.display = 'block';
         d3.select("#interpolation").node().style.display = 'block';
+        d3.select("#predictions").node().style.display = 'block';
         d3.select("#solvedCrimeCheckboxes").node().style.display = 'block';
         d3.select("#content").node().style.height = "calc(100% - 315px)";
         map.invalidateSize();
@@ -826,6 +911,7 @@ function toggleCrimetimeview() {
         d3.select("#toggleCrimetimeview").node().innerHTML = "&darr;";
         d3.select("#timelineView").node().style.display = 'none';
         d3.select("#interpolation").node().style.display = 'none';
+        d3.select("#predictions").node().style.display = 'none';
         d3.select("#solvedCrimeCheckboxes").node().style.display = 'none';
         d3.select("#content").node().style.height = "calc(100% - 110px)";
         map.invalidateSize();
@@ -996,8 +1082,8 @@ function crimeTimeViewRequirements() {
         for (var k = 0; k < months.length; k++) {
             for (var i = 0; i < data.getCrimeTypes().length; i++) {
                 if (!(typeof data.crimeAggregates[years[j]] === 'undefined' || typeof data.crimeAggregates[years[j]][months[k]] === 'undefined')) {
-                    var val = data.crimeAggregates[years[j]][months[k]][data.getCrimeTypes()[i]];
-                    var key = data.getCrimeTypes(i);
+                    let val = data.crimeAggregates[years[j]][months[k]][data.getCrimeTypes()[i]];
+                    let key = data.getCrimeTypes(i);
                     if (typeof val !== "undefined") {
                         if (countMax[key] == undefined || countMax[key] < val) countMax[key] = val;
                         if (countMin[key] == undefined || countMin[key] > val) countMin[key] = val;
@@ -1012,8 +1098,8 @@ function crimeTimeViewRequirements() {
     globalMax = 0;
     globalMin = Number.MAX_VALUE;
     globalCountTotal = 0;
-    for (var i = 1; i < Object.keys(countMax).length; i++) {
-        var key = data.getCrimeTypes(i);
+    for (let i = 1; i < Object.keys(countMax).length; i++) {
+        let key = data.getCrimeTypes(i);
         //if (i == 0) continue; // DO NOT USE ALL CRIMES FOR GLOBAL NORMALIZATION!!!
         if (countMax[key] > globalMax) {
             globalMax = countMax[key];
@@ -1104,7 +1190,7 @@ function updateDateLimits() {
     d3.select("#left_overlay_rect").attr("width",x(lowerDate));
     d3.select("#right_overlay_rect")
         .attr("x",x(upperDate))
-        .attr("width",827-x(upperDate));
+        .attr("width",807-x(upperDate));
 }
 
 

@@ -32,6 +32,14 @@
 <div class="sidebar">
     <h2>Please Select the Crime Types</h2>
     <div id="crimeCheckboxes"></div>
+    <div>
+        <h2>Please Select the Visualization</h2>
+        <select multiple="multiple" height="2" id="vis_select">
+            <option value="crimeTimeMatrix" selected="true">Matrix View</option>
+            <option value="map_box">Map View</option>
+            <option value="corrplot">Correlation Matrix</option>
+        </select>
+    </div>
     <h2>Please Select the Region</h2>
     <div id="lsoa_boxes">
         <form>
@@ -88,36 +96,34 @@
         </form>
 
     </div>
-    <div>
-        <h2>Please Select the Visualization</h2>
-        <select multiple="multiple" height="2" id="vis_select">
-            <option value="crimeTimeMatrix" selected="true">Matrix View</option>
-            <option value="map_box">Map View</option>
-            <option value="corrplot">Correlation Matrix</option>
-        </select>
-    </div>
 </div>
 
 <div class="main">
     <div id="line_wrapper" class="clearfix">
         <div id="crimeTimeVieWrapper" class="filter clearfix">
             <h2>Please Select the Time Frame</h2>
-            <div id="solvedCrimeCheckboxes" style="position: absolute; margin-top: 0px; margin-left: 140px">
+            <div id="solvedCrimeCheckboxes" style="position: absolute; margin-top: 0px; margin-left: 5px">
                         <span style="font-size: 120%">
                             <b>Crime Status:</b>
                             <input name="OnlySolved" id="only_solved" type="checkbox"
-                                   onclick="updateSolvedTypeLines('only_crime_status')"><text id="only_text"></text>
+                                   onclick="updateSolvedTypeLines('only_crime_status')"/><text id="only_text"></text>
+                            </br></br>
+                            <i>Legend:</i><br>
                             <input name="Solved" id="solved" type="checkbox" onclick="updateSolvedTypeLines('solved')"><text
                                 id="solved_text"></text>
+                            <div id="solved_legend"></div>
+                            <br>
                             <input name="In Progress" id="inprogress" type="checkbox"
-                                   onclick="updateSolvedTypeLines('inprogress')"><text id="inprogress_text"></text>
+                                   onclick="updateSolvedTypeLines('inprogress')"/><text id="inprogress_text"></text>
+                            <div id="inprogress_legend"></div>
+                            <br>
                             <input name="Unresolved" id="failed" type="checkbox"
-                                   onclick="updateSolvedTypeLines('failed')"><text
-                                id="failed_text"></text>
+                                   onclick="updateSolvedTypeLines('failed')"/><text id="failed_text"></text>
+                            <div id="failed_legend"></div>
                         </span>
             </div>
-            <div>
-                <form id="interpolation" style="position: absolute; margin-left: 800px;">
+            <div id="timelineHeader">
+                <form id="interpolation" style="position: absolute; margin-left: 300px;">
                             <span style="font-size: 120%">
                                 Interpolation:
                             </span>
@@ -133,6 +139,9 @@
                         <option value="cardinal-open">Cardinal-Open</option>
                     </select>
                 </form>
+                <p id="predictions" style="position: absolute; margin-left: 820px; margin-top: 0px; width: 240px" >
+                    <input type="checkbox" id="show_predictions" onclick="togglePredictions()"><label for="show_predictions"><span style="font-size: 120%;">Show predictions for the selected crime<br> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp types for the next 12 months.</span></label>
+                </p>
                 <button style="float:right" id="toggleCrimetimeview" onclick="toggleCrimetimeview()">&uarr;</button>
             </div>
 
@@ -149,10 +158,6 @@
                 </form>
             </div>
             <div id="sliderDate"></div>
-        </div>
-        <div id="predictions">
-            <h2>Predictions</h2>
-            <input type="checkbox" id="show_predictions" onclick="togglePredictions()"><label for="show_predictions">Show predictions for the selected crime types for the next 12 months.</label>
         </div>
     </div>
 
