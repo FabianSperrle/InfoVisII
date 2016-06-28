@@ -70,6 +70,9 @@ var createCrimeCategoryButtons = function () {
             return "toggleCheckboxesOfCrimes(" + i + ")";
         });
     divs.append('label')
+        .attr("id", function(d,i){
+            return "label_category_" + i;
+        })
         .attr('for', function (d, i) {
             return 'category_' + i;
         })
@@ -126,8 +129,6 @@ var createCrimeCategoryButtons = function () {
         })
         .style("cursor", "pointer");
 
-
-
     // Make sure they're all unchecked
     d3.select('#crimeCheckboxes').selectAll('input').property('checked', false);
     // And select the default ones from the boolean array
@@ -136,59 +137,59 @@ var createCrimeCategoryButtons = function () {
     }
 };
 
-    var SOLVED_TYPES = ["solved", "inprogress", "failed"];
-    var SOLVED_TYPES_VISIBILITY = [0, 0, 0];
-    var ONLY_CRIME_STATUS = 0;
-    function updateSolvedTypeLines(solvedType, toggle) {
-        if (typeof toggle == "undefined") toggle = true;
-        var crimeList = data.getCrimeTypes();
-        if (solvedType == "only_crime_status" || solvedType == "undefined") {
-            if(toggle) ONLY_CRIME_STATUS = (ONLY_CRIME_STATUS + 1) % 2;
-            if (ONLY_CRIME_STATUS) {
-                for (var i in crimeList) {
-                    d3.select("#" + crimeList[i]).attr("display", "none");
-                }
-            } else {
-                for (var i in crimeList) {
-                    var id = "#" + crimeList[i];
-                    if (data.crimeTypes[crimeList[i]].visibility) {
-                        d3.select(id).attr("display", "block");
-                    } else {
-                        d3.select(id).attr("display", "none");
-                    }
-                }
+var SOLVED_TYPES = ["solved", "inprogress", "failed"];
+var SOLVED_TYPES_VISIBILITY = [0, 0, 0];
+var ONLY_CRIME_STATUS = 0;
+function updateSolvedTypeLines(solvedType, toggle) {
+    if (typeof toggle == "undefined") toggle = true;
+    var crimeList = data.getCrimeTypes();
+    if (solvedType == "only_crime_status" || solvedType == "undefined") {
+        if(toggle) ONLY_CRIME_STATUS = (ONLY_CRIME_STATUS + 1) % 2;
+        if (ONLY_CRIME_STATUS) {
+            for (var i in crimeList) {
+                d3.select("#" + crimeList[i]).attr("display", "none");
             }
-            resizeTimeLine();
-            return;
-        }
-        if (typeof solvedType == "undefined") {
-            solvedType = SOLVED_TYPES;
         } else {
-            solvedType = [solvedType];
-        }
-        for (var j in solvedType) {
-            var currentSolvedType = solvedType[j];
-            if(toggle) SOLVED_TYPES_VISIBILITY[SOLVED_TYPES.indexOf(currentSolvedType)] = (SOLVED_TYPES_VISIBILITY[SOLVED_TYPES.indexOf(currentSolvedType)] + 1) % 2;
-            if (SOLVED_TYPES_VISIBILITY[SOLVED_TYPES.indexOf(currentSolvedType)]) {
-                for (var i in crimeList) {
-                    var id = "#" + crimeList[i] + "_" + currentSolvedType;
-                    if (data.crimeTypes[crimeList[i]].visibility) {
-                        d3.select(id).attr("display", "block");
-                    } else {
-                        d3.select(id).attr("display", "none");
-                    }
-                }
-            } else {
-                for (var i in crimeList) {
-                    var id = "#" + crimeList[i] + "_" + currentSolvedType;
-                    if (data.crimeTypes[crimeList[i]].visibility) {
-                        d3.select(id).attr("display", "none");
-                    }
+            for (var i in crimeList) {
+                var id = "#" + crimeList[i];
+                if (data.crimeTypes[crimeList[i]].visibility) {
+                    d3.select(id).attr("display", "block");
+                } else {
+                    d3.select(id).attr("display", "none");
                 }
             }
         }
         resizeTimeLine();
+        return;
     }
+    if (typeof solvedType == "undefined") {
+        solvedType = SOLVED_TYPES;
+    } else {
+        solvedType = [solvedType];
+    }
+    for (var j in solvedType) {
+        var currentSolvedType = solvedType[j];
+        if(toggle) SOLVED_TYPES_VISIBILITY[SOLVED_TYPES.indexOf(currentSolvedType)] = (SOLVED_TYPES_VISIBILITY[SOLVED_TYPES.indexOf(currentSolvedType)] + 1) % 2;
+        if (SOLVED_TYPES_VISIBILITY[SOLVED_TYPES.indexOf(currentSolvedType)]) {
+            for (var i in crimeList) {
+                var id = "#" + crimeList[i] + "_" + currentSolvedType;
+                if (data.crimeTypes[crimeList[i]].visibility) {
+                    d3.select(id).attr("display", "block");
+                } else {
+                    d3.select(id).attr("display", "none");
+                }
+            }
+        } else {
+            for (var i in crimeList) {
+                var id = "#" + crimeList[i] + "_" + currentSolvedType;
+                if (data.crimeTypes[crimeList[i]].visibility) {
+                    d3.select(id).attr("display", "none");
+                }
+            }
+        }
+    }
+    resizeTimeLine();
+}
 
 function toggleAllCrimes(){
     var s = 0;
