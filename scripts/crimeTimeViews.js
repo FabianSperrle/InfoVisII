@@ -628,10 +628,14 @@ var timelineView = function () {
     x.domain(timeRange);
     y.domain([0, 500]);
 
-    svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + crimeTime.height + ")")
-        .call(xAxis);
+    // Set Prediction Background
+    overlayRect.append("rect")
+        .attr("id", "prediction_background")
+        .attr("width", 174)
+        .attr("height", 151)
+        .attr("x",827)
+        .style("fill", "rgb(240,240,240)")
+        .attr("fill-opacity",1);
 
     overlayRect.append("rect")
         .attr("id", "left_overlay_rect")
@@ -656,6 +660,11 @@ var timelineView = function () {
             .ticks(d3.time.months)
             .tickSize(10, 0)
             .tickFormat(d3.time.format("")));
+
+    overlayRect.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + crimeTime.height + ")")
+        .call(xAxis);
 
     overlayRect.append("g")
         .attr("class", "y axis")
@@ -723,7 +732,7 @@ var timelineView = function () {
         d3.event.preventDefault();
         if (dragSliderLine1 !== null) {
             var coordinateX = d3.mouse(this)[0];
-            if (coordinateX >= 50) {
+            if (coordinateX >= 50 && coordinateX <= 880) {
                 if (sliderLine1.attr("class") == "left") {
                     if (coordinateX > sliderLine2.attr("x1")) {
                         xSliderLeft = xSliderRight - 1;
@@ -739,7 +748,7 @@ var timelineView = function () {
             }
         } else if (dragSliderLine2 !== null) {
             var coordinateX = d3.mouse(this)[0];
-            if (coordinateX >= 50 && coordinateX < 890) {
+            if (coordinateX >= 50 && coordinateX <= 880) {
                 if (sliderLine2.attr("class") == "right") {
                     if (coordinateX < sliderLine1.attr("x1")) {
                         xSliderRight = xSliderLeft + 1;
@@ -765,7 +774,7 @@ var timelineView = function () {
     svg1.on("mousedown", function () {
         d3.event.preventDefault();
         var coordinateX = d3.mouse(this)[0];
-        if (coordinateX >= 50) {
+        if (coordinateX >= 50 && coordinateX <= 880) {
             if (Math.abs(coordinateX - xSliderLeft) < Math.abs(coordinateX - xSliderRight)) {
                 xSliderLeft = coordinateX;
                 d3.select(".left").attr("x1", coordinateX).attr("x2", coordinateX);
@@ -1093,7 +1102,7 @@ function updateDateLimits() {
     d3.select("#left_overlay_rect").attr("width",x(lowerDate));
     d3.select("#right_overlay_rect")
         .attr("x",x(upperDate))
-        .attr("width",870-x(upperDate));
+        .attr("width",827-x(upperDate));
 }
 
 
