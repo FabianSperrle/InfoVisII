@@ -7,6 +7,14 @@ var tiles = L.tileLayer('http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}
 var latlng = L.latLng(51.513819, -0.098361);
 var map = L.map('map', {center: this.latlng, zoom: 15, layers: [this.tiles]});
 
+
+var choropleth_maxColor = "red";
+var choropleth_pivotColor = "orange";
+var choropleth_minColor = "green"; // white
+var choropleth_deselected = "#D3D3D3"
+
+
+
 var layers = {
     clusters: {
         layer: undefined,
@@ -317,7 +325,7 @@ function resetHighlight(e) {
 
 var colorscale = d3.scale.linear()
             .domain([0, 0.5, 1])
-            .range(['white', 'orange', 'red']);
+            .range([choropleth_minColor, choropleth_pivotColor, choropleth_maxColor]);
 
 
 var legend;
@@ -383,7 +391,7 @@ var updateChloroplethLayer = function () {
         var div = L.DomUtil.create('div', 'info legend');
 
         div.innerHTML +=
-                maxValue+'<i style="background: linear-gradient( red, orange, white )"></i> </br> </br> </br> </br></br> </br> </br> </br> '+minValue;
+                maxValue+'<i style="background: linear-gradient( '+choropleth_maxColor+','+choropleth_pivotColor+','+choropleth_minColor+' )"></i> </br> </br> </br> </br></br> </br> </br> </br> '+minValue; 
 
         return div;
     };
@@ -402,7 +410,7 @@ var updateChloroplethLayer = function () {
             weight = (totalCrimesPerWard[lsoaCodes.indexOf(d)].values - minValue)/(maxValue-minValue);
             return colorscale(weight); 
         }else {
-            return "#D3D3D3";
+            return choropleth_deselected; //"#D3D3D3";
         }   
 
           
