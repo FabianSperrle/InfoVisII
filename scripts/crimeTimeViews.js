@@ -20,7 +20,7 @@ var tooltip = d3.select("body")
     .style("font-size", "14px")
     .style("font-style", "Sans-serif")
     .style("z-index", "10")
-    .style("background-color", "rgba(255,255,255,0.9)")
+    .style("background-color", "rgba(255,255,255,0.95)")
     .style("visibility", "hidden")
     .style("padding", "2px");
 var crimeTime = new CrimeTime();
@@ -135,6 +135,7 @@ var createCrimeCategoryButtons = function () {
     for (var i = 0; i < data.getCrimeTypes().length; i++) {
         d3.select("#category_" + i).property("checked", data.crimeTypes[data.getCrimeTypes()[i]].visibility);
     }
+    initializeCrimeInformationFields();
 };
 
 var SOLVED_TYPES = ["solved", "inprogress", "failed"];
@@ -733,7 +734,7 @@ var timelineView = function () {
         d3.event.preventDefault();
         if (dragSliderLine1 !== null) {
             var coordinateX = d3.mouse(this)[0];
-            if (coordinateX >= 50 && coordinateX <= 880) {
+            if (coordinateX >= 50 && coordinateX <= 877) {
                 if (sliderLine1.attr("class") == "left") {
                     if (coordinateX > sliderLine2.attr("x1")) {
                         xSliderLeft = xSliderRight - 1;
@@ -749,7 +750,7 @@ var timelineView = function () {
             }
         } else if (dragSliderLine2 !== null) {
             var coordinateX = d3.mouse(this)[0];
-            if (coordinateX >= 50 && coordinateX <= 880) {
+            if (coordinateX >= 50 && coordinateX <= 877) {
                 if (sliderLine2.attr("class") == "right") {
                     if (coordinateX < sliderLine1.attr("x1")) {
                         xSliderRight = xSliderLeft + 1;
@@ -775,7 +776,7 @@ var timelineView = function () {
     svg1.on("mousedown", function () {
         d3.event.preventDefault();
         var coordinateX = d3.mouse(this)[0];
-        if (coordinateX >= 50 && coordinateX <= 880) {
+        if (coordinateX >= 50 && coordinateX <= 877) {
             if (Math.abs(coordinateX - xSliderLeft) < Math.abs(coordinateX - xSliderRight)) {
                 xSliderLeft = coordinateX;
                 d3.select(".left").attr("x1", coordinateX).attr("x2", coordinateX);

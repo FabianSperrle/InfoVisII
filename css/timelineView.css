@@ -26,6 +26,10 @@ body {
     padding-left: 80px;
 }
 
+#tooltip {
+    border: thin solid lightgrey;
+    border-radius:10px;
+}
 
 #slider1,
 #slider2{
