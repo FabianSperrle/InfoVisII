@@ -400,9 +400,12 @@ var updateChloroplethLayer = function () {
 
         if (data.lsoa_codes[d]) { // set color 
             weight = (totalCrimesPerWard[lsoaCodes.indexOf(d)].values - minValue)/(maxValue-minValue);
-        }
+            return colorscale(weight); 
+        }else {
+            return "#D3D3D3";
+        }   
 
-         return colorscale(weight);  
+          
     }
 
     function style(feature) {
