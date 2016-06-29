@@ -1,6 +1,6 @@
 html, body {
-
-    min-width: 1940px;
+    min-width: 1920px;
+    font-size: 90%;
 }
 
 .sidebar {
@@ -100,5 +100,20 @@ html, body {
 }
 
 #solvedCrimeCheckboxes {
-    z-index: 0;
+    font-size: 0.8em;
+}
+
+#predictions {
+    font-size: 0.8em;
+    line-height: 1em;
+}
+
+.sidebar_card {
+    padding-left: 5px;
+    width: 250px;
+}
+
+.timeline_card {
+    padding-left: 5px;
+    width: 1120px;
 }

@@ -124,7 +124,7 @@ function reloadDetailPanel(){
     d3.select("#rb_div").remove();
     if(data.filtered.length==0){
         d3.select("#nodataselected").remove();
-        barChart = d3.select("#detailPanel").append("div").attr("id", "nodataselected").style("text-align","center").style("height","450").append("h1").text("No data selected!");
+        barChart = d3.select("#detailPanel").append("div").attr("id", "nodataselected").style("text-align","center").style("height","450").append("h5").text("No data selected!");
         return;
     } else {
         d3.select("#nodataselected").remove();

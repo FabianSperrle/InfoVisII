@@ -821,7 +821,7 @@ var timelineView = function () {
     }
 
     function createStatusLegend() {
-        let w = 90;
+        let w = 80;
         let legend = d3.select("#solved_legend").append("svg")
             .attr("id", "solved_leg")
             .attr("width", w)

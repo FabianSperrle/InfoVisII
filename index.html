@@ -17,6 +17,7 @@
     <script src="libs/numeric.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.3/d3-tip.min.js"></script>
     <script src="libs/corrplot.min.js"></script>
+    <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
 
     <script src="scripts/dataController.js"></script>
 
@@ -24,99 +25,103 @@
     <link rel="stylesheet" type="text/css" href="css/pointCluster.css">
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css">
     <link rel="stylesheet" href="css/d3.slider.css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.indigo-pink.min.css">
     <link rel="stylesheet" href="css/app.css"/>
 </head>
 
 <body>
 
 <div class="sidebar">
-    <h2>Please Select the Crime Types</h2>
-    <div id="crimeCheckboxes"></div>
+    <div class="">
+        <h5>Select the Crime Types</h5>
+        <div id="crimeCheckboxes"></div>
+    </div>
+
     <div>
-        <h2>Please Select the Visualization</h2>
+        <h5>Select the Visualization</h5>
         <select multiple="multiple" height="2" id="vis_select">
             <option value="crimeTimeMatrix" selected="true">Matrix View</option>
             <option value="map_box">Map View</option>
             <option value="corrplot">Correlation Matrix</option>
         </select>
     </div>
-    <h2>Please Select the Region</h2>
-    <div id="lsoa_boxes">
-        <form>
-            <div><input type="checkbox" id="E05009288" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009288">Aldersgate</label></div>
-            <div><input type="checkbox" id="E05009289" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009289">Aldgate</label></div>
-            <div><input type="checkbox" id="E05009290" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009290">Bassishaw</label></div>
-            <div><input type="checkbox" id="E05009291" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009291">Billingsgate</label></div>
-            <div><input type="checkbox" id="E05009292" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009292">Bishopsgate</label></div>
-            <div><input type="checkbox" id="E05009293" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009293">Bread Street</label></div>
-            <div><input type="checkbox" id="E05009294" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009294">Bridge</label></div>
-            <div><input type="checkbox" id="E05009295" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009295">Broad Street</label></div>
-            <div><input type="checkbox" id="E05009296" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009296">Candlewick</label></div>
-            <div><input type="checkbox" id="E05009297" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009297">Castle Baynard</label></div>
-            <div><input type="checkbox" id="E05009298" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009298">Cheap</label></div>
-            <div><input type="checkbox" id="E05009299" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009299">Coleman Street</label></div>
-            <div><input type="checkbox" id="E05009300" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009300">Cordwainer</label></div>
-            <div><input type="checkbox" id="E05009301" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009301">Cornhill</label></div>
-            <div><input type="checkbox" id="E05009302" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009302">Cripplegate</label></div>
-            <div><input type="checkbox" id="E05009303" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009303">Dowgate</label></div>
-            <div><input type="checkbox" id="E05009304" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009304">Farringdon Within</label></div>
-            <div><input type="checkbox" id="E05009305" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009305">Farringdon Without</label></div>
-            <div><input type="checkbox" id="E05009306" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009306">Langbourn</label></div>
-            <div><input type="checkbox" id="E05009307" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009307">Lime Street</label></div>
-            <div><input type="checkbox" id="E05009308" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009308">Portsoken</label></div>
-            <div><input type="checkbox" id="E05009309" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009309">Queenhithe</label></div>
-            <div><input type="checkbox" id="E05009310" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009310">Tower</label></div>
-            <div><input type="checkbox" id="E05009311" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009311">Vintry</label></div>
-            <div><input type="checkbox" id="E05009312" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
-                    for="E05009312">Walbrook</label></div>
-        </form>
-
+    <div class="">
+        <h5>Select the Region</h5>
+        <div id="lsoa_boxes">
+            <form>
+                <div><input type="checkbox" id="E05009288" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009288">Aldersgate</label></div>
+                <div><input type="checkbox" id="E05009289" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009289">Aldgate</label></div>
+                <div><input type="checkbox" id="E05009290" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009290">Bassishaw</label></div>
+                <div><input type="checkbox" id="E05009291" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009291">Billingsgate</label></div>
+                <div><input type="checkbox" id="E05009292" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009292">Bishopsgate</label></div>
+                <div><input type="checkbox" id="E05009293" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009293">Bread Street</label></div>
+                <div><input type="checkbox" id="E05009294" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009294">Bridge</label></div>
+                <div><input type="checkbox" id="E05009295" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009295">Broad Street</label></div>
+                <div><input type="checkbox" id="E05009296" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009296">Candlewick</label></div>
+                <div><input type="checkbox" id="E05009297" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009297">Castle Baynard</label></div>
+                <div><input type="checkbox" id="E05009298" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009298">Cheap</label></div>
+                <div><input type="checkbox" id="E05009299" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009299">Coleman Street</label></div>
+                <div><input type="checkbox" id="E05009300" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009300">Cordwainer</label></div>
+                <div><input type="checkbox" id="E05009301" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009301">Cornhill</label></div>
+                <div><input type="checkbox" id="E05009302" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009302">Cripplegate</label></div>
+                <div><input type="checkbox" id="E05009303" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009303">Dowgate</label></div>
+                <div><input type="checkbox" id="E05009304" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009304">Farringdon Within</label></div>
+                <div><input type="checkbox" id="E05009305" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009305">Farringdon Without</label></div>
+                <div><input type="checkbox" id="E05009306" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009306">Langbourn</label></div>
+                <div><input type="checkbox" id="E05009307" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009307">Lime Street</label></div>
+                <div><input type="checkbox" id="E05009308" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009308">Portsoken</label></div>
+                <div><input type="checkbox" id="E05009309" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009309">Queenhithe</label></div>
+                <div><input type="checkbox" id="E05009310" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009310">Tower</label></div>
+                <div><input type="checkbox" id="E05009311" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009311">Vintry</label></div>
+                <div><input type="checkbox" id="E05009312" checked="checked" onClick="data.toggleLSOA(this.id)"/><label
+                        for="E05009312">Walbrook</label></div>
+            </form>
+        </div>
     </div>
 </div>
 
 <div class="main">
     <div id="line_wrapper" class="clearfix">
         <div id="crimeTimeVieWrapper" class="filter clearfix">
-            <h2>Please Select the Time Frame</h2>
+            <h5>Select the Time Frame</h5>
             <div id="solvedCrimeCheckboxes" style="position: absolute; margin-top: 0px; margin-left: 5px">
                         <span style="font-size: 120%">
                             <b>Crime Status:</b><br>
                             <input name="OnlySolved" id="only_solved" type="checkbox"
                                    onclick="updateSolvedTypeLines('only_crime_status')"/><text id="only_text"></text>
-                            </br></br>
+                            <br />
                             <i>Legend:</i><br>
                             <input name="Solved" id="solved" type="checkbox" onclick="updateSolvedTypeLines('solved')"><text
                                 id="solved_text"></text>
                             <div id="solved_legend"></div>
-                            <br>
                             <input name="In Progress" id="inprogress" type="checkbox"
                                    onclick="updateSolvedTypeLines('inprogress')"/><text id="inprogress_text"></text>
                             <div id="inprogress_legend"></div>
-                            <br>
                             <input name="Unresolved" id="failed" type="checkbox"
                                    onclick="updateSolvedTypeLines('failed')"/><text id="failed_text"></text>
                             <div id="failed_legend"></div>
@@ -189,12 +194,12 @@
                 </div>
                 <div id="map">
                     <div id="no_elements">
-                        <h3>No data selected.</h3>
+                        <h5>No data selected.</h5>
                         Your current filters remove all data.<br/>Make sure to include more crime types, or enlarge the time
                         period.
                     </div>
                     <div id="too_many">
-                        <h3>Too much data!</h3>
+                        <h5>Too much data!</h5>
                         You have selected more than 1000 data points, that's more than we can plot on one map! Please
                         adjust
                         your filters or load a different visualization.
@@ -224,10 +229,10 @@
             </div>
         </div>
         <div id="content_right">
-            <h2>Outcomes: Overview</h2>
+            <h5>Outcomes: Overview</h5>
             <div id="detailPanel"></div>
             <div id="wardHoverPanel" style="visibility:hidden;display:none">
-                <h2>District Information</h2>
+                <h5>District Information</h5>
                 <div id="wardHover"></div>
             </div>
         </div>
