@@ -25,7 +25,7 @@ let plotPredictions = function () {
         .y(function (d) {
             return y(d);
         })
-        .interpolate('linear');
+        .interpolate(currentInterpolationType);
 
     var getData = function (i) {
         var crimes;
@@ -89,7 +89,7 @@ let addContainer = function () {
 };
 
 let removePredictions = function() {
-    d3.select("#show_predictions").property("checked", false);
+    d3.select("#show_predictions").property("checked", showPredictions & allowShow);
     d3.select('#predictions_').selectAll('path').remove();
 };
 
@@ -98,8 +98,9 @@ let toggleAllowShow = function(newStatus) {
     if (!allowShow) {
         removePredictions();
     } else {
-        if (showPredictions)
+        if (showPredictions) {
             plotPredictions();
+        }
     }
 };
 
