@@ -1,16 +1,3 @@
-var sel = document.getElementById('vis_select');
-var content = document.getElementById('content_left').children;
-sel.onchange = function () {
-    console.log("Selected value is " + sel.value);
-    for (var i = content.length - 1; i >= 0; i--) {
-        content[i].style.display = 'none';
-        content[i].style.visibility = 'hidden';
-    }
-    content[sel.value].style.display = 'block';
-    content[sel.value].style.visibility = 'visible';
-    map.invalidateSize();
-};
-
 //var tiles = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 var tiles = L.tileLayer('http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png', {
 //var tiles = L.tileLayer('https://api.apbox.com/styles/v1/fabiansperrle/cio2xydhi003dbzm14yr5xu17/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZmFiaWFuc3BlcnJsZSIsImEiOiJjaW51NXBlOXowMG13dzltMndzdHI4b3gwIn0.-KwI70EkNL2Ni6YWkXfKsQ', {

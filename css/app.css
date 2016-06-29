@@ -42,6 +42,7 @@ html, body {
     width: 1005px;
     float: left;
     height: 100%;
+    margin-top: -45px;
 }
 
 #content_right {
@@ -101,4 +102,18 @@ html, body {
 
 #solvedCrimeCheckboxes {
     z-index: 0;
+}
+
+.tab {
+    font-size: 11pt;
+    padding: 2px 30px;
+    padding-top: 3px;
+    display: inline-block;
+    border: 1px solid #c8c8c8;
+}
+
+#vis_select_div {
+    width: 445px;
+    border-bottom: 2px solid #c8c8c8;
+    margin-bottom: 15px;
 }

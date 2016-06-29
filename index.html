@@ -32,14 +32,6 @@
 <div class="sidebar">
     <h2>Please Select the Crime Types</h2>
     <div id="crimeCheckboxes"></div>
-    <div>
-        <h2>Please Select the Visualization</h2>
-        <select multiple="multiple" height="2" id="vis_select">
-            <option value="crimeTimeMatrix" selected="true">Matrix View</option>
-            <option value="map_box">Map View</option>
-            <option value="corrplot">Correlation Matrix</option>
-        </select>
-    </div>
     <h2>Please Select the Region</h2>
     <div id="lsoa_boxes">
         <form>
@@ -163,6 +155,12 @@
 
     <div id="content">
         <div id="content_left">
+            <div id="vis_select_div">
+                <h2>Please Select the Visualization</h2>
+                <span class="tab" id="crimeTimeMatrixTab" data-id="crimeTimeMatrix" onclick="selectVis(this.getAttribute('id'))">Matrix View</span>
+                <span class="tab" id="map_box_tab" data-id="map_box" onclick="selectVis(this.getAttribute('id'))">Map View</span>
+                <span class="tab" id="corrplot_tab" data-id="corrplot" onclick="selectVis(this.getAttribute('id'))">Correlation Matrix</span>
+            </div>
             <div id="crimeTimeMatrix">
                 <button style="float:left; font-size: 11px" id="toggleMatrixNormalization"
                         onclick="toggleMatrixNormalization()">Show Global Normalization
@@ -243,4 +241,5 @@
 <script type="text/javascript" src="scripts/detailPanel.js"></script>
 <script type="text/javascript" src="scripts/geoController.js"></script>
 <script type="text/javascript" src="scripts/predictionController.js"></script>
+<script type="text/javascript" src="scripts/visselect.controller.js"></script>
 </body>
