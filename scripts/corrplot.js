@@ -139,9 +139,13 @@ function load(matrix, nodes) {
         fpc: Order.FPC(matrix)
     };
 
-    corrplot.drawAndSave({'nodes': nodes, 'matrix': matrix})
-        .order(orders[d3.select('#order').node().value])
-        .shape(shapes[d3.select('#shape').node().value]);
+    try {
+        corrplot.drawAndSave({'nodes': nodes, 'matrix': matrix})
+            .order(orders[d3.select('#order').node().value])
+            .shape(shapes[d3.select('#shape').node().value]);
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 data.on('filtered', calculateCorrelationMatrix);
