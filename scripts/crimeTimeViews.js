@@ -92,7 +92,12 @@ var createCrimeCategoryButtons = function () {
         .text("Only Status")
         .on("click", function (d, i) {
             updateSolvedTypeLines("only_crime_status");
-            d3.select("#only_solved").property("checked", !d3.select("#only_solved").property("checked"));
+            let newStatus = !d3.select("#only_solved").property("checked");
+            
+            // Toggle prediction status
+            toggleAllowShow(!newStatus);
+            
+            d3.select("#only_solved").property("checked", newStatus);
         })
         .style("cursor", "pointer");
 

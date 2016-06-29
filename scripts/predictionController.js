@@ -1,9 +1,15 @@
 let showPredictions = false;
+let allowShow = true;
 
 let isNumber = function(obj) { return !isNaN(parseFloat(obj)) };
 
 let plotPredictions = function () {
     if (showPredictions === false) return;
+    if (allowShow === false) {
+        alert('Predictions are only shown when "Only Status" is not selected');
+        d3.select("#show_predictions").property("checked", false);
+        return;
+    }
 
     var monthScale = d3.time.months(new Date(2016, 1, 1), new Date(2017, 2, 1));
     monthScale = monthScale.map(function (d) {
@@ -83,7 +89,18 @@ let addContainer = function () {
 };
 
 let removePredictions = function() {
+    d3.select("#show_predictions").property("checked", false);
     d3.select('#predictions_').selectAll('path').remove();
+};
+
+let toggleAllowShow = function(newStatus) {
+    allowShow = newStatus;
+    if (!allowShow) {
+        removePredictions();
+    } else {
+        if (showPredictions)
+            plotPredictions();
+    }
 };
 
 let togglePredictions = function() {
