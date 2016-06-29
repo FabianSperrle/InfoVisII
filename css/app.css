@@ -110,6 +110,7 @@ html, body {
     padding-top: 3px;
     display: inline-block;
     border: 1px solid #c8c8c8;
+    cursor: pointer; 
 }
 
 #vis_select_div {
