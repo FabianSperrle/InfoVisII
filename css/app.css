@@ -98,3 +98,7 @@ html, body {
     opacity: 0.9;
     border: 1px solid gray;
 }
+
+#solvedCrimeCheckboxes {
+    z-index: -1;
+}
