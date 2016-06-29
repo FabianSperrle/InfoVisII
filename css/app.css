@@ -118,3 +118,7 @@ html, body {
     border-bottom: 2px solid #c8c8c8;
     margin-bottom: 15px;
 }
+
+#vis_select_div :nth-child(2) {
+    background-color: #c8c8c8;
+}
