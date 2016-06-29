@@ -1,28 +1,33 @@
 html, body {
-
-    min-width: 1940px;
+    min-width: 1920px;
+    width: 100%;
+    height: 100%;
 }
 
 .sidebar {
     float: left;
     width: 250px;
     margin: 8px;
+    margin-top: 0;
+    height: 100%;
 }
 
 .main {
     float: left;
     width: calc(100% - 300px);
-    margin-top: 10px;
     margin-left: 5px;
     margin-right: 10px;
     margin-bottom: 10px;
     height: 100%;
 }
 
+#line_wrapper {
+    margin-bottom: 10px;
+}
+
 #crimeTimeVieWrapper {
     width: 1120px;
     float: left;
-    margin-bottom: 30px;
 }
 
 #predictions {
@@ -33,16 +38,15 @@ html, body {
 
 #content {
     width: 100%;
-    overflow: none;
-    margin-top: 30px;
     height: calc(100% - 315px);
+    position: relative;
 }
 
 #content_left {
     width: 1005px;
     float: left;
     height: 100%;
-    margin-top: -45px;
+    position: relative;
 }
 
 #content_right {
@@ -50,7 +54,6 @@ html, body {
     width: 580px;
     height: 100%;
     padding-left: 20px;
-    margin-top: -50px;
 }
 
 .clearfix:after {
@@ -70,16 +73,20 @@ html, body {
     width: 50%;
 }
 
+#corrplot {
+    max-height: calc(100% - 70px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
 #corrplot svg {
     margin-left: 50px !important;
 }
 
 #detail-Panel {
-    margin-left: -10px;
 }
 
 #wardHoverPanel {
-    margin-top: -80px;
 }
 
 .legend {
