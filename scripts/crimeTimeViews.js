@@ -89,7 +89,7 @@ var createCrimeCategoryButtons = function () {
         .append('text')
         .attr("font-family", "sans-serif")
         .attr("font-size", "10px")
-        .text("Only Crime Status")
+        .text("Only Status")
         .on("click", function (d, i) {
             updateSolvedTypeLines("only_crime_status");
             d3.select("#only_solved").property("checked", !d3.select("#only_solved").property("checked"));
