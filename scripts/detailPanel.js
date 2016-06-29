@@ -578,6 +578,15 @@ function loadSingleOutcomesChart(crimeType){
     var ymax = d3.max(Object.keys(singleOutcomesOfOneCrimeType).map(function(v){return singleOutcomesOfOneCrimeType[v].values;})); //if(groupedByCrimeType[v].key != "All Crimes") 
     xBar.domain([0,ymax]);
 
+
+
+    if(keys.length==0){
+        d3.select("#nodataselected").remove();
+        barChart.append("text").attr("transform", "translate(-60,120)").text("No outcomes for this selection registered!");
+        return;
+    }
+
+
     var yAx = barChart.append("g")
         .attr("class", "y axis")
         .call(yAxisBarChart)
@@ -676,11 +685,7 @@ function loadSingleOutcomesChart(crimeType){
         });
 
 
-    if(keys.length==0){
-        d3.select("#nodataselected").remove();
-        barChart.append("text").attr("transform", "translate(-40,120)").text("No outcomes for this selection registered!");
-        return;
-    }
+    
 
     barChart.selectAll(".bar")
         .data(singleOutcomesOfOneCrimeType)
