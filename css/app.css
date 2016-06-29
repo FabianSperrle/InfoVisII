@@ -120,3 +120,29 @@ html, body {
 }
 
 
+#vis_select_div :nth-child(2) {
+    background-color: #c8c8c8;
+}
+
+#logo{
+    float: left;
+    height:0px;
+    position: relative;
+    margin-left: 1100px;
+    margin-top: -10px;
+}
+#logo div{
+    width: 350px;
+    height:200px;
+    text-align: center;
+}
+#logo h3{
+    font-family: Georgia; /*http://www.grazersoft.com/webdesign-schriftarten.html */
+}
+
+#logo img {
+    display: block;
+    margin: 0 auto;
+    height:160px;
+
+}
