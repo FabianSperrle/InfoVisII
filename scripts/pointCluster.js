@@ -1,3 +1,16 @@
+var sel = document.getElementById('vis_select');
+var content = document.getElementById('content_left').children;
+sel.onchange = function () {
+    console.log("Selected value is " + sel.value);
+    for (var i = content.length - 1; i >= 0; i--) {
+        content[i].style.display = 'none';
+        content[i].style.visibility = 'hidden';
+    }
+    content[sel.value].style.display = 'block';
+    content[sel.value].style.visibility = 'visible';
+    map.invalidateSize();
+};
+
 //var tiles = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 var tiles = L.tileLayer('http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png', {
 //var tiles = L.tileLayer('https://api.apbox.com/styles/v1/fabiansperrle/cio2xydhi003dbzm14yr5xu17/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZmFiaWFuc3BlcnJsZSIsImEiOiJjaW51NXBlOXowMG13dzltMndzdHI4b3gwIn0.-KwI70EkNL2Ni6YWkXfKsQ', {
@@ -12,7 +25,6 @@ var choropleth_maxColor = "red";
 var choropleth_pivotColor = "orange";
 var choropleth_minColor = "green"; // white
 var choropleth_deselected = "#E3E3E3";
-
 
 
 var layers = {
@@ -39,9 +51,10 @@ var visibleLayer = layers.clusters;
 var visibleLayerName = 'clusters';
 
 function setVisibleLayer(name) {
-     try{
-       legend.removeFrom(map);
-    } catch (e) {}
+    try {
+        legend.removeFrom(map);
+    } catch (e) {
+    }
 
     if (visibleLayer !== undefined)
         map.removeLayer(visibleLayer);
@@ -54,8 +67,12 @@ function setVisibleLayer(name) {
     visibleLayer = layers[name];
     visibleLayerName = name;
     map.addLayer(visibleLayer);
+    
+    // Check whether there is no data in selection, display warning accordingly
+    // unless the current value is choropleth map
+    emptyDataList();
 
-    if(name == 'choropleth'){
+    if (name == 'choropleth') {
         d3.select('#wardHoverPanel').style("visibility", "visible").style("display", "block");
         initAllWardsCrimesBarChart();
         map.addControl(legend);
@@ -162,7 +179,7 @@ var updateClusterLayer = function () {
     }
 
     layers.clusters.on('clustermouseover', function (a) {
-        if(ONLY_CRIME_STATUS) return;
+        if (ONLY_CRIME_STATUS) return;
         var children = a.layer.getAllChildMarkers();
         var bins = {};
         for (var i = 0; i < children.length; i++) {
@@ -309,13 +326,13 @@ function highlightFeature(e) {
     ttt = e;
     var layer = e.target;
     layer.setStyle({
-      weight: 5,
-      //color: '#666',
-      //dashArray: '',
-      fillOpacity: 0.5
+        weight: 5,
+        //color: '#666',
+        //dashArray: '',
+        fillOpacity: 0.5
     });
     if (!L.Browser.ie && !L.Browser.opera) {
-      layer.bringToFront();
+        layer.bringToFront();
     }
 }
 
@@ -324,8 +341,8 @@ function resetHighlight(e) {
 }
 
 var colorscale = d3.scale.linear()
-            .domain([0, 0.5, 1])
-            .range([choropleth_minColor, choropleth_pivotColor, choropleth_maxColor]);
+    .domain([0, 0.5, 1])
+    .range([choropleth_minColor, choropleth_pivotColor, choropleth_maxColor]);
 
 
 var legend;
@@ -347,43 +364,44 @@ var updateChloroplethLayer = function () {
     //totalCrimesPerWard
     //lsoaCodes 
 
-    for(var k = 0; k < totalCrimesPerWard.length; k++){
+    for (var k = 0; k < totalCrimesPerWard.length; k++) {
         var weight = 0;
         var districtContainer = data.crimesAggGeo[lsoaCodes[k]];
-            var months = d3.time.months(data.dates.from, data.dates.to);
-            months = months.map(function (d) {
-                return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-01";
-            });
+        var months = d3.time.months(data.dates.from, data.dates.to);
+        months = months.map(function (d) {
+            return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-01";
+        });
 
-            for (var i = 0; i < months.length; i++) {
-                var a = districtContainer[months[i]];
-                if (a == undefined) {
-                    continue;
-                }
-                for (var j = 0; j < activecrimes.length; j++) {
-                    var count = a[activecrimes[j]];
-                    if (count != undefined) {
-                        weight += +count;
-                    }
+        for (var i = 0; i < months.length; i++) {
+            var a = districtContainer[months[i]];
+            if (a == undefined) {
+                continue;
+            }
+            for (var j = 0; j < activecrimes.length; j++) {
+                var count = a[activecrimes[j]];
+                if (count != undefined) {
+                    weight += +count;
                 }
             }
+        }
 
-        if(choropleth_normalization_status == 0) { //global
+        if (choropleth_normalization_status == 0) { //global
             minValue = Math.min(minValue, weight);
             maxValue = Math.max(maxValue, weight);
         } else { //selection
-            if(data.lsoa_codes[lsoaCodes[k]]){
-               minValue = Math.min(minValue, weight);
-               maxValue = Math.max(maxValue, weight); 
+            if (data.lsoa_codes[lsoaCodes[k]]) {
+                minValue = Math.min(minValue, weight);
+                maxValue = Math.max(maxValue, weight);
             }
         }
 
         updateSumOfCrimesgWardDetailPanel(lsoaCodes[k], weight);
     }
 
-    try{
-       legend.removeFrom(map);
-    } catch (e) {}
+    try {
+        legend.removeFrom(map);
+    } catch (e) {
+    }
 
     legend = L.control({position: 'bottomright'});
 
@@ -391,29 +409,24 @@ var updateChloroplethLayer = function () {
         var div = L.DomUtil.create('div', 'info legend');
 
         div.innerHTML +=
-                maxValue+'<i style="background: linear-gradient( '+choropleth_maxColor+','+choropleth_pivotColor+','+choropleth_minColor+' )"></i> </br> </br> </br> </br></br> </br> </br> </br> '+minValue; 
+            maxValue + '<i style="background: linear-gradient( ' + choropleth_maxColor + ',' + choropleth_pivotColor + ',' + choropleth_minColor + ' )"></i> </br> </br> </br> </br></br> </br> </br> </br> ' + minValue;
 
         return div;
     };
 
- 
 
-
-
-    
-
-    function getColor(d) { 
+    function getColor(d) {
 
         var weight = 0;
 
         if (data.lsoa_codes[d]) { // set color 
-            weight = (totalCrimesPerWard[lsoaCodes.indexOf(d)].values - minValue)/(maxValue-minValue);
-            return colorscale(weight); 
-        }else {
+            weight = (totalCrimesPerWard[lsoaCodes.indexOf(d)].values - minValue) / (maxValue - minValue);
+            return colorscale(weight);
+        } else {
             return choropleth_deselected; //"#D3D3D3";
-        }   
+        }
 
-          
+
     }
 
     function style(feature) {
@@ -424,10 +437,9 @@ var updateChloroplethLayer = function () {
             color: 'white',
             dashArray: '3',
             fillOpacity: 0.7,
-            className: "choropleth_ward_"+feature.id
+            className: "choropleth_ward_" + feature.id
         };
     }
-
 
 
     function onEachFeature(feature, layer) {
@@ -458,7 +470,7 @@ function invalidateLayers() {
 }
 
 function emptyDataList() {
-    if (data.filtered.length == 0) {
+    if (data.filtered.length == 0 && visibleLayerName != 'choropleth') {
         d3.selectAll('#no_elements')
             .style('visibility', 'visible')
             .style('opacity', '1');
