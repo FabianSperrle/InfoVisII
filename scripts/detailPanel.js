@@ -418,7 +418,7 @@ function initSingleOutcomesChart(width) {
         .rangeRoundBands([0, 300], .1);
 
     xBar = d3.scale.linear()
-        .range([0,width]);
+        .range([0,260]);
 
     xAxisBarChart = d3.svg.axis()
         .scale(xBar)
