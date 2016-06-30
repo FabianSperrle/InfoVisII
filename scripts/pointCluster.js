@@ -433,6 +433,7 @@ var updateChloroplethLayer = function () {
         layer.on('click', function (e) {
             let id = e.target.feature.id;
             document.getElementById(id).click();
+            d3.selectAll(".highlightDots").remove();
         });
         layer.on('mouseover', function (e) {
             createTimelineHighlightFromChoroHover(feature.id);
