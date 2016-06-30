@@ -435,13 +435,77 @@ var updateChloroplethLayer = function () {
             document.getElementById(id).click();
         });
         layer.on('mouseover', function (e) {
+            createTimelineHighlightFromChoroHover(feature.id);
             initSingleWardCrimesBarChart(feature);
             highlightFeature(e);
         });
         layer.on('mouseout', function (e) {
+            d3.selectAll(".highlightDots").remove();
             initAllWardsCrimesBarChart();
             resetHighlight(e);
         });
+    }
+
+    function createTimelineHighlightFromChoroHover(LSOA_LAYER_ID){
+        let geo = data.crimesAggGeo;
+        if(data.lsoa_codes[LSOA_LAYER_ID]){
+            let objects = geo[LSOA_LAYER_ID];
+            for (let j in objects){
+                let date = new Date(j);
+                let crimeObj = objects[j];
+                let crimeKeys = Object.keys(crimeObj);
+                let crimeNames = {};
+                for(let k in crimeKeys){
+                    var crimeIndex = data.getCrimeIndexByVerboseName(crimeKeys[k]);
+                    var crimeType = data.getCrimeTypes()[crimeIndex];
+                    if (data.crimeTypes[crimeType].visibility === 0) {
+                        crimeType = "All Crimes";
+                    } else {
+                        crimeType = crimeKeys[k];
+                    }
+                    if(crimeNames[crimeType] == undefined){
+                        crimeNames[crimeType] = parseFloat(geo[LSOA_LAYER_ID][j][crimeKeys[k]]);
+                    } else {
+                        crimeNames[crimeType] += parseFloat(geo[LSOA_LAYER_ID][j][crimeKeys[k]]);
+                    }
+                }
+                for(let i in crimeNames){
+                    if(getDateOfSlider(1) < date && date < getDateOfSlider(2)){
+                        createTimelineHighlight(date, i, crimeNames[i]);
+                    }
+                }
+            }
+        }
+    }
+    function createTimelineHighlight(date, verboseCrimeTypeTitle, number, opacity) {
+        if (typeof number === 'undefined') number = 1;
+        if (typeof opacity === 'undefined') opacity = 0.5;
+        // find CrimeTypeLine to highlight :: only activated lines!!
+        // IF not activated take "allCrimes" line for Highlighting!
+        var crimeIndex = data.getCrimeIndexByVerboseName(verboseCrimeTypeTitle);
+        var crimeType = data.getCrimeTypes()[crimeIndex];
+        if (data.crimeTypes[crimeType].visibility === 0) {
+            crimeType = "allCrimes";
+            if (!data.crimeTypes[crimeType].visibility) {
+                log("Error happened: " + crimeType + " not existing!");
+                return;
+            }
+        }
+        var year = date.getFullYear();
+        var mon = date.getMonth() + 1;
+        // Take First of month for Correct Highlighting! TODO change to middle if possible!
+        var newDate = new Date(year, mon - 1, 1);
+        if (mon < 10) mon = "0" + mon;
+        var y_value = data.crimeAggregatesNew[crimeType][year + "-" + mon + "-01"];
+        //log(crimeType + "_" + y_value);
+        svg.append("circle")
+            .attr("class", "highlightDots")
+            .attr("r", 3 + Math.sqrt(number) * 2)
+            .attr("cx", x(newDate))
+            .attr("cy", y(y_value))
+            .attr("stroke-width", 10)
+            .style("fill-opacity", opacity)
+            .attr("fill", data.getCrimeColor(crimeType));
     }
 
     layers.choropleth = L.geoJson(data.geo, {
