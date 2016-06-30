@@ -91,11 +91,12 @@ var createCrimeCategoryButtons = function () {
         .attr("font-size", "10px")
         .text("Only Status")
         .on("click", function (d, i) {
-            updateSolvedTypeLines("only_crime_status");
             let newStatus = !d3.select("#only_solved").property("checked");
-            
+
+            updateSolvedTypeLines("only_crime_status");
             // Toggle prediction status
             toggleAllowShow(!newStatus);
+
             
             d3.select("#only_solved").property("checked", newStatus);
         })
@@ -237,7 +238,13 @@ function toggleCheckboxesOfCrimes(checkboxID) {
     resizeTimeLine();
     highlightMatrixSelection();
     d3.select("#category_" + checkboxID).property("checked", data.crimeTypes[data.getCrimeTypes()[checkboxID]].visibility);
-    plotPredictions();
+    if (allowShow === false) {
+        alert('Predictions are only shown when "Only Status" is not selected');
+        d3.select("#show_predictions").property("checked", false);
+        return;
+    } else {
+        plotPredictions();
+    }
 }
 
 function getCrimeData(crimeType) {

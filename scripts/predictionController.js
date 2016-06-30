@@ -1,5 +1,5 @@
-let showPredictions = false;
-let allowShow = true;
+var showPredictions = false;
+var allowShow = true;
 
 let isNumber = function (obj) {
     return !isNaN(parseFloat(obj))
