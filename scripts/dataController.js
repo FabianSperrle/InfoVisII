@@ -168,7 +168,7 @@ DataController.prototype.initializeFilters = function () {
         return d.lsoa_code;
     });
     this.filterDate();
-    this.filtered = this.crimesByType.filterAll().top(Infinity);
+        this.filtered = this.crimesByType.filterAll().top(Infinity);
     this.visibleVerboseCrimeTypes = ["All Crimes", "Violence and sexual offences", "Other theft", "Burglary", "Violent crime", "Bicycle theft", "Anti-social behaviour", "Other crime", "Shoplifting", "Drugs", "Criminal damage and arson", "Vehicle  crime", "Theft from the person", "Public disorder and weapons", "Public order", "Robbery", "Possession of weapons"];
 
     data.emit('filtered');
