@@ -1347,6 +1347,7 @@ function getDateOfSlider(slider) {
 function changeChartInterpolation(type) {
     currentInterpolationType = type;
     resizeTimeLine(false);
+    plotPredictions(false);
 }
 
 function log(text) {

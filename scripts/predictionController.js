@@ -8,7 +8,8 @@ let isNumber = function (obj) {
 var dateFormat = d3.time.format("%Y-%m");
 
 
-var plotPredictions = function () {
+var plotPredictions = function (smooth) {
+    if(typeof smooth == "undefined") smooth = true;
     if (showPredictions === false) return;
     if (allowShow === false) {
         alert('Predictions are only shown when "Only Status" is not selected');
@@ -73,7 +74,7 @@ var plotPredictions = function () {
         if (data.crimeTypes[data.getCrimeTypes(j)].visibility !== 1) continue;
         if(maxValue < Math.max.apply(Math, getData(j))) maxValue = Math.max.apply(Math, getData(j));
     }
-    resizeTimeLine(true, maxValue);
+    resizeTimeLine(smooth, maxValue);
 
     for (var i = 0; i < data.getCrimeTypes().length; i++) {
         if (data.crimeTypes[data.getCrimeTypes(i)].visibility !== 1) continue;
