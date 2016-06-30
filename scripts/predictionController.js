@@ -3,7 +3,7 @@ let allowShow = true;
 
 let isNumber = function(obj) { return !isNaN(parseFloat(obj)) };
 
-let plotPredictions = function () {
+var plotPredictions = function () {
     if (showPredictions === false) return;
     if (allowShow === false) {
         alert('Predictions are only shown when "Only Status" is not selected');
@@ -65,6 +65,13 @@ let plotPredictions = function () {
     };
 
     removePredictions();
+    let maxValue = 0;
+    for (let j in data.getCrimeTypes()) {
+        if (data.crimeTypes[data.getCrimeTypes(j)].visibility !== 1) continue;
+        if(maxValue < Math.max.apply(Math, getData(j))) maxValue = Math.max.apply(Math, getData(j));
+    }
+    resizeTimeLine(true, maxValue);
+
     for (var i = 0; i < data.getCrimeTypes().length; i++) {
         if (data.crimeTypes[data.getCrimeTypes(i)].visibility !== 1) continue;
         d3.select('#predictions_')

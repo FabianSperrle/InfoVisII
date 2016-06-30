@@ -237,6 +237,7 @@ function toggleCheckboxesOfCrimes(checkboxID) {
     resizeTimeLine();
     highlightMatrixSelection();
     d3.select("#category_" + checkboxID).property("checked", data.crimeTypes[data.getCrimeTypes()[checkboxID]].visibility);
+    plotPredictions();
 }
 
 function getCrimeData(crimeType) {
@@ -541,7 +542,7 @@ function toggleTimeviewLines(crimeLineID) {
     }
 }
 
-function resizeTimeLine(transition) {
+function resizeTimeLine(transition, predictionMaxValue) {
     if (typeof transition === 'undefined') transition = true;
     var plotCrimePath = d3.svg.line()
         .x(function (d) {
@@ -602,6 +603,11 @@ function resizeTimeLine(transition) {
                     }
                 }
             }
+        }
+    }
+    if(typeof predictionMaxValue != "undefined"){
+        if(predictionMaxValue > maxValue){
+            maxValue = predictionMaxValue;
         }
     }
     y.domain([0, maxValue + 0.2 * maxValue]);
