@@ -2,6 +2,7 @@ html, body {
     min-width: 1920px;
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 
 .sidebar {
@@ -83,7 +84,8 @@ html, body {
     margin-left: 50px !important;
 }
 
-#detail-Panel {
+#detailPanel {
+    height: 380px;
 }
 
 #wardHoverPanel {
@@ -121,7 +123,7 @@ html, body {
 }
 
 #vis_select_div {
-    width: 445px;
+    width: 447px;
     border-bottom: 2px solid #c8c8c8;
     margin-bottom: 15px;
 }
