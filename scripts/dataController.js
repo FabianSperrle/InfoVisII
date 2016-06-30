@@ -460,7 +460,7 @@ d3.json("https://raw.githubusercontent.com/FabianSperrle/InfoVisII/geoBasedForec
     
     setTimeout(function() {
         data.emit('predictions');
-    }, 5000);
+    }, 3000);
 });
 
 data.on('loadSolvedCrimes', data.prepareSolvedCrimesForTimeline);
