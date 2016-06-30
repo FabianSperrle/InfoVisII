@@ -16,13 +16,13 @@ var countMax = {},
 var tooltip = d3.select("body")
     .append("div")
     .attr("id", "tooltip")
+    .attr("class", "normalShadow")
     .style("position", "absolute")
     .style("font-size", "14px")
     .style("font-style", "Sans-serif")
     .style("z-index", "1001")
     .style("background-color", "rgba(255,255,255,0.95)")
-    .style("visibility", "hidden")
-    .style("padding", "2px");
+    .style("visibility", "hidden");
 var crimeTime = new CrimeTime();
 var xSliderLeft = 100;
 var xSliderRight = 300;

@@ -27,7 +27,20 @@ body {
 
 #tooltip {
     border: thin solid lightgrey;
-    border-radius:10px;
+    border-radius:5px;
+    padding: 5px;
+}
+
+.crimeInfoHover{
+    -moz-box-shadow:    1px 1px 3px 3px #444;
+    -webkit-box-shadow: 1px 1px 3px 3px #444;
+    box-shadow:         1px 1px 3px 3px #444;
+}
+
+.normalShadow{
+    -webkit-box-shadow: 4px 4px 5px 0px rgba(127,127,127,0.5);
+    -moz-box-shadow: 4px 4px 5px 0px rgba(127,127,127,0.5);
+    box-shadow: 4px 4px 5px 0px rgba(127,127,127,0.5);
 }
 
 #slider1,

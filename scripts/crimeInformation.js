@@ -2,6 +2,7 @@ function setToolTip(elementID, content, textColor) {
     var tooltip = d3.select("#tooltip");
     var mine = d3.select("#" + elementID);
     mine.on("mouseout", function () {
+        tooltip.attr("class", "normalShadow");
         return tooltip.style("visibility", "hidden");
     });
     mine.on("mousemove", function () {
@@ -12,6 +13,7 @@ function setToolTip(elementID, content, textColor) {
         tooltip.style("color", textColor);
         tooltip.html(content);
         tooltip.style("visibility", "visible");
+        tooltip.attr("class","crimeInfoHover");
     });
 }
 
