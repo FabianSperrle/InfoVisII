@@ -448,6 +448,7 @@ var updateChloroplethLayer = function () {
     }
 
     function createTimelineHighlightFromChoroHover(LSOA_LAYER_ID){
+        if (ONLY_CRIME_STATUS) return;
         let geo = data.crimesAggGeo;
         if(data.lsoa_codes[LSOA_LAYER_ID]){
             let objects = geo[LSOA_LAYER_ID];
