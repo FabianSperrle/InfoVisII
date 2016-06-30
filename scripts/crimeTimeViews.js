@@ -19,7 +19,7 @@ var tooltip = d3.select("body")
     .style("position", "absolute")
     .style("font-size", "14px")
     .style("font-style", "Sans-serif")
-    .style("z-index", "10")
+    .style("z-index", "1001")
     .style("background-color", "rgba(255,255,255,0.95)")
     .style("visibility", "hidden")
     .style("padding", "2px");
