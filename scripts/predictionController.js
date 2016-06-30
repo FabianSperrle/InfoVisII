@@ -1,7 +1,12 @@
 let showPredictions = false;
 let allowShow = true;
 
-let isNumber = function(obj) { return !isNaN(parseFloat(obj)) };
+let isNumber = function (obj) {
+    return !isNaN(parseFloat(obj))
+};
+
+var dateFormat = d3.time.format("%Y-%m");
+
 
 let plotPredictions = function () {
     if (showPredictions === false) return;
@@ -15,8 +20,6 @@ let plotPredictions = function () {
     monthScale = monthScale.map(function (d) {
         return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2);
     });
-
-    var dateFormat = d3.time.format("%Y-%m");
 
     var plotCrimePrediction = d3.svg.line()
         .x(function (d, i) {
@@ -77,7 +80,30 @@ let plotPredictions = function () {
             .attr("class", "line")
             .attr("d", plotCrimePrediction)
             .attr("stroke-width", "1.5px")
-            .attr("stroke", data.getCrimeColor(data.getCrimeTypes()[i]));
+            .attr("stroke", data.getCrimeColor(data.getCrimeTypes(i)))
+            .on("mouseover", function (d, i) {
+                var tooltip = d3.select("#tooltip");
+                var mine = d3.select(this);
+
+                var xcoo = d3.mouse(this)[0];
+                var date = x.invert(xcoo);
+                
+                var currentCrimeNumbers = d;
+                let index = 13 - d3.time.month.range(date, new Date(2017, 2, 1)).length
+                var numberOfCrimes = d[index];
+
+                tooltip.style("color", mine.attr("stroke"));
+                tooltip.html(data.getVerboseCrimeName(mine.attr("crime_type")) + "<br>" +  dateFormat(date) + " - #: " + numberOfCrimes);
+                tooltip.style("visibility", "visible");
+                highlightCrimeSelection(mine.attr("crime_type"), true, d3.select(this).attr("id"));
+            })
+            .on("mousemove", function () {
+                tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
+            })
+            .on("mouseout", function () {
+                highlightCrimeSelection(d3.select(this).attr("crime_type"), false);
+                return d3.select("#tooltip").style("visibility", "hidden");
+            });
     }
 };
 
@@ -88,12 +114,12 @@ let addContainer = function () {
         .attr('id', 'predictions_');
 };
 
-let removePredictions = function() {
+let removePredictions = function () {
     d3.select("#show_predictions").property("checked", showPredictions & allowShow);
     d3.select('#predictions_').selectAll('path').remove();
 };
 
-let toggleAllowShow = function(newStatus) {
+let toggleAllowShow = function (newStatus) {
     allowShow = newStatus;
     if (!allowShow) {
         removePredictions();
@@ -104,7 +130,7 @@ let toggleAllowShow = function(newStatus) {
     }
 };
 
-let togglePredictions = function() {
+let togglePredictions = function () {
     showPredictions = !showPredictions;
     if (!showPredictions) removePredictions();
     plotPredictions();
