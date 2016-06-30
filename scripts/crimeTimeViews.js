@@ -899,6 +899,33 @@ var timelineView = function () {
             .attr("stroke-width", 1)
             .attr("stroke-linecap", "round")
             .attr("stroke-dasharray", "10, 3");
+
+
+        legend = d3.select("#prediction_legend").append("svg")
+            .attr("id", "prediction_leg")
+            .attr("width", w+40)
+            .attr("height", 10)
+            .append("g")
+            .attr("transform", "translate(0,0)");
+
+        legend.append("line")
+            .attr("id", "prediction_leg_line") // TODO NEEDS ID
+            .attr("x1", function () {
+                return 5;
+            })
+            .attr("y1", function () {
+                return 5;
+            })
+            .attr("x2", function () {
+                return w+40;
+            })
+            .attr("y2", function () {
+                return 5;
+            })
+            .attr("stroke", "black")
+            .attr("stroke-width", 1)
+            .attr("stroke-linecap", "round")
+            .style("stroke-dasharray", ("7, 3, 3, 3, 7"))
     }
     createStatusLegend();
 };
@@ -909,6 +936,7 @@ function toggleCrimetimeview() {
         d3.select("#timelineView").node().style.display = 'block';
         d3.select("#interpolation").node().style.display = 'block';
         d3.select("#predictions").node().style.display = 'block';
+        d3.select("#prediction_legend").node().style.display = 'block';
         d3.select("#solvedCrimeCheckboxes").node().style.display = 'block';
         d3.select("#content").node().style.height = "calc(100% - 315px)";
         map.invalidateSize();
@@ -917,6 +945,7 @@ function toggleCrimetimeview() {
         d3.select("#timelineView").node().style.display = 'none';
         d3.select("#interpolation").node().style.display = 'none';
         d3.select("#predictions").node().style.display = 'none';
+        d3.select("#prediction_legend").node().style.display = 'none';
         d3.select("#solvedCrimeCheckboxes").node().style.display = 'none';
         d3.select("#content").node().style.height = "calc(100% - 110px)";
         map.invalidateSize();
