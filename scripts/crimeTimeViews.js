@@ -84,6 +84,7 @@ var createCrimeCategoryButtons = function () {
             return data.getVerboseCrimeName(d);
         });
 
+    d3.select("#only_solved").property("checked", false);
     // create Listeners on Solved Buttons:
     d3.select("#only_text")
         .append('text')
