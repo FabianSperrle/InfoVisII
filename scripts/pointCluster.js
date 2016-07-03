@@ -303,11 +303,22 @@ var updateHeatLayer = function () {
     }
 
     layers.heat = L.heatLayer(latlngList, {
-        max: data.filtered.length / 800,
-        blur: 40,
-        radius: 40
+        max: data.filtered.length / (10 * Math.sqrt(map.getZoom()) * map.getZoom()),
+        blur: map.getZoom() * 3,
+        radius: map.getZoom() * 2
     });
 };
+
+// Update kernel + zoom on zoom
+map.on('zoomend', function() {
+    console.log("zoom");
+    layers.heat.setOptions({
+        max: data.filtered.length / (10 * Math.sqrt(map.getZoom()) * map.getZoom()),
+        blur: map.getZoom() * 3,
+        radius: map.getZoom() * 2
+
+    });
+});
 
 function highlightFeature(e) {
     ttt = e;
